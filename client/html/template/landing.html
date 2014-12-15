@@ -90,7 +90,7 @@ Nucleus.initialize({
         </div>
 
         <div class="row">
-          <div class="col-sm-offset-1 col-sm-10">
+          <div id="super-powers" class="col-sm-offset-1 col-sm-10">
             <h2 class="main-heading"><strong>Super Powers</strong></h2>
             <p>
               <strong>Nucleus IDE</strong> - not your another browser based IDE. It's bathed in gamma rays and bitten by radioactive spiders. Not to mention its outer space origins
@@ -236,8 +236,22 @@ Nucleus.initialize({
     <!-- <h2 class="thanks text-align-center">Thanks for watching!</h2> -->
     <p class="lead text-align-center"><a class="back-to-top" href="#"> back to top <i class="fa fa-angle-up"></i></a></p>
     <footer class="footer container">
-      &copy; 2014 &nbsp;&nbsp;
-      <a href="http://faceyspacey.com">FaceySpacey Inc</a>
+      <div class="row">
+        <ul class="col-md-6 col-xs-12 nav">
+          <li><a href="{{pathFor 'home'}}">Home</a></li>
+          <li><a href="{{pathFor 'about'}}">About</a></li>
+          <li><a href="{{pathFor 'team'}}">Team</a></li>
+        </ul>
+        <ul class="col-md-6 col-xs-12 nav">
+          <li><a href="{{pathFor 'join'}}">Signup</a></li>
+          <li><a href="#super-powers">Super Powers</a></li>
+          <li><a href="https://github.com/NucleusIDE/meteor-nucleus">Source Code</a></li>
+        </ul>
+      </div>
+      <div class="row col-md-8 copyright col-md-offset-2">
+        &copy; 2014 &nbsp;&nbsp;
+        <a href="http://faceyspacey.com">Nucleus IDE Inc</a>
+      </div>
     </footer>
   </div>
 </template>

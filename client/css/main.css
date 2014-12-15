@@ -110,6 +110,17 @@ pre {
   margin-top: 50px;
   margin-bottom: -100px;
 }
+.footer > .row {
+  text-align: center;
+}
 .footer a {
   color: #fff;
+}
+.nav > li > a:hover, .nav > li > a:focus, .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+  background-color: transparent !important;
+  text-decoration: underline;
+}
+.copyright {
+  margin-top: 20px;
+  text-align: left !important;
 }
