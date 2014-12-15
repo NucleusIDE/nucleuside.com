@@ -6,24 +6,24 @@
           <div class="logo pull-left">
             <h4><a href="{{pathFor 'home'}}">Nucleus <strong>IDE</strong></a></h4>
           </div>
-          <ul class="nav navbar-nav pull-right navbar-menu hidden-xs">
-            <li class="active">
-              <a href="{{pathFor 'home'}}">
-                Home
-              </a>
-            </li>
-          </ul>
           <ul class="navbar-buttons pull-right">
-            <li>
-              <a href="{{pathFor 'home'}}" class="btn btn-sm btn-transparent">
-                Nucleus
-              </a>
-            </li>
             <li>
               <a href="https://github.com/NucleusIDE/meteor-nucleus"
                  class="btn btn-sm btn-transparent">
                 Github&nbsp;
                 <i class="fa fa-github"></i>
+              </a>
+            </li>
+            <li>
+              <a href="{{pathFor 'login'}}"
+                 class="btn btn-sm btn-transparent">
+                Login
+              </a>
+            </li>
+            <li>
+              <a href="{{pathFor 'signup'}}"
+                 class="btn btn-sm btn-transparent">
+                Signup
               </a>
             </li>
           </ul>
@@ -33,9 +33,9 @@
         <div class="demo-details col-lg-5 col-md-5 col-sm-12 col-xs-12">
           <h1 class='heading'>Nucleus IDE</h1>
           <h2 class="subheading">Make the web writable</h2>
-          <div class="btn btn-transparent btn-lg goto-demo">
+          <a href="http://demo.nucleuside.com" class="btn btn-transparent btn-lg goto-demo">
             Check Nucleus in Action
-          </div>
+          </a>
         </div>
         <div class="demo-video col-lg-7 col-md-7 col-sm-12 col-xs-12">
           <div class="vid">
@@ -290,7 +290,7 @@ Nucleus.initialize({
 
         </div>
         <p class="preview text-align-center">
-          <a href="#" class="btn btn-lg btn-danger">
+          <a href="http://demo.nucleuside.com" class="btn btn-lg btn-danger">
             &nbsp; Check Nucleus in Action &nbsp;
           </a>
         </p>
@@ -306,7 +306,7 @@ Nucleus.initialize({
           <li><a href="{{pathFor 'team'}}">Team</a></li>
         </ul>
         <ul class="col-md-6 col-xs-12 nav">
-          <li><a href="{{pathFor 'join'}}">Signup</a></li>
+          <li><a href="{{pathFor 'signup'}}">Signup</a></li>
           <li><a href="#super-powers">Super Powers</a></li>
           <li><a href="https://github.com/NucleusIDE/meteor-nucleus">Source Code</a></li>
         </ul>
