@@ -54,6 +54,7 @@ Template.payment_details.events({
       expYear: expiry_year
     };
 
+    BlockUI.block();
     Stripe.createToken(stripe_card, function(status, response) {
       if(status === 200) {
         if(!Meteor.user()) { alert("No user"); return false;}
@@ -61,11 +62,17 @@ Template.payment_details.events({
         var last4CardNumber = (""+card).slice(-4);
 
         Meteor.call('update_billing_info', stripeCardToken, last4CardNumber, function(error, result) {
+          BlockUI.unblock();
+          if (error) {
+            Flash.danger('Something is wrong with the card you provided. Please double check it.');
+            return false;
+          }
           Flash.success("Payment info updated! :)");
-          form.reset();
+          form[0].reset();
         });
       }
       else {
+        BlockUI.unblock();
         Flash.danger('Something is wrong with the card you provided. Please double check it.');
         console.log(response);
       }

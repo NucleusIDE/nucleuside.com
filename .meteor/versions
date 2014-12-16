@@ -9,7 +9,7 @@ blaze-tools@1.0.1
 blaze@2.0.3
 boilerplate-generator@1.0.1
 callback-hook@1.0.1
-channikhabra:smuggler@0.1.0
+channikhabra:block-ui@0.2.2
 channikhabra:stupid-models@0.0.6
 check@1.0.2
 ctl-helper@1.0.4
@@ -21,6 +21,7 @@ email@1.0.4
 fastclick@1.0.1
 follower-livedata@1.0.2
 geojson-utils@1.0.1
+handlebars@1.0.1
 html-tools@1.0.2
 htmljs@1.0.2
 http@1.0.8
