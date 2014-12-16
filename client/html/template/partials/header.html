@@ -12,6 +12,7 @@
             <i class="fa fa-github"></i>
           </a>
         </li>
+        {{#unless currentUser}}
         <li>
           <a href="{{pathFor 'login'}}"
              class="btn btn-sm btn-transparent">
@@ -24,6 +25,15 @@
             Signup
           </a>
         </li>
+        {{else}}
+        <li>
+          <a href="{{pathFor 'logout'}}"
+             class="btn btn-sm btn-transparent">
+            Sign Out
+            <i class="fa fa-sign-out"></i>
+          </a>
+        </li>
+        {{/unless}}
       </ul>
     </div>
   </header>

@@ -21,6 +21,7 @@ Router.route("/", {
 
 Router.route("/login", {
   action: function() {
+    Session.set("is_signing_up", false);
     this.render("login");
   },
   name: "login"
@@ -28,7 +29,8 @@ Router.route("/login", {
 
 Router.route("/signup", {
   action: function() {
-    this.redirect('login');
+    Session.set("is_signing_up", true);
+    this.render("login");
   },
   name: "signup"
 });
