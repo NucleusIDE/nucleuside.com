@@ -1,3 +1,20 @@
 <template name="footer">
-
+  <footer class="footer container">
+    <div class="row">
+      <ul class="col-md-6 col-xs-12 nav">
+        <li><a href="{{pathFor 'home'}}">Home</a></li>
+        <li><a href="{{pathFor 'about'}}">About</a></li>
+        <li><a href="{{pathFor 'team'}}">Team</a></li>
+      </ul>
+      <ul class="col-md-6 col-xs-12 nav">
+        <li><a href="{{pathFor 'signup'}}">Signup</a></li>
+        <li><a href="#super-powers">Super Powers</a></li>
+        <li><a href="https://github.com/NucleusIDE/meteor-nucleus">Source Code</a></li>
+      </ul>
+    </div>
+    <div class="row col-md-8 copyright col-md-offset-2">
+      &copy; 2014 &nbsp;&nbsp;
+      <a href="http://faceyspacey.com">Nucleus IDE Inc</a>
+    </div>
+  </footer>
 </template>

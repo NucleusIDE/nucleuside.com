@@ -1,3 +1,30 @@
 <template name="header">
-
+  <header class="page-header">
+    <div class="navbar">
+      <div class="logo pull-left">
+        <h4><a href="{{pathFor 'home'}}">Nucleus <strong>IDE</strong></a></h4>
+      </div>
+      <ul class="navbar-buttons pull-right">
+        <li>
+          <a href="https://github.com/NucleusIDE/meteor-nucleus"
+             class="btn btn-sm btn-transparent">
+            Github&nbsp;
+            <i class="fa fa-github"></i>
+          </a>
+        </li>
+        <li>
+          <a href="{{pathFor 'login'}}"
+             class="btn btn-sm btn-transparent">
+            Login
+          </a>
+        </li>
+        <li>
+          <a href="{{pathFor 'signup'}}"
+             class="btn btn-sm btn-transparent">
+            Signup
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
 </template>

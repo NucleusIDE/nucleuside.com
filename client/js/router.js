@@ -49,3 +49,10 @@ Router.route("billing_wizard", {
   },
   name: "billing_wizard"
 });
+
+Router.route("/my-lab-sessions", {
+  action: function() {
+    this.render("lab_sessions");
+  },
+  name: "lab_sessions"
+});
