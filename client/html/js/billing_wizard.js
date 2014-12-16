@@ -1,10 +1,10 @@
-Template.signup_wizard.rendered = function() {
+Template.billing_wizard.rendered = function() {
   $("#wizard > ul > li:first-child > a").click();
   $("select").select2();
 };
 
 
-Template.signup_wizard.events({
+Template.billing_wizard.events({
   "click .step-1": function() {
     Session.set("signup_steps_done", 1);
   },

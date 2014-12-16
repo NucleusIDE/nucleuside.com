@@ -28,7 +28,7 @@ Router.route("/login", {
 
 Router.route("/signup", {
   action: function() {
-    this.render("signup_wizard");
+    this.redirect('login');
   },
   name: "signup"
 });
@@ -41,4 +41,11 @@ Router.route("/logout", {
     });
   },
   name: "logout"
+});
+
+Router.route("billing_wizard", {
+  action: function() {
+    this.render("billing_wizard");
+  },
+  name: "billing_wizard"
 });
