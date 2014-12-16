@@ -12,36 +12,57 @@
 
             </header>
             <div class="body">
+              {{flash}}
               <div id="" class="form">
 
                 <div class="tab-content">
 
                   <div class="" id="payment-details">
-                    <form class="form-horizontal mt-sm" action='' method="POST">
+                    <form class="form-horizontal mt-sm" id="payment-details-form">
                       <fieldset>
                         <div class="form-group">
                           <label class="control-label col-md-3"  for="name">Name on the Card</label>
                           <div class="col-md-8">
-                            <div class="col-md-10"><input type="text" id="name" name="name" placeholder="" class="form-control"></div>
+                            <div class="col-md-10"><input type="text" id="name" name="name" tabindex="1" placeholder="" class="form-control"></div>
                           </div>
                         </div>
                         <div class="form-group ">
                           <label class="control-label col-md-3" for="credit">Credit Card Number </label>
                           <div class="col-md-8">
-                            <div class="col-md-10"><input id="credit" type="text" tabindex="3" class="form-control"></div>
+                            <div class="col-md-10"><input id="credit" type="text" tabindex="2" class="form-control"></div>
                           </div>
                         </div>
                         <div class="form-group">
                           <label for="expiration-date" class="control-label col-md-3">Expiration Date</label>
                           <div class="col-md-8">
-                            <div class="col-md-10"><input type="text" id="expiration-date"  class="form-control"></div>
+                            <div class="col-md-10">
+                              <select id="expiry-month" tabindex="4">
+                                <option value=1>January</option>
+                                <option value=2>February</option>
+                                <option value=3>March</option>
+                                <option value=4>April</option>
+                                <option value=5>May</option>
+                                <option value=6>June</option>
+                                <option value=7>July</option>
+                                <option value=8>August</option>
+                                <option value=9>September</option>
+                                <option value=10>October</option>
+                                <option value=11>November</option>
+                                <option value=12>December</option>
+                              </select>
+                              <select id="expiry-year" style="margin-left:20px;" tabindex="4">
+                                {{#each expiry_year}}
+                                <option value="{{year}}">{{year}}</option>
+                                {{/each}}
+                              </select>
+                            </div>
                           </div>
                         </div>
                         <div class="form-group">
                           <label for="cvc" class="control-label col-md-3">CVC</label>
                           <div class="col-md-8">
                             <div class="col-md-10">
-                              <input class="form-control" id="cvc" name="" type="password" />
+                              <input class="form-control" id="cvc" name="cvc" type="password" tabindex="5" />
                             </div>
                           </div>
                         </div>
@@ -49,11 +70,10 @@
                           <label for="cvc" class="control-label col-md-3"></label>
                           <div class="col-md-6">
                             <div class="col-md-10">
-                              <input class="form-control btn btn-success col-md" value="Save" id="cvc" name="" type="submit" />
+                              <input class="form-control btn btn-success col-md" value="Save" id="cvc" name="" type="submit" tabindex="5"/>
                             </div>
                           </div>
                         </div>
-
                       </fieldset>
                     </form>
                   </div>
