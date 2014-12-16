@@ -1,0 +1,17 @@
+.signup-wizard {
+  margin-top: 5vh;
+}
+
+#wizard > ul {
+  margin-bottom: 15px;
+
+  a:hover, a:focus {
+    text-decoration: none;
+  }
+}
+
+#wizard > ul > li.active > a {
+  @extend .btn-transparent;
+  padding: 5px;
+  border-radius: 4px;
+}
