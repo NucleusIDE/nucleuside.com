@@ -1,0 +1,33 @@
+.signup-wizard {
+  margin-top: 5vh;
+}
+
+#wizard > ul {
+  margin-bottom: 15px;
+}
+#wizard > ul  a:hover,#wizard > ul a:focus {
+  text-decoration: none;
+}
+
+#wizard > ul > li.active > a {
+  background: rgba(51, 51, 51, 0.3);
+  color: white;
+  text-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.billing-buttons {
+  margin-bottom: 30px;
+}
+
+.billing-buttons > button {
+  margin: 20px auto;
+  width: 70%;
+}
+
+.desc {
+  text-align: left;
+}
