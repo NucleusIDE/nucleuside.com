@@ -56,3 +56,17 @@ Router.route("/my-lab-sessions", {
   },
   name: "lab_sessions"
 });
+
+Router.route("/billing-history", {
+  action: function() {
+    this.render("billing_history");
+  },
+  name: "billing_history"
+});
+
+Router.route("/payment-details", {
+  action: function() {
+    this.render("payment_details");
+  },
+  name: "payment_details"
+});

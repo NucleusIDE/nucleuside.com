@@ -1,0 +1,71 @@
+<template name="payment_details">
+  {{> header}}
+
+  {{> sidebar}}
+  <div class="wrap">
+    <div class="content container signup-wizard">
+      <h2 class="page-title"> Payment <small> details</small></h2>
+      <div class="row">
+        <div class="col-lg-7 col-lg-offset-1">
+          <section class="widget">
+            <header>
+
+            </header>
+            <div class="body">
+              <div id="" class="form">
+
+                <div class="tab-content">
+
+                  <div class="" id="payment-details">
+                    <form class="form-horizontal mt-sm" action='' method="POST">
+                      <fieldset>
+                        <div class="form-group">
+                          <label class="control-label col-md-3"  for="name">Name on the Card</label>
+                          <div class="col-md-8">
+                            <div class="col-md-10"><input type="text" id="name" name="name" placeholder="" class="form-control"></div>
+                          </div>
+                        </div>
+                        <div class="form-group ">
+                          <label class="control-label col-md-3" for="credit">Credit Card Number </label>
+                          <div class="col-md-8">
+                            <div class="col-md-10"><input id="credit" type="text" tabindex="3" class="form-control"></div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="expiration-date" class="control-label col-md-3">Expiration Date</label>
+                          <div class="col-md-8">
+                            <div class="col-md-10"><input type="text" id="expiration-date"  class="form-control"></div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="cvc" class="control-label col-md-3">CVC</label>
+                          <div class="col-md-8">
+                            <div class="col-md-10">
+                              <input class="form-control" id="cvc" name="" type="password" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="cvc" class="control-label col-md-3"></label>
+                          <div class="col-md-6">
+                            <div class="col-md-10">
+                              <input class="form-control btn btn-success col-md" value="Save" id="cvc" name="" type="submit" />
+                            </div>
+                          </div>
+                        </div>
+
+                      </fieldset>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+    <div class="loader-wrap hiding hide">
+      <i class="fa fa-circle-o-notch fa-spin"></i>
+    </div>
+  </div>
+</template>

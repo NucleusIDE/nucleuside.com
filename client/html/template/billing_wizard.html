@@ -1,18 +1,7 @@
 <template name="billing_wizard">
-  <header class="page-header">
-    <div class="navbar">
-      <div class="logo pull-left">
-        <h4><a href="{{pathFor 'home'}}">Nucleus <strong>IDE</strong></a></h4>
-      </div>
-      <!-- <ul class="navbar-buttons pull-right">
-      <li>
-      <a href="{{pathFor 'logout'}}" class="btn btn-sm btn-transparent">
-      Logout
-      </a>
-      </li>
-      </ul> -->
-    </div>
-  </header>
+  {{> header}}
+
+  {{> sidebar}}
 
   <div class="wrap">
     <div class="content container signup-wizard">
@@ -28,7 +17,7 @@
                 <ul class="wizard-navigation nav-justified">
                   <li><a class="step-1" href="#tab1" data-toggle="tab"><small>1.</small><strong> Billing Option </strong></a></li>
                   <li><a class="step-2" href="#tab2" data-toggle="tab"><small>2.</small> <strong> Order Details  </strong></a></li>
-                  <li><a class="step-3" href="#tab3" data-toggle="tab"><small>3.</small> <strong>Pay</strong></a></li>
+                  <li><a class="step-3" href="#tab3" data-toggle="tab"><small>3.</small> <strong>Review</strong></a></li>
                   <li><a class="step-4" href="#tab4" data-toggle="tab"><small>4.</small> <strong>Thank you!</strong></a></li>
                 </ul>
                 <div id="bar" class="progress progress-small">
@@ -87,34 +76,39 @@
                     <form class="form-horizontal mt-sm" action='' method="POST">
                       <fieldset>
                         <div class="form-group">
-                          <label class="control-label col-md-3"  for="name">Name on the Card</label>
-                          <div class="col-md-8">
-                            <div class="col-md-10"><input type="text" id="name" name="name" placeholder="" class="form-control"></div>
-                          </div>
-                        </div>
-                        <div class="form-group ">
-                          <label class="control-label col-md-3" for="credit">Credit Card Number </label>
-                          <div class="col-md-8">
-                            <div class="col-md-10"><input id="credit" type="text" tabindex="3" class="form-control"></div>
+                          <label for="subdomain" class="col-sm-4 control-label">Subdomain</label>
+                          <div class="col-sm-7">
+                            <input type="text" id="normal-field" class="form-control input-transparent" disabled="disabled" value="my-project.nucleuside.com">
                           </div>
                         </div>
                         <div class="form-group">
-                          <label for="expiration-date" class="control-label col-md-3">Expiration Date</label>
-                          <div class="col-md-8">
-                            <div class="col-md-10"><input type="text" id="expiration-date"  class="form-control"></div>
+                          <label for="hint-field" class="col-sm-4 control-label">
+                            Billing Option
+                          </label>
+                          <div class="col-sm-7">
+                            <input type="text" id="transparent-field" class="form-control input-transparent" disabled="disabled" value="Hourly">
                           </div>
                         </div>
                         <div class="form-group">
-                          <label for="cvc" class="control-label col-md-3">CVC</label>
-                          <div class="col-md-8">
-                            <div class="col-md-10">
-                              <input class="form-control" id="cvc" name="" type="password" />
-                            </div>
+                          <label for="hint-field" class="col-sm-4 control-label">
+                            Github Url
+                          </label>
+                          <div class="col-sm-7">
+                            <input type="text" id="transparent-field" class="form-control input-transparent" disabled="disabled" value="https://github.com/bla/bla">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="hint-field" class="col-sm-4 control-label">
+                            Branch
+                          </label>
+                          <div class="col-sm-7">
+                            <input type="text" id="hint-field" class="form-control input-transparent" disabled="disabled" value="devel">
                           </div>
                         </div>
                       </fieldset>
                     </form>
                   </div>
+
                   <div class="tab-pane" id="tab4">
                     <h2>Thank you!</h2>
                     <p class="mb-lg">Your submission has been received.</p>
