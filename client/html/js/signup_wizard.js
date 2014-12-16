@@ -26,8 +26,6 @@ Tracker.autorun(function() {
   var signup_steps_done = Session.get("signup_steps_done"),
       $progress_bar = $(".progress-bar-inverse");
 
-  console.log("SIGNUP", signup_steps_done);
-
   switch(signup_steps_done) {
   case 1:
     $progress_bar.width("25%");
