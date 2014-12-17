@@ -1,8 +1,3 @@
-Template.login.rendered = function() {
-  if(Meteor.userId())
-    Router.go("lab_sessions");
-};
-
 Template.login.helpers({
 
 });
@@ -57,5 +52,26 @@ Template.login.events({
         Router.go("lab_sessions");
       });
     }
+  },
+  "click #login-with-github": function(e) {
+    e.preventDefault();
+    Meteor.loginWithGithub({
+      requestPermissions: ['user']
+    },function(err) {
+      console.log(arguments);
+    });
+  }
+});
+
+/**
+ * Autorun to redirect users from login page to lab sessions page if user is logged in already. This is because Router.onBefore isn't working when logging in with github
+ */
+Tracker.autorun(function(stop) {
+  if (!Router.current()) {
+    return;
+  }
+  var current_route = Router.current().route.options.name;
+  if ((current_route == 'login' || current_route == 'signup') && Meteor.user()) {
+    Router.go("lab_sessions");
   }
 });

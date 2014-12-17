@@ -20,6 +20,9 @@ Router.route("/", {
 });
 
 Router.route("/login", {
+  onBefore: function() {
+    //we handle redirection to appropriate page on login with github in login.js in an autorun
+  },
   action: function() {
     Session.set("is_signing_up", false);
     this.render("login");
@@ -28,6 +31,9 @@ Router.route("/login", {
 });
 
 Router.route("/signup", {
+  onBefore: function() {
+    //we handle redirection to appropriate page on login with github in login.js in an autorun
+  },
   action: function() {
     Session.set("is_signing_up", true);
     this.render("login");

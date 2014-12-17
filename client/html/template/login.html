@@ -6,7 +6,7 @@
       <header class="text-align-center">
         <h4>Login to your account</h4>
       </header>
-        {{flash}}
+      {{flash}}
 
       <div class="body">
         <form class="no-margin"
@@ -57,8 +57,13 @@
             {{#if session 'is_signing_up'}}
             <a class="forgot goto-login" href="{{pathFor 'login'}}">Got an account already?</a>
             {{else}}
-            <a class="forgot goto-signup" href="{{pathFor 'signup'}}">New User?</a>
+            <a class="forgot goto-signup" href="{{pathFor 'signup'}}">New User?  <span class='underline bold'> Signup</span></a>
             {{/if}}
+
+            <button id="login-with-github" class="btn btn-block btn-lg btn-success  github-login">
+              <span class="small-circle"><i class="fa fa-github"></i></span>
+              <small>Sign {{#if session 'is_signing_up'}} Up {{else}} In {{/if}} with Github</small>
+            </button>
 
           </div>
         </form>
