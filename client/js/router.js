@@ -7,10 +7,10 @@ var require_login = function() {
 
   if (! Meteor.userId()) {
     if(! Meteor.loggingIn()) {
-      this.redirect("login");
+      Router.go("login");
       Session.set("rl_redirect_back_to", this.route.options.name);
     }
-  }
+  } else this.next();
 };
 
 /**
@@ -29,6 +29,7 @@ Tracker.autorun(function() {
 Router.map(function() {
   this.route("dashboard", {
     path: "/dashboard",
+    onBeforeAction: require_login,
     waitOn: function() {
       // return Smuggler.load_templates_from_url( '/templates/test.html');
     },
@@ -91,6 +92,7 @@ Router.map(function() {
   });
 
   this.route("/my-lab-sessions", {
+    onBeforeAction: require_login,
     action: function() {
       this.render("lab_sessions");
     },
@@ -106,6 +108,7 @@ Router.map(function() {
   });
 
   this.route("/payment-details", {
+    onBeforeAction: require_login,
     action: function() {
       this.render("payment_details");
     },
