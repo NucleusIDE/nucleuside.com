@@ -23,8 +23,9 @@
                 <div id="bar" class="progress progress-small">
                   <div class="progress-bar progress-bar-inverse"></div>
                 </div>
-                <div class="tab-content">
+                <div class="tabs">
 
+                  {{#is_equal key=steps_done val=1}}
                   <div class="tab-pane" id="tab1">
                     <form class="form-horizontal mt-sm" action='#'>
                       <div class="billing-buttons col-md-12 text-align-center">
@@ -35,7 +36,9 @@
                       </div>
                     </form>
                   </div>
+                  {{/is_equal}}
 
+                  {{#is_equal key=steps_done val=2}}
                   <div class="tab-pane" id="tab2">
                     <form class="form-horizontal mt-sm" action='' method="POST">
                       <fieldset>
@@ -71,7 +74,9 @@
                       </fieldset>
                     </form>
                   </div>
+                  {{/is_equal}}
 
+                  {{#is_equal key=steps_done val=3}}
                   <div class="tab-pane" id="tab3">
                     <form class="form-horizontal mt-sm" action='' method="POST">
                       <fieldset>
@@ -108,18 +113,22 @@
                       </fieldset>
                     </form>
                   </div>
+                  {{/is_equal}}
 
+                  {{#is_equal key=steps_done val=4}}
                   <div class="tab-pane" id="tab4">
                     <h2>Thank you!</h2>
                     <p class="mb-lg">Your submission has been received.</p>
                   </div>
+                  {{/is_equal}}
+
                   <div class="description ml mr mt-n-md">
                     <ul class="pager wizard">
                       <li class="previous">
-                        <button disabled={{!can_go_previous}} class="btn btn-primary pull-left"><i class="fa fa-caret-left"></i> Previous</button>
+                        <button disabled={{cant_go_previous}} class="btn btn-primary pull-left"><i class="fa fa-caret-left"></i> Previous</button>
                       </li>
                       <li class="next">
-                        <button class="btn btn-primary pull-right" >Next <i class="fa fa-caret-right"></i></button>
+                        <button class="btn btn-primary pull-right" disabled={{cant_go_next}}>Next <i class="fa fa-caret-right"></i></button>
                       </li>
                       <li class="finish" style="display: none">
                         <button class="btn btn-success pull-right" >Finish <i class="fa fa-check"></i></button>

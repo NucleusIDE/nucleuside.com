@@ -16,15 +16,30 @@ Template.billing_wizard.events({
   },
   "click .step-4": function() {
     Session.set("billing_steps_done", 4);
+  },
+  "click .next > button": function() {
+    var steps_done = Session.get("billing_steps_done");
+    steps_done === 4 ?
+      Session.set("billing_steps_done", 4) :
+      Session.set("billing_steps_done", steps_done + 1);
+  },
+  "click .previous > button": function() {
+    var steps_done = Session.get("billing_steps_done");
+    steps_done === 1 ?
+      Session.set("billing_steps_done", 1) :
+      Session.set("billing_steps_done", steps_done - 1);
   }
 });
 
 Template.billing_wizard.helpers({
-  "can_go_previous": function() {
-    return Session.get("billing_steps_done") > 1;
+  "cant_go_previous": function() {
+    return Session.get("billing_steps_done") === 1;
   },
-  "can_go_forward": function() {
-    return Session.get("billing_steps_done") < 4;
+  "cant_go_next": function() {
+    return Session.get("billing_steps_done") === 4;
+  },
+  steps_done: function() {
+    return Session.get("billing_steps_done");
   }
 });
 
@@ -49,5 +64,4 @@ Tracker.autorun(function() {
     $progress_bar.width("100%");
     break;
   }
-
 });
