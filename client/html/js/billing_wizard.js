@@ -1,6 +1,7 @@
 Template.billing_wizard.rendered = function() {
-  $("#wizard > ul > li:first-child > a").click();
+  var $progress_bar = $(".progress-bar-inverse");
   $("select").select2();
+  $progress_bar.width("25%");
 };
 
 
@@ -28,6 +29,18 @@ Template.billing_wizard.events({
     steps_done === 1 ?
       Session.set("billing_steps_done", 1) :
       Session.set("billing_steps_done", steps_done - 1);
+  },
+  "click .hourly": function(e) {
+    e.preventDefault();
+    $(e.currentTarget).addClass('btn-primary').removeClass('btn-transparent');
+    $(".monthly").removeClass('btn-primary').addClass('btn-transparent');
+    Session.set("billing_method", 'hourly');
+  },
+  "click .monthly": function(e) {
+    e.preventDefault();
+    $(e.currentTarget).addClass('btn-primary').removeClass('btn-transparent');
+    $(".hourly").removeClass('btn-primary').addClass('btn-transparent');
+    Session.set("billing_method", 'monthly');
   }
 });
 

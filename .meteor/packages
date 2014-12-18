@@ -4,15 +4,12 @@
 # but you can also edit it by hand.
 
 meteor-platform
-autopublish
-insecure
 iron:router
 accounts-password
 mrt:moment
-naxio:flash
 channikhabra:stupid-models
 mrgalaxy:stripe
 channikhabra:block-ui
 accounts-github
 service-configuration
-
+naxio:flash
