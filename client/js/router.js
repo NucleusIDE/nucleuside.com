@@ -45,13 +45,12 @@ Tracker.autorun(function() {
 
   if (user && other_redirect_route && ir_helper_redirect_condition()) {
     Router.go(other_redirect_route);
-    // Session.set(ir_helper_redirect_key, false);
+    Session.set(ir_helper_redirect_key, false);
+    Flash.clear();
   }
 
   if (flash && typeof Flash !== 'undefined') {
-    Meteor.setTimeout(function() {
-      Flash[flash.action](flash.message);
-    }, 200);
+    Flash[flash.action](flash.message);
   }
 });
 
@@ -119,7 +118,6 @@ Router.map(function() {
       if (Meteor.user() && ! Meteor.user().has_valid_card()) {
         come_back_from.call(this, 'payment_details', {
           condition: function() {
-            console.log("CALLING ME");
             return Meteor.user().has_valid_card();
           },
           flash: {message: "You don't have a card on file. Please add a card first.", action: 'warning'}
