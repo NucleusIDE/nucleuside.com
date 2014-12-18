@@ -12,5 +12,8 @@ User.extend({
   },
   get_email: function() {
     return this.emails[0].address;
+  },
+  get_card: function() {
+    return this.card_number;
   }
 });
