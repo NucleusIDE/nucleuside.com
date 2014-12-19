@@ -6,6 +6,10 @@
  * amount                         Integer
  * date                           Date
  * order_id                       Mongo ID
+ * order_billing_method           String
+ * next_attempt                   Unix Timestamp - set by stripe
+ * stripe_subscription_id         Stripe Subscription ID
+ *
  **/
 
 Payments = new Meteor.Collection('payments');

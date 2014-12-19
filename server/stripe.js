@@ -51,44 +51,24 @@ Meteor.methods({
   },
   charge_order: function(order_id) {
     var order = Orders.findOne(order_id),
-        // customer = Meteor.users.findOne(order.customer_id),
         user_id = order.user_id,
+        cost = order.get_cost_to_charge(),
+        fut = new Future(),
         error, result;
 
-    console.log("********************************");
-    console.log("INSIDE charge_order");
-    console.log("********************************");
-    console.log("ORDER IS", order._id);
-    console.log("CUSTOMER IS", order.user_id);
-    console.log("********************************");
+    Stripe.charges.create({
+      amount: cost*100,
+      currency: "USD",
+      customer: Meteor.users.findOne(user_id).stripe_customer_token,
+      description: "Charge for Nucleus IDE"
+    }, function (err, res) {
+      if (err) {
+        fut.throw(new Meteor.Error(err.name+": "+err.message));
+      }
+      fut.return(res);
+    });
 
-    var user_id_interval = Meteor.setInterval(function() {
-      if (Orders.findOne(order_id).user_id) {
-
-        Stripe.charges.create({
-          amount: order.cost*100,
-          currency: "USD",
-          user: Meteor.users.findOne(user_id).stripe_user_token
-        }, function (error, result) {
-          Fiber(function() {
-            if(error != undefined) {
-              console.log("ERROR WHILE CHARGING USER: ", error);
-              console.log("AMOUNT WAS:", order.cost*100);
-              Meteor.users.update(user_id, {$set: {valid_card: false}});
-              Orders.update(order_id, {$set: {error: error, order_processed: true}});
-            }
-            //we'll use the stripe_charge_id to refund it if the deadline is missed. no more captures
-            else {
-              Orders.update(order_id, {$set: {paid: true, stripe_charge_id: result.id, order_processed: true, status: OrderStatuses.NEW}});
-              order.celebrity().decrementAvailableInventory();
-              Meteor.call('sendOrderEmail', order_id);
-            }
-          }).run();
-        });
-
-        Meteor.clearInterval(user_id_interval);
-      } else console.log("HAVEN't GOT THE USER_ID YET",Orders.findOne(order_id).user_id);
-    },200);
+    return fut.wait();
   },
   update_stripe_plan: function(order_id) {
     var plan_id = MasterConfig.stripe_plans.monthly,
