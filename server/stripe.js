@@ -1,6 +1,7 @@
 Stripe = StripeAPI(MasterConfig.keys.stripe);
 
 Fiber = Npm.require("fibers");
+Future = Npm.require('fibers/future');
 
 Meteor.methods({
   update_billing_info: function(stripe_card_token, last_4_card_number) {
@@ -48,45 +49,110 @@ Meteor.methods({
       });
     }
   },
-  chargeCustomer: function(orderId) {
-    var order = Orders.findOne(orderId),
+  charge_order: function(order_id) {
+    var order = Orders.findOne(order_id),
         // customer = Meteor.users.findOne(order.customer_id),
-        customerId = order.customer_id,
+        user_id = order.user_id,
         error, result;
 
     console.log("********************************");
-    console.log("INSIDE chargeCustomer");
+    console.log("INSIDE charge_order");
     console.log("********************************");
     console.log("ORDER IS", order._id);
-    console.log("CUSTOMER IS", order.customer_id);
+    console.log("CUSTOMER IS", order.user_id);
     console.log("********************************");
 
-    var customer_id_interval = Meteor.setInterval(function() {
-      if (Orders.findOne(orderId).customer_id) {
+    var user_id_interval = Meteor.setInterval(function() {
+      if (Orders.findOne(order_id).user_id) {
 
         Stripe.charges.create({
           amount: order.cost*100,
           currency: "USD",
-          customer: Meteor.users.findOne(customerId).stripe_customer_token
+          user: Meteor.users.findOne(user_id).stripe_user_token
         }, function (error, result) {
           Fiber(function() {
             if(error != undefined) {
               console.log("ERROR WHILE CHARGING USER: ", error);
               console.log("AMOUNT WAS:", order.cost*100);
-              Meteor.users.update(customerId, {$set: {valid_card: false}});
-              Orders.update(orderId, {$set: {error: error, order_processed: true}});
+              Meteor.users.update(user_id, {$set: {valid_card: false}});
+              Orders.update(order_id, {$set: {error: error, order_processed: true}});
             }
             //we'll use the stripe_charge_id to refund it if the deadline is missed. no more captures
             else {
-              Orders.update(orderId, {$set: {paid: true, stripe_charge_id: result.id, order_processed: true, status: OrderStatuses.NEW}});
+              Orders.update(order_id, {$set: {paid: true, stripe_charge_id: result.id, order_processed: true, status: OrderStatuses.NEW}});
               order.celebrity().decrementAvailableInventory();
-              Meteor.call('sendOrderEmail', orderId);
+              Meteor.call('sendOrderEmail', order_id);
             }
           }).run();
         });
 
-        Meteor.clearInterval(customer_id_interval);
-      } else console.log("HAVEN't GOT THE CUSTOMER_ID YET",Orders.findOne(orderId).customer_id);
+        Meteor.clearInterval(user_id_interval);
+      } else console.log("HAVEN't GOT THE USER_ID YET",Orders.findOne(order_id).user_id);
     },200);
+  },
+  update_stripe_plan: function(order_id) {
+    var plan_id = MasterConfig.stripe_plans.monthly,
+        order = Orders.findOne(order_id),
+        self = this,
+        user = Meteor.users.findOne({_id: this.userId}),
+        fut = new Future();
+
+    if (!order) {
+      throw new Meteor.Error('Order is null');
+    }
+
+    var process_stripe_res = function(err, subscription) {
+      if (err) {
+        console.log("Plan in stripe.js: update_plan: else:", err);
+        // fut.throw(new Meteor.Error(err.name+': '+err.message));
+        fut.throw(new Meteor.Error(err.name+': '+err.message));
+      } else {
+        Fiber(function() {
+          // console.log("SUBSCRIPTION", subscription);
+          Orders.update(order_id, {$set: {
+            plan: plan_id,
+            current_plan_start: subscription.current_period_start,
+            current_plan_end: subscription.current_period_end,
+            stripe_subscription_id: subscription.id
+          }});
+          fut.return(order._id);
+        }).run();
+      }
+    };
+
+    //if user has a subscription
+    if (order.stripe_subscription_id) {
+      Stripe.customers.updateSubscription(
+        user.stripe_customer_token,
+        user.stripe_subscription_id,
+        {plan: plan_id},
+        process_stripe_res);
+    } else {
+      Stripe.customers.createSubscription(
+        user.stripe_customer_token, {
+          plan: plan_id
+        }, process_stripe_res);
+    }
+    return fut.wait();
+  },
+  cancel_stripe_subscription: function() {
+    var user = Meteor.users.findOne({_id: this.userId});
+    Stripe.customers.cancelSubscription(
+      user.stripe_customer_token,
+      user.stripe_subscription_id,
+      function(err, confirmation) {
+        if (err) {
+          console.log("Error in cancelSubscription:", err);
+          throw new Meteor.Error(err.name+': '+err.message);
+        }
+        Fiber(function() {
+          console.log("Confirming Subscription Cancel:", confirmation);
+          Meteor.users.update(user._id, {$set: {
+            stripe_subscription_id: null
+          }});
+        }).run();
+      }
+    );
   }
+
 });

@@ -114,6 +114,7 @@ Router.map(function() {
       require_login.call(this);
       Session.set("billing_steps_done", 1);
       Session.set("billing_method", 'hourly');
+      Session.set("wizard_locked", false);
 
       if (Meteor.user() && ! Meteor.user().has_valid_card()) {
         come_back_from.call(this, 'payment_details', {
@@ -122,7 +123,7 @@ Router.map(function() {
           },
           flash: {message: "You don't have a card on file. Please add a card first.", action: 'warning'}
         });
-      }
+      } else Flash.clear();
     },
     action: function() {
       this.render("billing_wizard");

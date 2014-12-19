@@ -1,5 +1,5 @@
 MasterConfig = {
   keys: {
-    stripe: "pk_test_uS5osAMemybsrEdo2cWioBJV"
+    stripe: "pk_test_2HqQ2uRQYIDNhWcPZgTqo0IL"
   }
 };

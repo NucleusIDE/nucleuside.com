@@ -4,7 +4,12 @@
  * user_id                      Mongo ID
  * billing_method               String
  * units_used                   Integer
- * start_date                   Date - we bill in relation to start_date. Like 4 days after start date. This field is also used to determine if the order is active or not; to deactivate an order, set this field to null/false
+ * start_date                   Date - we bill in relation to start_date. Like 4 days after start date. For hourly orders, this field is also used to determine if the order is active or not
+ * current_plan_start           Unix timestamp - set by stripe - for monthly orders, determine the active status of order
+ * current_plan_end             Unix timestamp - set by stripe
+ * github_url                   String
+ * subdomain                    String
+ * password                     String
  */
 
 Orders = new Mongo.Collection('orders');
@@ -49,16 +54,26 @@ Order.extend({
     }
   },
   is_active: function() {
-    return !! this.start_date;
+    return this.is_monthly()
+      ? !! this.current_plan_start
+      : !! this.start_date;
   },
   deactivate: function() {
-    this.update({start_date: null});
+    this.is_monthly()
+      ? this.update({'current_plan_start': null, current_plan_end: null, stripe_subscription_id: null})
+      : this.update({start_date: null});
   },
   //let's call this method 're_activate' instead of 'activate' to avoid confusion that this might be activating a new order. New orders are always active
   re_activate: function() {
     this.update({start_date: moment().toDate()});
   },
-  charge_order: function(cb) {
+  is_monthly: function() {
+    return this.billing_method === BILLING_METHODS.monthly.method;
+  },
+  is_hourly: function() {
+    return this.billing_method === BILLING_METHODS.hourly.method;
+  },
+  charge: function(cb) {
     Meteor.call('charge_order', this._id, cb);
   }
 });

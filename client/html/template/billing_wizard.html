@@ -15,15 +15,17 @@
             <div class="body">
               <div id="wizard" class="form-wizard">
                 <ul class="wizard-navigation nav-justified">
-                  <li><a class="step-1" href="#tab1" data-toggle="tab"><small>1.</small><strong> Billing Option </strong></a></li>
-                  <li><a class="step-2" href="#tab2" data-toggle="tab"><small>2.</small> <strong> Order Details  </strong></a></li>
-                  <li><a class="step-3" href="#tab3" data-toggle="tab"><small>3.</small> <strong>Review</strong></a></li>
-                  <li><a class="step-4" href="#tab4" data-toggle="tab"><small>4.</small> <strong>Thank you!</strong></a></li>
+                  <li><a class="step-1" href="#"><small>1.</small><strong> Billing Option </strong></a></li>
+                  <li><a class="step-2" href="#"><small>2.</small> <strong> Order Details  </strong></a></li>
+                  <li><a class="step-3" href="#"><small>3.</small> <strong>Review</strong></a></li>
+                  <li><a class="step-4" href="#"><small>4.</small> <strong>Thank you!</strong></a></li>
                 </ul>
                 <div id="bar" class="progress progress-small">
                   <div class="progress-bar progress-bar-inverse"></div>
                 </div>
                 <div class="tabs">
+
+                  {{flash}}
 
                   {{#is_equal key=steps_done val=1}}
                   <div class="tab-pane" id="tab1">
@@ -46,7 +48,7 @@
                           <label for="github-url" class="control-label col-md-3">Github URL</label>
                           <div class="col-md-8">
                             <div class="col-md-10">
-                              <input type="text" id="github-url" name="github-url" placeholder="Github URL of your Project" class="form-control">
+                              <input type="url" id="github-url" name="github-url" placeholder="Github URL of your Project" class="form-control" value="{{order.github_url}}" >
                               <span class="help-block pull-left">Github URL of your project</span>
                             </div>
                           </div>
@@ -57,7 +59,7 @@
                           <div class="col-md-8">
                             <div class="col-md-10 input-group" style="margin-left:15px;">
                               <div class="form-inline input-group">
-                                <input type="text" class="form-control" id="subdomain" placeholder="my-project">
+                                <input type="text" class="form-control" id="subdomain" placeholder="my-project" value="{{order.subdomain}}">
                                 <div class="input-group-addon">.nucleuside.com</div>
                               </div>
                               <span class="help-block pull-left">Your project will be accessible here</span>
@@ -67,7 +69,7 @@
                         <div class="form-group">
                           <label class="control-label col-md-3" for="password">Password</label>
                           <div class="col-md-8">
-                            <div class="col-md-10"><input type="password" id="destination" name="password" placeholder="(optional)" class="form-control">
+                            <div class="col-md-10"><input type="password" id="domain-passwd" name="password" placeholder="(optional)" class="form-control" value="{{order.password}}">
                               <span class="help-block">Wanna password protect your subdomain?</span></div>
                           </div>
                         </div>
@@ -83,7 +85,7 @@
                         <div class="form-group">
                           <label for="subdomain" class="col-sm-4 control-label">Subdomain</label>
                           <div class="col-sm-7">
-                            <input type="text" id="normal-field" class="form-control input-transparent" disabled="disabled" value="my-project.nucleuside.com">
+                            <input type="text" id="normal-field" class="form-control input-transparent" disabled="disabled" value="{{order.subdomain}}.nucleuside.com">
                           </div>
                         </div>
                         <div class="form-group">
@@ -91,7 +93,7 @@
                             Billing Option
                           </label>
                           <div class="col-sm-7">
-                            <input type="text" id="transparent-field" class="form-control input-transparent" disabled="disabled" value="Hourly">
+                            <input type="text" id="transparent-field" class="form-control input-transparent" disabled="disabled" value="{{order.billing_method}}">
                           </div>
                         </div>
                         <div class="form-group">
@@ -99,15 +101,23 @@
                             Github Url
                           </label>
                           <div class="col-sm-7">
-                            <input type="text" id="transparent-field" class="form-control input-transparent" disabled="disabled" value="https://github.com/bla/bla">
+                            <input type="text" id="transparent-field" class="form-control input-transparent" disabled="disabled" value="{{order.github_url}}">
                           </div>
                         </div>
                         <div class="form-group">
                           <label for="hint-field" class="col-sm-4 control-label">
-                            Branch
+                            Card
                           </label>
                           <div class="col-sm-7">
-                            <input type="text" id="hint-field" class="form-control input-transparent" disabled="disabled" value="devel">
+                            <input type="text" id="hint-field" class="form-control input-transparent" disabled="disabled" value="************{{currentUser.get_card}}">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="hint-field" class="col-sm-4 control-label">
+                            Amount
+                          </label>
+                          <div class="col-sm-7">
+                            <input type="text" id="hint-field" class="form-control input-transparent" disabled="disabled" value="{{order.display_amount}}">
                           </div>
                         </div>
                       </fieldset>
