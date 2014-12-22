@@ -61,13 +61,20 @@ Meteor.setTimeout(function() {
       payment.order_billing_method = order.billing_method;
       payment.amount = order.get_cost_to_charge();
       payment.date = moment().toDate();
+      payment.order_cost_per_unit = order.get_cost_per_unit();
 
       if (err) {
         payment.status = 'FAIL';
         order.deactivate();
+
+        Meteor.call("send_payment_failed_email", order._id);
       } else {
         payment.status = 'SUCCESS';
         payment.stripe_charge_id = res.id;
+        payment.units_used = order.get_units_used();
+
+        Meteor.call("send_invoice_email", order._id);
+
         order.reset();
       }
 

@@ -16,8 +16,11 @@ Router.route('stripe_subscription_hook', {
       payment.next_attempt = moment(this.request.body.next_payment_attempt).toDate();
       payment.order_id = order._id;
       payment.stripe_subscription_id = this.request.body.data.object.id;
+      payment.order_cost_per_unit = order.get_cost_per_unit();
       payment.save();
       payment.handle_failed_payment();
+
+      Meteor.call("send_payment_failed_email", order._id);
     }
     if (stripe_response === "invoice.payment_succeeded") {
       var payment = new PaymentModel();
@@ -28,7 +31,12 @@ Router.route('stripe_subscription_hook', {
       payment.amount = this.request.body.data.object.lines.data.amount;
       payment.stripe_subscription_id = this.request.body.data.object.id;
       payment.date = moment().toDate();
+      payment.units_used = order.get_units_used();
+      payment.order_cost_per_unit = order.get_cost_per_unit();
       payment.save();
+
+      order.set_last_charged(moment().toDate());
+      Meteor.call("send_invoice_email", order._id);
     }
 
     this.response.writeHead(200, {'Content-Type': 'text/html'});

@@ -156,12 +156,20 @@ Router.map(function() {
   });
 
   this.route("invoice", {
-    path: "/invoice/:order_id",
+    path: "/invoice/:payment_id",
+    onBeforeAction: function() {
+      require_login.call(this);
+    },
+    waitOn: function() {
+      return [
+        Meteor.subscribe('my-payments', this.params.payment_id)
+      ];
+    },
     action: function() {
       this.render("invoice");
     },
     data: function() {
-      return {order_id: this.params.order_id};
+      return {payment_id: this.params.payment_id};
     }
   });
 

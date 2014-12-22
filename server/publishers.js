@@ -6,3 +6,16 @@ Meteor.publish('self', function() {
     profile: 1
   }});
 });
+
+Meteor.publish("my-orders", function() {
+  return Orders.find({user_id: this.userId});
+});
+
+Meteor.publish("my-order", function(order_id) {
+  return Orders.find({_id: order_id});
+});
+
+Meteor.publish("my-payments", function(payment_id) {
+  var payment = Payments.find({_id: payment_id});
+  return payment;
+});

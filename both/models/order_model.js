@@ -2,6 +2,7 @@
  * Attributes
  *
  * user_id                      Mongo ID
+ * num                          Integer
  * billing_method               String
  * units_used                   Integer
  * last_charged                 Date - we bill in relation to this. Like 4 days after start date. For hourly orders, this field is also used to determine if the order is active or not
@@ -13,6 +14,10 @@
  */
 
 Orders = new Mongo.Collection('orders');
+
+Orders.before.insert(function (userId, doc) {
+  doc.created_at = moment().toDate();
+});
 
 Order = Model(Orders);
 
@@ -49,9 +54,11 @@ Order.extend({
       console.log("nothing to reset in monthly orders");
       return;
     }
-    console.log("RESETING ORDER", this._id);
     last_charged = last_charged || moment().toDate();
     this.update({units_used: 0, last_charged: last_charged});
+  },
+  get_units_used: function() {
+    return this.units_used;
   },
   get_billing_period: function() {
     return this.billing_period;
@@ -60,16 +67,19 @@ Order.extend({
     if (this.is_monthly())
       throw new Meteor.Error("What do you want here?");
 
-    //TESTING
-    return 10;
-
     return this.cost_per_unit * this.units_used;
-
   },
   is_active: function() {
     return this.is_monthly()
       ? !! this.current_plan_start
       : !! this.last_charged;
+  },
+  get_last_charged: function() {
+    return moment(this.last_charged).format('ddd MMMM DD, YYYY') || moment().format('ddd MMMM DD, YYYY');
+  },
+  set_last_charged: function(date) {
+    if (!date) return;
+    this.update({last_charged: date});
   },
   deactivate: function() {
     this.is_monthly()
