@@ -1,0 +1,7 @@
+.table-hover > tbody > tr.clickable {
+  cursor: pointer;
+}
+
+.table-hover > tbody > tr.clickable:active {
+  background: rgba(51, 51, 51, 0.45);
+}

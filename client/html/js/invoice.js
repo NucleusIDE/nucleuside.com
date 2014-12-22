@@ -11,10 +11,10 @@ Template.invoice.helpers({
   },
   items: function() {
     var count = 1;
-    var total_cost = payment.get_amount();
+    total_cost = payment.get_amount();
     return [{
       sno: count,
-      item: "Nucleus " + payment.order_billing_method,
+      item: payment.get_subdomain(),
       desc: payment.order_billing_method + " instance of Nucleus IDE",
       qty: payment.get_units_used(),
       ppu: payment.get_cost_per_unit(),
