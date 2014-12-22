@@ -46,6 +46,12 @@ Order.extend({
   get_cost_per_unit: function() {
     return this.cost_per_unit;
   },
+  get_subdomain: function() {
+    return this.subdomain;
+  },
+  get_github_url: function() {
+    return this.github_url;
+  },
   reset: function(last_charged) {
     /**
      * Reset order after a successful charge

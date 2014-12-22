@@ -15,7 +15,11 @@ Meteor.publish("my-order", function(order_id) {
   return Orders.find({_id: order_id});
 });
 
-Meteor.publish("my-payments", function(payment_id) {
+Meteor.publish("my-payment", function(payment_id) {
   var payment = Payments.find({_id: payment_id});
   return payment;
+});
+
+Meteor.publish("my-payments", function() {
+  return Payments.find({user_id: this.userId});
 });

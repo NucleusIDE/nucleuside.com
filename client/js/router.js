@@ -141,6 +141,9 @@ Router.map(function() {
 
   this.route("/billing-history", {
     onBeforeAction: require_login,
+    waitOn: function() {
+      return Meteor.subscribe('my-payments');
+    },
     action: function() {
       this.render("billing_history");
     },
@@ -162,7 +165,7 @@ Router.map(function() {
     },
     waitOn: function() {
       return [
-        Meteor.subscribe('my-payments', this.params.payment_id)
+        Meteor.subscribe('my-payment', this.params.payment_id)
       ];
     },
     action: function() {

@@ -55,26 +55,17 @@ Meteor.setTimeout(function() {
     last_charged: {$lt: moment().subtract({days: 7}).toDate({days: 7})}
   }).forEach(function(order) {
     Meteor.call("charge_order", order._id, function(err, res) {
-      var payment = new PaymentModel();
-      payment.order_id = order._id;
-      payment.user_id = order.user_id;
-      payment.order_billing_method = order.billing_method;
-      payment.amount = order.get_cost_to_charge();
-      payment.date = moment().toDate();
-      payment.order_cost_per_unit = order.get_cost_per_unit();
 
       if (err) {
-        payment.status = 'FAIL';
+        var payment = new PaymentModel.create_payment('FAIL', order._id);
         order.deactivate();
 
         Meteor.call("send_payment_failed_email", order._id);
       } else {
-        payment.status = 'SUCCESS';
+        var payment = new PaymentModel.create_payment('SUCCESS', order._id);
         payment.stripe_charge_id = res.id;
-        payment.units_used = order.get_units_used();
 
         Meteor.call("send_invoice_email", order._id);
-
         order.reset();
       }
 

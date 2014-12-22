@@ -8,7 +8,7 @@
 
       <section class="widget">
         <header>
-          <h4>November <span class="fw-semi-bold">2014</span></h4>
+          <!-- <h4>November <span class="fw-semi-bold">2014</span></h4> -->
           <div class="widget-controls">
             <a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
             <a data-widgster="collapse" title="Collapse" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
@@ -28,186 +28,22 @@
                 </tr>
               </thead>
               <tbody>
+                {{#each payments}}
                 <tr>
-                  <td><span class="fw-semi-bold">bla.nucleus.com</span></td>
+                  <td><span class="fw-semi-bold">{{get_subdomain}}</span></td>
                   <td class="hidden-xs">
-                    <small>github.com/bla/bla.git</small>
+                    <small>{{get_github_url}}</small>
                   </td>
                   <td class="hidden-xs">Master</td>
-                  <td class="hidden-xs">December 7, 2014</td>
+                  <td class="hidden-xs">{{get_date}}</td>
                   <td class="width-150">
-                    5
+                    {{get_units_used}}
                   </td>
                   <td class="">
-                    $ 40
+                    $ {{get_amount}}
                   </td>
                 </tr>
-                <tr>
-                  <td><span class="fw-semi-bold">bla.nucleus.com</span></td>
-                  <td class="hidden-xs">
-                    <small>github.com/bla/bla.git</small>
-                  </td>
-                  <td class="hidden-xs">Master</td>
-                  <td class="hidden-xs">December 7, 2014</td>
-                  <td class="width-150">
-                    5
-                  </td>
-                  <td class="">
-                    $ 40
-                  </td>
-                </tr>
-                <tr>
-                  <td><span class="fw-semi-bold">bla.nucleus.com</span></td>
-                  <td class="hidden-xs">
-                    <small>github.com/bla/bla.git</small>
-                  </td>
-                  <td class="hidden-xs">Master</td>
-                  <td class="hidden-xs">December 7, 2014</td>
-                  <td class="width-150">
-                    5
-                  </td>
-                  <td class="">
-                    $ 40
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-      <section class="widget">
-        <header>
-          <h4>October <span class="fw-semi-bold">2014</span></h4>
-          <div class="widget-controls">
-            <a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
-            <a data-widgster="collapse" title="Collapse" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
-          </div>
-        </header>
-        <div class="body">
-          <div class="mt">
-            <table id="datatable-table" class="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th class="no-sort hidden-xs">Git Url</th>
-                  <th class="hidden-xs">Branch</th>
-                  <th class="hidden-xs">Date</th>
-                  <th class="no-sort">Hours</th>
-                  <th class="no-sort">Total Charge (USD)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="fw-semi-bold">bla.nucleus.com</span></td>
-                  <td class="hidden-xs">
-                    <small>github.com/bla/bla.git</small>
-                  </td>
-                  <td class="hidden-xs">Master</td>
-                  <td class="hidden-xs">December 7, 2014</td>
-                  <td class="width-150">
-                    5
-                  </td>
-                  <td class="">
-                    $ 40
-                  </td>
-                </tr>
-                <tr>
-                  <td><span class="fw-semi-bold">bla.nucleus.com</span></td>
-                  <td class="hidden-xs">
-                    <small>github.com/bla/bla.git</small>
-                  </td>
-                  <td class="hidden-xs">Master</td>
-                  <td class="hidden-xs">December 7, 2014</td>
-                  <td class="width-150">
-                    5
-                  </td>
-                  <td class="">
-                    $ 40
-                  </td>
-                </tr>
-                <tr>
-                  <td><span class="fw-semi-bold">bla.nucleus.com</span></td>
-                  <td class="hidden-xs">
-                    <small>github.com/bla/bla.git</small>
-                  </td>
-                  <td class="hidden-xs">Master</td>
-                  <td class="hidden-xs">December 7, 2014</td>
-                  <td class="width-150">
-                    5
-                  </td>
-                  <td class="">
-                    $ 40
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-      <section class="widget">
-        <header>
-          <h4>September <span class="fw-semi-bold">2014</span></h4>
-          <div class="widget-controls">
-            <a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
-            <a data-widgster="collapse" title="Collapse" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
-          </div>
-        </header>
-        <div class="body">
-          <div class="mt">
-            <table id="datatable-table" class="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th class="no-sort hidden-xs">Git Url</th>
-                  <th class="hidden-xs">Branch</th>
-                  <th class="hidden-xs">Date</th>
-                  <th class="no-sort">Hours</th>
-                  <th class="no-sort">Total Charge (USD)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="fw-semi-bold">bla.nucleus.com</span></td>
-                  <td class="hidden-xs">
-                    <small>github.com/bla/bla.git</small>
-                  </td>
-                  <td class="hidden-xs">Master</td>
-                  <td class="hidden-xs">December 7, 2014</td>
-                  <td class="width-150">
-                    5
-                  </td>
-                  <td class="">
-                    $ 40
-                  </td>
-                </tr>
-                <tr>
-                  <td><span class="fw-semi-bold">bla.nucleus.com</span></td>
-                  <td class="hidden-xs">
-                    <small>github.com/bla/bla.git</small>
-                  </td>
-                  <td class="hidden-xs">Master</td>
-                  <td class="hidden-xs">December 7, 2014</td>
-                  <td class="width-150">
-                    5
-                  </td>
-                  <td class="">
-                    $ 40
-                  </td>
-                </tr>
-                <tr>
-                  <td><span class="fw-semi-bold">bla.nucleus.com</span></td>
-                  <td class="hidden-xs">
-                    <small>github.com/bla/bla.git</small>
-                  </td>
-                  <td class="hidden-xs">Master</td>
-                  <td class="hidden-xs">December 7, 2014</td>
-                  <td class="width-150">
-                    5
-                  </td>
-                  <td class="">
-                    $ 40
-                  </td>
-                </tr>
+                {{/each}}
               </tbody>
             </table>
           </div>
