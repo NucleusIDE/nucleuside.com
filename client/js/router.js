@@ -155,4 +155,14 @@ Router.map(function() {
     name: "payment_details"
   });
 
+  this.route("invoice", {
+    path: "/invoice/:order_id",
+    action: function() {
+      this.render("invoice");
+    },
+    data: function() {
+      return {order_id: this.params.order_id};
+    }
+  });
+
 });
