@@ -133,6 +133,9 @@ Router.map(function() {
 
   this.route("/my-lab-sessions", {
     onBeforeAction: require_login,
+    waitOn: function() {
+      return Meteor.subscribe('my-orders');
+    },
     action: function() {
       this.render("lab_sessions");
     },

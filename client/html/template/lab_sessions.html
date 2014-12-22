@@ -22,54 +22,28 @@
                   <th>Name</th>
                   <th class="no-sort hidden-xs">Git Url</th>
                   <th class="hidden-xs">Branch</th>
-                  <th class="hidden-xs">Date</th>
-                  <th class="no-sort">Hours</th>
+                  <th class="hidden-xs">Last Billed</th>
+                  <th class="no-sort">Units Used</th>
                   <th class="no-sort">Status</th>
                 </tr>
               </thead>
               <tbody>
+                {{#each orders}}
                 <tr>
-                  <td><span class="fw-semi-bold">bla.nucleus.com</span></td>
+                  <td><span class="fw-semi-bold">{{get_subdomain}}</span></td>
                   <td class="hidden-xs">
-                    <small>github.com/bla/bla.git</small>
+                    <small>{{get_github_url}}</small>
                   </td>
                   <td class="hidden-xs">Master</td>
-                  <td class="hidden-xs">December 7, 2014</td>
+                  <td class="hidden-xs">{{get_last_charged}}</td>
                   <td class="width-150">
-                    5
+                    {{get_units_used}}
                   </td>
                   <td class="">
                     <span class="label label-success">Active</span>
                   </td>
                 </tr>
-                <tr>
-                  <td><span class="fw-semi-bold">bla.nucleus.com</span></td>
-                  <td class="hidden-xs">
-                    <small>github.com/bla/bla.git</small>
-                  </td>
-                  <td class="hidden-xs">Master</td>
-                  <td class="hidden-xs">December 7, 2014</td>
-                  <td class="width-150">
-                    5
-                  </td>
-                  <td class="">
-                    <span class="label label-warning">Activating</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td><span class="fw-semi-bold">bla.nucleus.com</span></td>
-                  <td class="hidden-xs">
-                    <small>github.com/bla/bla.git</small>
-                  </td>
-                  <td class="hidden-xs">Master</td>
-                  <td class="hidden-xs">December 7, 2014</td>
-                  <td class="width-150">
-                    5
-                  </td>
-                  <td class="">
-                    <span class="label label-danger">Failed</span>
-                  </td>
-                </tr>
+                {{/each}}
               </tbody>
             </table>
           </div>
