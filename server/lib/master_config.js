@@ -18,8 +18,8 @@ MasterConfig = {
       };
     },
     aws: {
-      accessKeyId: "AKIAJZS77QX5QT66VS4A",
-      secretAccessKey: "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"
+      accessKeyId: "",
+      secretAccessKey: ""
     }
   },
   stripe_plans: {
