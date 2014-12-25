@@ -15,4 +15,4 @@ service-configuration
 naxio:flash
 matb33:collection-hooks
 email
-peerlibrary:aws-sdk
+channikhabra:aws-sdk
