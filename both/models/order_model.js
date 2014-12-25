@@ -146,7 +146,18 @@ Order.extend({
     }
 
     EC2_Manager.stop_instance(instance_id, function(err, data) {
-
+      // data = { StoppingInstances:
+      //          [ { InstanceId: 'i-2eefd9e4',
+      //              CurrentState: [Object],
+      //              PreviousState: [Object] } ] }
+      if (err) {
+        console.log("ERROR WHILE STOPPING AWS INSTANCE for order", this._id, err);
+        return;
+      }
+      this.update({
+        aws_instance_stopped: true,
+        aws_instance_stopped_res: data
+      });
     });
   },
   //let's call this method 're_activate' instead of 'activate' to avoid confusion that this might be activating a new order. New orders are always active
