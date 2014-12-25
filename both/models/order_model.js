@@ -87,10 +87,67 @@ Order.extend({
     if (!date) return;
     this.update({last_charged: date});
   },
+  activate: function() {
+    EC2_Manager.launch_instance(function(err, data) {
+      // data = { ReservationId: 'r-4155d18b',
+      //          OwnerId: '510151306058',
+      //          Groups: [],
+      //          Instances:
+      //          [ { InstanceId: 'i-2eefd9e4',
+      //              ImageId: 'ami-61c6db24',
+      //              State: [Object],
+      //              PrivateDnsName: 'ip-172-30-2-209.us-west-1.compute.internal',
+      //              PublicDnsName: '',
+      //              StateTransitionReason: '',
+      //              KeyName: 'NucleusIDE-us-west-1',
+      //              AmiLaunchIndex: 0,
+      //              ProductCodes: [],
+      //              InstanceType: 't2.small',
+      //              LaunchTime: Thu Dec 25 2014 13:13:08 GMT+0530 (IST),
+      //              Placement: [Object],
+      //              Monitoring: [Object],
+      //              SubnetId: 'subnet-29180f6f',
+      //              VpcId: 'vpc-7fc7391a',
+      //              PrivateIpAddress: '172.30.2.209',
+      //              StateReason: [Object],
+      //              Architecture: 'x86_64',
+      //              RootDeviceType: 'ebs',
+      //              RootDeviceName: '/dev/sda1',
+      //              BlockDeviceMappings: [],
+      //              VirtualizationType: 'hvm',
+      //              ClientToken: '',
+      //              Tags: [],
+      //              SecurityGroups: [Object],
+      //              SourceDestCheck: true,
+      //              Hypervisor: 'xen',
+      //              NetworkInterfaces: [Object],
+      //              EbsOptimized: false } ] }
+
+      if (err) {
+        console.log("ERROR WHILE LAUNCHING AWS INSTANCE FOR ORDER", this._id);
+        return;
+      }
+
+      this.update({
+        aws: data
+      });
+    });
+  },
   deactivate: function() {
     this.is_monthly()
       ? this.update({'current_plan_start': null, current_plan_end: null, stripe_subscription_id: null})
     : this.update({last_charged: null});
+
+    var instance_id = this.aws ? this.aws.Instances[0].InstanceId : null;
+
+    if(! instance_id) {
+      console.log("NO INSTANCE FOR THIS ORDER", this._id);
+      return;
+    }
+
+    EC2_Manager.stop_instance(instance_id, function(err, data) {
+
+    });
   },
   //let's call this method 're_activate' instead of 'activate' to avoid confusion that this might be activating a new order. New orders are always active
   re_activate: function() {

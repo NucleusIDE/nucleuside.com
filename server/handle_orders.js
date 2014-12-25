@@ -34,10 +34,12 @@ Meteor.methods({
         if (err) {
           fut.throw(err);
         }
+        order.activate();
         fut.return(order._id);
       });
     } else {
-      console.log("TODO: HOURLY ORDER");
+      console.log("HOURLY ORDERS ARE CHARGED AFTER 1 WEEK");
+      order.activate();
       return;
     }
 

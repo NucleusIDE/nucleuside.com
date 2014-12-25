@@ -6,11 +6,13 @@ Meteor.startup(function() {
     apiVersion: '2014-10-01'
   });
 
-  EC2 = new AWS.EC2();
+  EC2 = new AWS.EC2({
+
+  });
 });
 
 EC2_Manager = {
-  create_instance: function() {
+  launch_instance: function(cb) {
     var params = {
       ImageId: 'ami-61c6db24', /* custom ami with ubuntu, node, meteor and git */
       MaxCount: 1, /* required */
@@ -21,16 +23,13 @@ EC2_Manager = {
       Monitoring: {
         Enabled: true
       },
-      SecurityGroups: ['nucleus-ide-ami'],
-      UserData: 'STRING_VALUE'
+      // SecurityGroups: ['nucleus-ide-ami'],
+      SubnetId: "subnet-29180f6f"
     };
 
-    EC2.runInstances(params, function(err, data) {
-      if (err) console.log(err, err.stack); // an error occurred
-      else     console.log(data);           // successful response
-    });
+    EC2.runInstances(params, cb);
   },
-  stop_instance: function() {
+  stop_instance_of_order: function(instance_id, cb) {
 
   }
 };
