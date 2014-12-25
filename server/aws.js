@@ -1,3 +1,5 @@
+Future = Npm.require('fibers/future');
+
 Meteor.startup(function() {
   AWS.config.update({
     accessKeyId: MasterConfig.keys.aws.accessKeyId,
@@ -27,7 +29,7 @@ EC2_Manager = {
       SubnetId: "subnet-29180f6f"
     };
 
-    EC2.runInstances(params, cb);
+    EC2.runInstances(params, cb.future());
   },
   stop_instance_of_order: function(instance_id, cb) {
     var params = {
@@ -35,15 +37,49 @@ EC2_Manager = {
       Force: true
     };
 
-    EC2.stopInstances(params, function(err, data) {
-      if (err) console.log(err, err.stack); // an error occurred
-      else     console.log(data);           // successful response
-    });
+    EC2.stopInstances(params, cb.future());
   },
   describe_status: function(instance_id, cb) {
     var params = {
       InstanceIds: [instance_id]
     };
-    EC2.describeInstanceStatus(params, cb);
+    EC2.describeInstanceStatus(params, cb.future());
   }
 };
+
+
+Meteor.methods({
+  get_aws_instance_status: function(instance_id) {
+    var fut = new Future();
+
+    EC2_Manager.describe_status(instance_id, function(err, data) {
+      if (err) {
+        console.log("ERROR WHILE CHECKING STATUS");
+        fut.return(new Error("ERROR WHILE CHECKING STATUS", err));
+      }
+
+      var aws_status = '';
+      try {
+        aws_status = data.InstanceStatuses[0].InstanceStatus.Status;
+      } catch (e) {
+        aws_status = 'Verifying...';
+      }
+
+      var status = 'Checking...';
+
+      switch(aws_status) {
+      case 'ok':
+        status = 'Active';
+        break;
+      default:
+        status = aws_status;
+      }
+
+      fut.return({
+        status: status
+      });
+    });
+
+    return fut.wait();
+  }
+});

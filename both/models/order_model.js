@@ -88,6 +88,10 @@ Order.extend({
     this.update({last_charged: date});
   },
   activate: function() {
+    if (!Meteor.isServer) {
+      return;
+    }
+    var self = this;
     EC2_Manager.launch_instance(function(err, data) {
       // data = { ReservationId: 'r-4155d18b',
       //          OwnerId: '510151306058',
@@ -128,12 +132,15 @@ Order.extend({
         return;
       }
 
-      this.update({
+      self.update({
         aws: data
       });
     });
   },
   deactivate: function() {
+    if(!Meteor.isServer)
+      return;
+
     this.is_monthly()
       ? this.update({'current_plan_start': null, current_plan_end: null, stripe_subscription_id: null})
     : this.update({last_charged: null});
@@ -185,32 +192,6 @@ Order.extend({
       return cb(null, {status: "No instance"});
     }
 
-    EC2_Manager.describe_status(instance_id, function(err, data) {
-      if (err) {
-        console.log("ERROR WHILE CHECKING STATUS");
-        return cb(new Error("ERROR WHILE CHECKING STATUS", err));
-      }
-
-      console.log("DATA FROM AWS WHILE CHCKING STATUS");
-
-      var aws_status = '';
-      try {
-        aws_status = data.InstanceStatuses[0].InstanceStatus.Status;
-      } catch (e) {
-        aws_status = 'Verifying...';
-      }
-
-      var status = 'Checking...';
-
-      switch(aws_status) {
-      case 'ok':
-        status = 'Active';
-        break;
-      }
-
-      return cb(null, {
-        status: aws_status
-      });
-    });
+    Meteor.call("get_aws_instance_status", instance_id, cb);
   }
 });
