@@ -39,5 +39,11 @@ EC2_Manager = {
       if (err) console.log(err, err.stack); // an error occurred
       else     console.log(data);           // successful response
     });
+  },
+  describe_status: function(instance_id, cb) {
+    var params = {
+      InstanceIds: [instance_id]
+    };
+    EC2.describeInstanceStatus(params, cb);
   }
 };

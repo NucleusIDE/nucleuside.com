@@ -172,5 +172,45 @@ Order.extend({
   },
   is_hourly: function() {
     return this.billing_method === BILLING_METHODS.hourly.method;
+  },
+  get_aws_instance_id: function() {
+    return this.aws.Instances[0].InstanceId || null;
+  },
+  check_instance_status: function(cb) {
+    /**
+     * This method takes a callback to do stuff with the status since AWS calls are async and no futures on client
+     */
+    var instance_id = this.get_aws_instance_id();
+    if (! instance_id) {
+      return cb(null, {status: "No instance"});
+    }
+
+    EC2_Manager.describe_status(instance_id, function(err, data) {
+      if (err) {
+        console.log("ERROR WHILE CHECKING STATUS");
+        return cb(new Error("ERROR WHILE CHECKING STATUS", err));
+      }
+
+      console.log("DATA FROM AWS WHILE CHCKING STATUS");
+
+      var aws_status = '';
+      try {
+        aws_status = data.InstanceStatuses[0].InstanceStatus.Status;
+      } catch (e) {
+        aws_status = 'Verifying...';
+      }
+
+      var status = 'Checking...';
+
+      switch(aws_status) {
+      case 'ok':
+        status = 'Active';
+        break;
+      }
+
+      return cb(null, {
+        status: aws_status
+      });
+    });
   }
 });
