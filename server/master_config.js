@@ -5,6 +5,9 @@ MasterConfig = {
     }
     return 'dev';
   },
+  admins: {
+    emails: ['ckhabra@gmail.com', 'james@faceyspacey.com', 'jamesgillmore@gmail.com', 'jamesg@faceyspacey.com']
+  },
   keys: {
     stripe: "sk_test_1G7JFjnHhhVAERbaw0dncTmE",
     github: function() {

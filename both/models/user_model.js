@@ -15,5 +15,11 @@ User.extend({
   },
   get_card: function() {
     return this.card_number;
+  },
+  is_admin: function(secure) {
+    if (secure && ! Meteor.isServer)
+      return false;
+
+    return Roles.userIsInRole(Meteor.userId(), ['admin']);
   }
 });

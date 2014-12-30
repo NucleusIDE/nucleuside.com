@@ -1,3 +1,10 @@
+/**
+ * Roles are not published by default
+ */
+Meteor.publish(null, function (){
+  return Meteor.roles.find({});
+});
+
 Meteor.publish('self', function() {
   return Meteor.users.find({_id: this.userId}, {fields: {
     card_number: 1,

@@ -110,6 +110,11 @@ Order.extend({
     if(!Meteor.isServer)
       return;
 
+    if (this.user().is_admin()) {
+      console.log("Not deactivating admin's order");
+      return;
+    }
+
     this.is_monthly()
       ? this.update({'current_plan_start': null, current_plan_end: null, stripe_subscription_id: null})
     : this.update({last_charged: null});
