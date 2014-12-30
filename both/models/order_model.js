@@ -11,6 +11,7 @@
  * github_url                   String
  * subdomain                    String
  * password                     String
+ * aws_instance_stopped:        Boolean
  */
 
 Orders = new Mongo.Collection('orders');
@@ -93,47 +94,15 @@ Order.extend({
     }
     var self = this;
     EC2_Manager.launch_instance(function(err, data) {
-      // data = { ReservationId: 'r-4155d18b',
-      //          OwnerId: '510151306058',
-      //          Groups: [],
-      //          Instances:
-      //          [ { InstanceId: 'i-2eefd9e4',
-      //              ImageId: 'ami-61c6db24',
-      //              State: [Object],
-      //              PrivateDnsName: 'ip-172-30-2-209.us-west-1.compute.internal',
-      //              PublicDnsName: '',
-      //              StateTransitionReason: '',
-      //              KeyName: 'NucleusIDE-us-west-1',
-      //              AmiLaunchIndex: 0,
-      //              ProductCodes: [],
-      //              InstanceType: 't2.small',
-      //              LaunchTime: Thu Dec 25 2014 13:13:08 GMT+0530 (IST),
-      //              Placement: [Object],
-      //              Monitoring: [Object],
-      //              SubnetId: 'subnet-29180f6f',
-      //              VpcId: 'vpc-7fc7391a',
-      //              PrivateIpAddress: '172.30.2.209',
-      //              StateReason: [Object],
-      //              Architecture: 'x86_64',
-      //              RootDeviceType: 'ebs',
-      //              RootDeviceName: '/dev/sda1',
-      //              BlockDeviceMappings: [],
-      //              VirtualizationType: 'hvm',
-      //              ClientToken: '',
-      //              Tags: [],
-      //              SecurityGroups: [Object],
-      //              SourceDestCheck: true,
-      //              Hypervisor: 'xen',
-      //              NetworkInterfaces: [Object],
-      //              EbsOptimized: false } ] }
-
+      //data looks like : https://paste.ee/p/XM85W
       if (err) {
         console.log("ERROR WHILE LAUNCHING AWS INSTANCE FOR ORDER", this._id);
         return;
       }
 
       self.update({
-        aws: data
+        aws: data,
+        aws_instance_stopped: false
       });
     });
   },
@@ -167,12 +136,8 @@ Order.extend({
       });
     });
   },
-  //let's call this method 're_activate' instead of 'activate' to avoid confusion that this might be activating a new order. New orders are always active
-  re_activate: function() {
-    if (this.is_monthly()) {
-      throw Meteor.Error("Not Implemented");
-    }
-    this.update({last_charged: moment().toDate()});
+  is_running: function() {
+    return ! this.aws_instance_stopped;
   },
   is_monthly: function() {
     return this.billing_method === BILLING_METHODS.monthly.method;

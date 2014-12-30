@@ -31,13 +31,25 @@ EC2_Manager = {
 
     EC2.runInstances(params, cb.future());
   },
-  stop_instance_of_order: function(instance_id, cb) {
+  stop_instance: function(instance_id, cb) {
     var params = {
       InstanceIds: [instance_id],
       Force: true
     };
 
     EC2.stopInstances(params, cb.future());
+  },
+  start_instance: function(instance_id, cb) {
+    /**
+     * Start stopped instance with 'instance_id'
+     */
+    var params = {
+      InstanceIds: [ /* required */
+        instance_id
+      ]
+    };
+
+    EC2.startInstances(params, cb.future());
   },
   describe_status: function(instance_id, cb) {
     var params = {
@@ -56,7 +68,7 @@ Meteor.methods({
       if (err) {
         if (err.name === "InvalidInstanceID.NotFound") {
           fut.return({
-            status: "Stopped"
+            status: "Terminated"
           });
         }
         fut.throw(err);
@@ -82,6 +94,60 @@ Meteor.methods({
       fut.return({
         status: status
       });
+    });
+
+    return fut.wait();
+  },
+  start_aws_instance: function(order_id) {
+    var order = Orders.findOne(order_id),
+        fut = new Future();
+
+    if (! order || order.user_id !== this.userId) {
+      fut.throw(new Meteor.Error("Invalid order for present user."));
+    }
+
+    var instance_id = order.get_aws_instance_id();
+    if (! instance_id) {
+      fut.throw(new Meteor.Error("Order doesn't have a stopped instance to start"));
+    }
+    EC2_Manager.start_instance(instance_id, function(err, data) {
+      //data looks like : https://paste.ee/p/XM85W
+      if (err) {
+        console.log("ERROR WHILE LAUNCHING AWS INSTANCE FOR ORDER", order._id);
+        fut.throw(new Meteor.Error(err));
+      }
+
+      order.update({
+        aws_instance_stopped: false
+      });
+
+      fut.return(data);
+    });
+    return fut.wait();
+  },
+  stop_aws_instance: function(order_id) {
+    var order = Orders.findOne(order_id),
+        fut = new Future();
+    if (! order || order.user_id !== this.userId) {
+      fut.throw(new Meteor.Error("Invalid order for present user."));
+    }
+
+    var instance_id = order.get_aws_instance_id();
+    EC2_Manager.stop_instance(instance_id, function(err, data) {
+      // data = { StoppingInstances:
+      //          [ { InstanceId: 'i-2eefd9e4',
+      //              CurrentState: [Object],
+      //              PreviousState: [Object] } ] }
+      if (err) {
+        console.log("ERROR WHILE STOPPING AWS INSTANCE for order", this._id, err);
+        fut.throw(new Meteor.Error(err));
+      }
+      this.update({
+        aws_instance_stopped: true,
+        aws_instance_stopped_res: data
+      });
+
+      fut.return(data);
     });
 
     return fut.wait();

@@ -21,10 +21,10 @@
                 <tr>
                   <th>Name</th>
                   <th class="no-sort hidden-xs">Git Url</th>
-                  <th class="hidden-xs">Branch</th>
                   <th class="hidden-xs">Last Billed</th>
                   <th class="no-sort">Units Used</th>
                   <th class="no-sort">Status</th>
+                  <th class="hidden-xs"></th>
                 </tr>
               </thead>
               <tbody>
@@ -34,13 +34,17 @@
                   <td class="hidden-xs">
                     <small>{{get_github_url}}</small>
                   </td>
-                  <td class="hidden-xs">Master</td>
                   <td class="hidden-xs">{{get_last_charged}}</td>
                   <td class="width-150">
                     {{get_units_used}}
                   </td>
                   <td class="">
                     <span class="label label-success label-{{status.class}}">{{status.status}}</span>
+                  </td>
+                  <td class="hidden-xs">
+                    {{#if action_button}}
+                    <a class="btn btn-{{action_button.class}} instance-action" href="#">{{action_button.text}}</a>
+                    {{/if}}
                   </td>
                 </tr>
                 {{/each}}
