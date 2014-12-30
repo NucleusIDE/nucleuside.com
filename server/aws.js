@@ -54,8 +54,12 @@ Meteor.methods({
 
     EC2_Manager.describe_status(instance_id, function(err, data) {
       if (err) {
-        console.log("ERROR WHILE CHECKING STATUS");
-        fut.return(new Error("ERROR WHILE CHECKING STATUS", err));
+        if (err.name === "InvalidInstanceID.NotFound") {
+          fut.return({
+            status: "Stopped"
+          });
+        }
+        fut.throw(err);
       }
 
       var aws_status = '';
