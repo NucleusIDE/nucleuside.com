@@ -1,36 +1,26 @@
-var order = {};
+var order;
 
-var valid_order = function() {
-  if (! document.getElementById("github-url")) return !!order.github_url;
-
-  order.github_url = $("#github-url").val().trim(),
-  order.subdomain = $("#subdomain").val().trim(),
-  order.password = $("#domain-passwd").val().trim(),
-  order.billing_method = Session.get("billing_method");
-  order.display_amount = order.billing_method === 'Monthly' ? '$160 / Month' : '$1 / hour used';
-
-  if (!order.github_url || !order.subdomain || !order.billing_method) {
-    Flash.danger("Invalid Order");
-    return false;
-  }
-
-  if (!Utils.validate_url(order.github_url)) {
-    Flash.danger("Invalid git url");
-    return false;
-  }
-
-  Flash.clear();
-  return true;
-};
+Meteor.startup(function() {
+	order = new Order;
+});
 
 Template.billing_wizard.rendered = function() {
   var $progress_bar = $(".progress-bar-inverse");
-  $("select").select2();
   $progress_bar.width("25%");
+	
+	$("select").select2();
+	
+	order = new Order;
+	Session.set("billing_method", 'hourly');
+	Session.set("wizard_locked", false);
 };
 
 
 Template.billing_wizard.events({
+	"blur #subdomain": function() {
+		order.subdomain = $("#subdomain").val().trim();
+		order.setSubdomainUsage();
+	},
   "click .step-1": function() {
     Session.set("billing_steps_done", 1);
   },
@@ -45,29 +35,22 @@ Template.billing_wizard.events({
   },
   "click .next > button": function() {
     var steps_done = Session.get("billing_steps_done");
-    steps_done === 4 ?
-      Session.set("billing_steps_done", 4) :
-      Session.set("billing_steps_done", steps_done + 1);
+		if(steps_done < 4) Session.set("billing_steps_done", steps_done + 1);
   },
   "click .previous > button": function() {
     var steps_done = Session.get("billing_steps_done");
-    steps_done === 1 ?
-      Session.set("billing_steps_done", 1) :
-      Session.set("billing_steps_done", steps_done - 1);
+		if(steps_done > 1) Session.set("billing_steps_done", steps_done - 1);
   },
   "click .hourly": function(e) {
-    e.preventDefault();
-    $(e.currentTarget).addClass('btn-primary').removeClass('btn-transparent');
-    $(".monthly").removeClass('btn-primary').addClass('btn-transparent');
-    Session.set("billing_method", 'Hourly');
+		e.preventDefault();
+    Session.set("billing_method", 'hourly');
   },
   "click .monthly": function(e) {
-    e.preventDefault();
-    $(e.currentTarget).addClass('btn-primary').removeClass('btn-transparent');
-    $(".hourly").removeClass('btn-primary').addClass('btn-transparent');
-    Session.set("billing_method", 'Monthly');
+		e.preventDefault();
+    Session.set("billing_method", 'monthly');
   }
 });
+
 
 Template.billing_wizard.helpers({
   "cant_go_previous": function() {
@@ -81,62 +64,66 @@ Template.billing_wizard.helpers({
   },
   order: function() {
     return order;
-  },
+  }
+});
 
+Template.billing_option.helpers({
+	selected: function(cycle) {
+		if(cycle == 'hourly') return Session.get('billing_method') == 'hourly' ? 'btn-primary' : 'btn-transparent';
+		else if(cycle == 'monthly') return Session.get('billing_method') == 'monthly' ? 'btn-primary' : 'btn-transparent';
+	}
 });
 
 /**
- * Autorun to update the progress bar below the signup form
+ * Redirect Flow + create_order on flow completion
  */
 Tracker.autorun(function() {
-  var steps_done = Session.get("billing_steps_done"),
-      $progress_bar = $(".progress-bar-inverse");
+	if (Session.get("wizard_locked")) return;
+		
+	var steps_done = Session.get("billing_steps_done");
 
-  if (Session.get("wizard_locked")) {
-    Session.set("billing_steps_done", 4);
-    steps_done = 4;
-    return;
-  }
-
-  if (steps_done > 2) {
-    if (!valid_order()) {
-      Session.set("billing_steps_done", 2);
-      return;
-    }
+  if (steps_done == 3) {
+		order.populateModel();
+		
+		if(!order.isValidOrder()) return Session.set("billing_steps_done", 2);
   }
 
   if (steps_done == 4) {
     BlockUI.block();
-    Meteor.call('create_order', {
-      billing_method: order.billing_method.toLowerCase(),
-      github_url: order.github_url,
-      subdomain: order.subdomain,
-      password: order.password
-    }, function(err, res) {
+		
+    Meteor.call('create_order', order, function(err, res) {
       BlockUI.unblock();
+			
       if (err) {
         Flash.danger(err.message);
         Session.set("billing_steps_done", 2);
-        return false;
       }
-      order = {};
-      Session.set("wizard_locked", true);
+      else Session.set("wizard_locked", true);
     });
   }
+});
 
-  //set width of progress bar
+
+
+/**
+ * Autorun to update the progress bar width below the signup form
+ */
+Tracker.autorun(function() {
+	var steps_done = Session.get("billing_steps_done"),
+		$progress_bar = $(".progress-bar-inverse");
+		
   switch (steps_done) {
-  case 1:
-    $progress_bar.width("25%");
-    break;
-  case 2:
-    $progress_bar.width("50%");
-    break;
-  case 3:
-    $progress_bar.width("75%");
-    break;
-  case 4:
-    $progress_bar.width("100%");
-    break;
+	  case 1:
+	    $progress_bar.width("25%");
+	    break;
+	  case 2:
+	    $progress_bar.width("50%");
+	    break;
+	  case 3:
+	    $progress_bar.width("75%");
+	    break;
+	  case 4:
+	    $progress_bar.width("100%");
+	    break;
   }
 });

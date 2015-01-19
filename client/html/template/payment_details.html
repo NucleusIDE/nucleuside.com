@@ -7,31 +7,47 @@
       <h2 class="page-title"> Payment <small> details</small></h2>
       <div class="row">
         <div class="col-lg-7 col-lg-offset-1">
+					
           <section class="widget">
+						
             <header>
-
+							{{#if current_card}}
+								<h4 style="text-align:right;">Card on File: {{current_card}}</h4>
+							{{/if}}
             </header>
+						
             <div class="body">
               {{flash}}
               <div id="" class="form">
 
                 <div class="tab-content">
 
+									{{#if current_card}}
+										<h3 style="margin-top: 0px; margin-bottom:20px;">Please enter your new card details below:</h3>
+									{{/if}}
+
                   <div class="" id="payment-details">
                     <form class="form-horizontal mt-sm" id="payment-details-form">
                       <fieldset>
+												
                         <div class="form-group">
                           <label class="control-label col-md-3"  for="name">Name on the Card</label>
                           <div class="col-md-8">
-                            <div class="col-md-10"><input type="text" id="name" name="name" tabindex="1" placeholder="" class="form-control"></div>
+                            <div class="col-md-10">
+															<input type="text" id="name" name="name" tabindex="1" placeholder="" class="form-control">
+														</div>
                           </div>
                         </div>
+												
                         <div class="form-group ">
                           <label class="control-label col-md-3" for="credit">Credit Card Number </label>
                           <div class="col-md-8">
-                            <div class="col-md-10"><input id="credit" type="text" tabindex="2" class="form-control"></div>
+                            <div class="col-md-10">
+															<input id="credit" type="text" tabindex="2" class="form-control" style="width: 195px;">
+														</div>
                           </div>
                         </div>
+												
                         <div class="form-group">
                           <label for="expiration-date" class="control-label col-md-3">Expiration Date</label>
                           <div class="col-md-8">
@@ -58,32 +74,38 @@
                             </div>
                           </div>
                         </div>
+												
                         <div class="form-group">
                           <label for="cvc" class="control-label col-md-3">CVC</label>
                           <div class="col-md-8">
                             <div class="col-md-10">
-                              <input class="form-control" id="cvc" name="cvc" type="password" tabindex="5" />
+                              <input class="form-control" id="cvc" name="cvc" type="password" tabindex="5" style="width: 96px;" />
                             </div>
                           </div>
                         </div>
+												
                         <div class="form-group">
                           <label for="cvc" class="control-label col-md-3"></label>
                           <div class="col-md-6">
                             <div class="col-md-10">
-                              <input class="form-control btn btn-success col-md" value="Save" id="cvc" name="" type="submit" tabindex="5"/>
+                              <input class="form-control btn btn-success col-md" value="Save" id="cvc" name="" type="submit" tabindex="5" style="width: 195px;"/>
                             </div>
                           </div>
                         </div>
+												
                       </fieldset>
                     </form>
                   </div>
+									
                 </div>
               </div>
             </div>
           </section>
+					
         </div>
       </div>
     </div>
+		
     <div class="loader-wrap hiding hide">
       <i class="fa fa-circle-o-notch fa-spin"></i>
     </div>

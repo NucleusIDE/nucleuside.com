@@ -5,7 +5,7 @@ Meteor.methods({
     if (!this.userId) {
       throw new Meteor.Error("Must be logged in to create an order");
     }
-
+		
     var method = options.billing_method;
 
     //security level: paranoid
@@ -28,7 +28,7 @@ Meteor.methods({
     order.last_charged = moment().toDate(); //used in hourly orders only
     order.created_at = moment().toDate();
     order.save();
-
+		
     if (order.is_monthly()) {
       Meteor.call('update_stripe_plan', order._id, function(err, res) {
         if (err) {

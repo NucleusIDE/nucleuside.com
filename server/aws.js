@@ -56,7 +56,18 @@ EC2_Manager = {
       InstanceIds: [instance_id]
     };
     EC2.describeInstanceStatus(params, cb.future());
-  }
+  },
+	get_ip_address: function(instance_id, cb) {
+		Meteor.setTimeout(function() {
+			EC2.describeInstances({InstanceIds: [instance_id]}, function(err, data) {
+				var ipAddress = data.Reservations[0].Instances[0].PublicIpAddress;
+			
+				console.log('Instance IP Address:' + ipAddress);
+			
+				cb(ipAddress);
+			});
+		}, 10 * 1000);
+	}
 };
 
 
@@ -74,6 +85,7 @@ Meteor.methods({
         fut.throw(err);
       }
 
+			console.log(data);
       var aws_status = '';
       try {
         aws_status = data.InstanceStatuses[0].InstanceStatus.Status;

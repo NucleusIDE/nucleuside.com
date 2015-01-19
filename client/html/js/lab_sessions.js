@@ -45,17 +45,13 @@ Template.lab_sessions.events({
 
     if (order.is_running()) {
       Meteor.call('stop_aws_instance', this._id, function(err, data) {
-        if (err) {
-          console.log("ERROR WHILE STOPPING INSTANCE", err); return;
-        }
+        if (err) console.log("ERROR WHILE STOPPING INSTANCE", err); return;
         console.log("DATA FROM SERVER", data);
 
       });
     } else {
       Meteor.call('start_aws_instance', this._id, function(err, data) {
-        if (err) {
-          console.log("ERROR WHILE STARTING INSTANCE", err); return;
-        }
+        if (err) console.log("ERROR WHILE STARTING INSTANCE", err); return;
         console.log("DATA FROM SERVER", data);
       });
     }

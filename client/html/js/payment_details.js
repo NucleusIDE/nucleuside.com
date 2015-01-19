@@ -5,11 +5,14 @@ Template.payment_details.rendered = function() {
 
 Template.payment_details.helpers({
   expiry_year: function() {
-    var years = _.map(_.range(moment().year(), 2040), function(y) {
+    var years = _.map(_.range(moment().year(), 2022), function(y) {
       return {year: y};
     });
     return years;
-  }
+  },
+	current_card: function() {
+		return Meteor.user() && Meteor.user().card_number;
+	}
 });
 
 Template.payment_details.events({
@@ -18,7 +21,7 @@ Template.payment_details.events({
 
     var form = $("#payment-details-form"),
         name = $("#name").val().trim(),
-        card = $("#credit").val().trim(),
+        card = $("#credit").val().replace(/ /g, ''),
         expiry_month = $("#expiry-month").val(),
         expiry_year = $("#expiry-year").val(),
         cvc = $("#cvc").val();
@@ -29,7 +32,7 @@ Template.payment_details.events({
     }
 
     if (cvc.length > 3) {
-      Flash.danger("CVC can't be more than 3 character in length");
+      Flash.danger("CVC can't be more than 3 characters in length");
       return false;
     }
     if (card.length !== 16) {
@@ -41,7 +44,7 @@ Template.payment_details.events({
     cvc =  parseInt(cvc);
 
     if (!_.isNumber(card) || !_.isNumber(cvc) ) {
-      Flash.danger("Card Number and CVC should be integers.");
+      Flash.danger("Card Number and CVC should only be numbers.");
       return false;
     }
 
@@ -58,8 +61,8 @@ Template.payment_details.events({
     Stripe.createToken(stripe_card, function(status, response) {
       if(status === 200) {
         if(!Meteor.user()) { alert("No user"); return false;}
-        var stripeCardToken = response.id;
-        var last4CardNumber = (""+card).slice(-4);
+        var stripeCardToken = response.id,
+					last4CardNumber = (""+card).slice(-4);
 
         Meteor.call('update_billing_info', stripeCardToken, last4CardNumber, function(error, result) {
           BlockUI.unblock();

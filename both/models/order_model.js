@@ -14,6 +14,8 @@
  * aws_instance_stopped:        Boolean
  */
 
+if(Meteor.isServer) Fibers = Npm.require('fibers');
+
 Orders = new Mongo.Collection('orders');
 
 Orders.before.insert(function (userId, doc) {
@@ -37,6 +39,7 @@ BILLING_METHODS = {
   }
 };
 
+
 Order.extend({
   get_user: function() {
     return Meteor.users.findOne(this.user_id);
@@ -53,6 +56,45 @@ Order.extend({
   get_github_url: function() {
     return this.github_url;
   },
+	display_amount: function() {
+		return this.billing_method === 'Monthly' ? '$160 / Month' : '$1 / hour used';
+	},
+	setSubdomainUsage: function() {
+		this.subdomainUsedAlready(this.subdomain, function(err, res) {
+			if(res) {
+				this.subdomainUsed = true;
+				Flash.danger("The subdomain you provided is already in use"); //i wish i didnt have to do it again,
+				Session.set("billing_steps_done", 2);//but it's if they click next before the blur event callback here updates this.subdomainUsed
+			}
+			else this.subdomainUsed = false;
+		}.bind(this));
+	},
+	populateModel: function() {
+	  this.github_url = $("#github-url").val().trim();
+	  this.subdomain = $("#subdomain").val().trim();
+	  this.password = $("#domain-passwd").val().trim();
+	  this.billing_method = Session.get("billing_method").toLowerCase();
+	},
+	isValidOrder: function() {
+	  if(!this.github_url || !this.subdomain || !this.billing_method) {
+	    Flash.danger("Invalid Order");
+	    return false;
+	  }
+		
+		if(!Utils.validate_url(this.github_url) || this.github_url.indexOf('github.com') === -1) {
+	    Flash.danger("Invalid Github Url");
+	    return false;
+		}
+
+
+		if(this.subdomainUsed) {
+	    Flash.danger("The subdomain you provided is already in use");
+	    return false;
+		}
+	
+	  Flash.clear();
+	  return true;
+	},
   reset: function(last_charged) {
     /**
      * Reset order after a successful charge
@@ -100,12 +142,27 @@ Order.extend({
         return;
       }
 
+			var instanceId = data.Instances[0].InstanceId;
+			self.linkSubdomain(instanceId);
+			
       self.update({
         aws: data,
         aws_instance_stopped: false
       });
     });
   },
+	linkSubdomain: function(instanceId) {
+		var self = this;
+	
+		EC2_Manager.get_ip_address(instanceId, function(ipAddress) {
+			Fiber(function() {
+				self.ip_address = ipAddress;
+				self.save();
+			
+				Cloudflare.linkSubdomain(self.subdomain, ipAddress);
+			}).run();
+		});
+	},
   deactivate: function() {
     if(!Meteor.isServer)
       return;
@@ -164,4 +221,11 @@ Order.extend({
 
     Meteor.call("get_aws_instance_status", instance_id, cb);
   }
+});
+
+
+Order.extendHTTP({
+	subdomainUsedAlready: function(subdomain) {
+		return !!Orders.find({subdomain: subdomain}).count();
+	}
 });
