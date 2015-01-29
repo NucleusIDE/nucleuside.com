@@ -64,6 +64,8 @@ StripeCharge.extendStaticServer({
 		var orders = this.ordersToCharge();
 	
 		orders.forEach(function(order) {
+			if(order.get_user().is_admin()) return;
+			
 			var stripeCharge = new StripeCharge(order);
 			stripeCharge.charge();
 		});

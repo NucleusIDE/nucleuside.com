@@ -1,60 +1,34 @@
 Template.lab_sessions.helpers({
   'orders': function() {
-    var orders = Orders.find({user_id: Meteor.userId()});
-    orders.forEach(function(order) {
-      Session.setDefault(order._id+'_instance_status', {status: 'Checking...', class: 'info'});
-    });
-    return orders;
+    return Orders.find();
   },
   status: function() {
-    var self = this;
-
-    this.check_instance_status(function(err, data) {
-      if (err) {
-        console.log("ERROR WHILE CHECKING STATUS", err.message);
-        data = {};
-        data.status = "Couldn't verify";
-      }
-      var label = data.status === 'Active' ? 'success' : 'danger';
-      Session.set(self._id+'_instance_status', {status: data.status, class: label});
-    });
-
-    return Session.get(this._id+'_instance_status');
+    return this.ec2.status;
   },
-  action_button: function() {
-    var order = Orders.findOne(this._id);
-    if (order.is_monthly()) {
-      return false;
-    }
-    return order.is_running() ? {
-      text: 'Stop',
-      class: 'danger'
-    } : {
-      text: 'Start',
-      class: 'success'
-    };
+	statusClass: function() {
+		if(this.ec2.status === 'running') return 'success';
+		if(this.ec2.status === 'pending') return 'warning';
+		if(this.ec2.status === 'stopping') return 'warning';
+		if(this.ec2.status === 'stopped') return 'danger';
+		if(this.ec2.status === 'shutting-down') return 'danger';
+		if(this.ec2.status === 'terminated') return 'danger';
+	},
+  action_button_text: function() {
+    if(this.is_monthly()) return false;
+    return order.is_running() ? 'stop' : 'start';
+  },
+  action_button_class: function() {
+    if(this.is_monthly()) return false;
+		return order.is_running() ? 'danger' : 'success';
   }
 });
 
 Template.lab_sessions.events({
   "click .instance-action": function(e) {
     e.preventDefault();
-    var order = Orders.findOne(this._id);
-
     $(e.currentTarget).html('<i class="fa fa-spinner fa-spin"></i>');
-
-    if (order.is_running()) {
-      Meteor.call('stop_aws_instance', this._id, function(err, data) {
-        if (err) console.log("ERROR WHILE STOPPING INSTANCE", err); return;
-        console.log("DATA FROM SERVER", data);
-
-      });
-    } else {
-      Meteor.call('start_aws_instance', this._id, function(err, data) {
-        if (err) console.log("ERROR WHILE STARTING INSTANCE", err); return;
-        console.log("DATA FROM SERVER", data);
-      });
-    }
-
+		
+    if (this.is_running()) this.stop();
+		else this.start();
   }
 });

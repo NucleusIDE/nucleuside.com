@@ -39,11 +39,11 @@
                     {{get_units_used}}
                   </td>
                   <td class="">
-                    <span class="label label-success label-{{status.class}}">{{status.status}}</span>
+                    <span class="label label-success label-{{statusClass}}">{{status}}</span>
                   </td>
                   <td class="hidden-xs">
                     {{#if action_button}}
-                    <a class="btn btn-{{action_button.class}} instance-action" href="#">{{action_button.text}}</a>
+                    	<a class="btn btn-{{action_button_class}} instance-action" href="#">{{action_button_text}}</a>
                     {{/if}}
                   </td>
                 </tr>
