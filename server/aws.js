@@ -1,20 +1,47 @@
-Future = Npm.require('fibers/future');
+var EC2 = function EC2(doc) {
+	if(doc) _.extend(this, doc);
+};
 
-Meteor.startup(function() {
-  AWS.config.update({
-    accessKeyId: MasterConfig.keys.aws.accessKeyId,
-    secretAccessKey: MasterConfig.keys.aws.secretAccessKey,
-    region: 'us-west-1',
-    apiVersion: '2014-10-01'
-  });
-
-  EC2 = new AWS.EC2({
-
-  });
-});
-
-EC2_Manager = {
-  launch_instance: function(cb) {
+EC2.extends(Base, {
+	_runInstances: function(params) {
+		return this.applySync(this._ec2, 'runInstances', [params]);
+	},
+	_startInstances: function(params) {
+		return this.applySync(this._ec2, 'startInstances', [params]);
+	},
+	_stopInstances: function(params) {
+		return this.applySync(this._ec2, 'stopInstances', [params]);
+	},
+	_describeInstances: function(params) {
+		return this.applySync(this._ec2, 'describeInstances', [params]);
+	},
+	
+	_params: function() {
+		return {InstanceIds: [this.instance_id]};
+	},
+	
+  start: function() {
+		this._startInstances(this._params());
+		this.ec2.active = true;
+  },
+  stop: function() {
+    var params =  this._params();
+		params.Force = true;
+		this._stopInstances(params);
+		this.ec2.active = false;
+  },
+	
+  getStatus: function() {
+    var res = this._describeInstances(this._params());
+		if(res.error && res.error.name === "InvalidInstanceID.NotFound") return this.status = 'terminated';
+		return this.status = res.data.Reservations[0].Instances[0].state.name;
+  },
+	getIpAddress: function() {
+		var res = this._describeInstances(this._params());
+		return this.ip_address = res.data.Reservations[0].Instances[0].PublicIpAddress;
+	},
+	
+  launch: function() {
     var params = {
       ImageId: 'ami-61c6db24', /* custom ami with ubuntu, node, meteor and git */
       MaxCount: 1, /* required */
@@ -28,140 +55,30 @@ EC2_Manager = {
       // SecurityGroups: ['nucleus-ide-ami'],
       SubnetId: "subnet-29180f6f"
     };
-
-    EC2.runInstances(params, cb.future());
-  },
-  stop_instance: function(instance_id, cb) {
-    var params = {
-      InstanceIds: [instance_id],
-      Force: true
-    };
-
-    EC2.stopInstances(params, cb.future());
-  },
-  start_instance: function(instance_id, cb) {
-    /**
-     * Start stopped instance with 'instance_id'
-     */
-    var params = {
-      InstanceIds: [ /* required */
-        instance_id
-      ]
-    };
-
-    EC2.startInstances(params, cb.future());
-  },
-  describe_status: function(instance_id, cb) {
-    var params = {
-      InstanceIds: [instance_id]
-    };
-    EC2.describeInstanceStatus(params, cb.future());
-  },
-	get_ip_address: function(instance_id, cb) {
-		Meteor.setTimeout(function() {
-			EC2.describeInstances({InstanceIds: [instance_id]}, function(err, data) {
-				var ipAddress = data.Reservations[0].Instances[0].PublicIpAddress;
-			
-				console.log('Instance IP Address:' + ipAddress);
-			
-				cb(ipAddress);
-			});
-		}, 10 * 1000);
-	}
-};
-
-
-Meteor.methods({
-  get_aws_instance_status: function(instance_id) {
-    var fut = new Future();
-
-    EC2_Manager.describe_status(instance_id, function(err, data) {
-      if (err) {
-        if (err.name === "InvalidInstanceID.NotFound") {
-          fut.return({
-            status: "Terminated"
-          });
-        }
-        fut.throw(err);
-      }
-
-			console.log(data);
-      var aws_status = '';
-      try {
-        aws_status = data.InstanceStatuses[0].InstanceStatus.Status;
-      } catch (e) {
-        aws_status = 'Verifying...';
-      }
-
-      var status = 'Checking...';
-
-      switch(aws_status) {
-      case 'ok':
-        status = 'Active';
-        break;
-      default:
-        status = aws_status;
-      }
-
-      fut.return({
-        status: status
-      });
-    });
-
-    return fut.wait();
-  },
-  start_aws_instance: function(order_id) {
-    var order = Orders.findOne(order_id),
-        fut = new Future();
-
-    if (! order || order.user_id !== this.userId) {
-      fut.throw(new Meteor.Error("Invalid order for present user."));
-    }
-
-    var instance_id = order.get_aws_instance_id();
-    if (! instance_id) {
-      fut.throw(new Meteor.Error("Order doesn't have a stopped instance to start"));
-    }
-    EC2_Manager.start_instance(instance_id, function(err, data) {
-      //data looks like : https://paste.ee/p/XM85W
-      if (err) {
-        console.log("ERROR WHILE LAUNCHING AWS INSTANCE FOR ORDER", order._id);
-        fut.throw(new Meteor.Error(err));
-      }
-
-      order.update({
-        aws_instance_stopped: false
-      });
-
-      fut.return(data);
-    });
-    return fut.wait();
-  },
-  stop_aws_instance: function(order_id) {
-    var order = Orders.findOne(order_id),
-        fut = new Future();
-    if (! order || order.user_id !== this.userId) {
-      fut.throw(new Meteor.Error("Invalid order for present user."));
-    }
-
-    var instance_id = order.get_aws_instance_id();
-    EC2_Manager.stop_instance(instance_id, function(err, data) {
-      // data = { StoppingInstances:
-      //          [ { InstanceId: 'i-2eefd9e4',
-      //              CurrentState: [Object],
-      //              PreviousState: [Object] } ] }
-      if (err) {
-        console.log("ERROR WHILE STOPPING AWS INSTANCE for order", this._id, err);
-        fut.throw(new Meteor.Error(err));
-      }
-      this.update({
-        aws_instance_stopped: true,
-        aws_instance_stopped_res: data
-      });
-
-      fut.return(data);
-    });
-
-    return fut.wait();
+		
+		var res = this._runInstances(params);
+		
+		if(res.error) {
+			this.status = 'error';
+			throw new Meteor.Error('unable-to-launch-instance', "UNABLE TO LAUNCHING ORDER INSTANCE", this._id);
+		}
+		else {
+			this.status = 'pending';
+			this.aws_instance_stopped = false;
+			return this.instance_id = res.data.Instances[0].InstanceId;
+		}
   }
+});
+
+EC2.extendStatic({
+	onStartup: function() {
+	  AWS.config.update({
+	    accessKeyId: MasterConfig.keys.aws.accessKeyId,
+	    secretAccessKey: MasterConfig.keys.aws.secretAccessKey,
+	    region: 'us-west-1',
+	    apiVersion: '2014-10-01'
+	  });
+		
+	  this._ec2 = this.prototype._ec2 = new AWS.EC2({});
+	}
 });

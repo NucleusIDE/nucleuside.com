@@ -23,7 +23,13 @@ MasterConfig = {
     aws: {
       accessKeyId: "AKIAJ6TQDQPF2GR2Y2ZA",
       secretAccessKey: "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"
-    }
+    },
+		cloudflare: {
+			cloudflare_api_interface: "https://www.cloudflare.com/api_json.html",
+			cloudflare_token: "efb121eb6f63b931c15d2474cbcf8a0e1f85c",
+			cloudflare_email: "jamesgillmore@gmail.com",
+			domain: "nucleuside.com"
+		}
   },
   stripe_plans: {
     monthly: 'monthly'

@@ -128,6 +128,11 @@ Router.map(function() {
     action: function() {
       this.render("billing_wizard");
     },
+		data: function()  {
+			var order  = new Order; 
+			order.user_id = Meteor.userId();
+			return order;
+		},
     name: "billing_wizard"
   });
 
