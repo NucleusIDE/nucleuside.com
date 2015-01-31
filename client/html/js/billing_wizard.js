@@ -1,4 +1,5 @@
 Template.billing_wizard.rendered = function() {
+	Session.set("billing_steps_done", 1);
 	Session.set("billing_method", 'hourly');
 	Session.set("wizard_locked", false);
 	$("select").select2();

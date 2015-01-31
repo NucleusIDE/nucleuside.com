@@ -6,19 +6,33 @@ EC2.extends(Base, {
 	_runInstances: function(params) {
 		return this.applySync(this._ec2, 'runInstances', [params]);
 	},
-	_startInstances: function(params) {
-		return this.applySync(this._ec2, 'startInstances', [params]);
+	_startInstances: function() {
+		return this.applySync(this._ec2, 'startInstances', [this._params()]);
 	},
 	_stopInstances: function(params) {
+		_.extend(params, this._params());
 		return this.applySync(this._ec2, 'stopInstances', [params]);
 	},
-	_describeInstances: function(params) {
-		return this.applySync(this._ec2, 'describeInstances', [params]);
+	_terminateInstances: function(params) {
+		_.extend(params, this._params());
+		return this.applySync(this._ec2, 'terminateInstances', [params]);
+	},
+	_describeInstances: function() {
+		return this.applySync(this._ec2, 'describeInstances', [this._params()]);
 	},
 	
 	_params: function() {
 		return {InstanceIds: [this.instance_id]};
-	}
+	},
+	
+  _start: function() {
+		this._startInstances();
+		this.active = true;
+  },
+  _stop: function() {
+		this._stopInstances({Force: true});
+		this.active = false;
+  }
 });
 
 EC2.extendStatic({

@@ -12,6 +12,7 @@
  * subdomain                    String
  * password                     String
  * aws_instance_stopped:        Boolean
+ * hide													Boolean
  */
 
 Orders = new Mongo.Collection('orders');

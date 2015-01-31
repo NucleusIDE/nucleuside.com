@@ -15,7 +15,7 @@
             </div>
             <div class="col-sm-6 col-print-6">
               <div class="invoice-number text-align-right">
-                #{{payment.get_invoice_number}} / {{payment.get_date}}
+                #{{get_invoice_number}} / {{get_date}}
               </div>
               <div class="invoice-number-info text-align-right">
                 Some Invoice number description or whatever
@@ -41,7 +41,7 @@
                 <h3 class="client-name">
                 </h3>
                 <address>
-                  <abbr title="Work email">e-mail:</abbr> <a href="mailto:{{buyer.get_email}}">{{buyer.get_email}}</a><br>
+                  <abbr title="Work email">e-mail:</abbr> <a href="mailto:{{user}}">{{user.get_email}}</a><br>
                   <div class="separator line"></div>
                   <p class="margin-none"><strong>Note:</strong><br>Some nights I stay up cashing in my bad luck.
                     Some nights I call it a draw</p>

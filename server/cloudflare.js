@@ -1,18 +1,16 @@
-Cloudflare = {};
-
 CloudFlare = function CloudFlare() {
-	this.cloudflare_api_interface = MasterConfig.keys.cloudflare.cloudflare_api_interface;
-	this.cloudflare_token = MasterConfig.keys.cloudflare.cloudflare_token;
-	this.cloudflare_email = MasterConfig.keys.cloudflare.cloudflare_email;
+	this.url = MasterConfig.keys.cloudflare.url;
+	this.token = MasterConfig.keys.cloudflare.token;
+	this.email = MasterConfig.keys.cloudflare.email;
 	this.domain = MasterConfig.keys.cloudflare.domain;
 };
 
 CloudFlare.extends(Base, {
 	linkSubdomain: function(subdomain, ipAddress) {
-	  var res = this.POST(this.cloudflare_api_interface, {
+	  var res = this.POST(this.url, {
       params: {
-        tkn: this.cloudflare_token,
-        email: this.cloudflare_email,
+        tkn: this.token,
+        email: this.email,
         a: "rec_new",
         z: this.domain,
         type: 'A',

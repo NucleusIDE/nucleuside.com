@@ -144,6 +144,9 @@ Router.map(function() {
     action: function() {
       this.render("lab_sessions");
     },
+		data: function() {
+			return {orders: Orders.find()};
+		},
     name: "lab_sessions"
   });
 
@@ -180,8 +183,13 @@ Router.map(function() {
       this.render("invoice");
     },
     data: function() {
-      return {payment_id: this.params.payment_id};
+			return Payments.findOne(this.params.payment_id);
     }
   });
+});
 
+Tracker.autorun(function(stop) {
+  //if (!Router.current()) return;
+  //var current_route = Router.current().route.options.name;
+  if(Meteor.user()) Router.go("lab_sessions");
 });

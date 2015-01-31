@@ -37,19 +37,20 @@ StripeSubscription.extends(Stripe, {
 		else {
       console.log("Confirming Subscription Cancel:", res.data);
 			this.order.canceled = true;
+			this.order.hide = true;
 			this.order.save();
 		}
   },
 	
 	
 	_createSync: function() {
-		return this.applySync(this._stripe(), 'createSubscription', _.toArray(arguments));
+		return this.applySync(this._stripe(), 'createSubscription', arguments);
 	},
 	_updateSync: function() {
-		return this.applySync(this._stripe(), 'updateSubscription', _.toArray(arguments));
+		return this.applySync(this._stripe(), 'updateSubscription', arguments);
 	},
 	_cancelSync: function() {
-		return this.applySync(this._stripe(), 'cancelSubscription', _.toArray(arguments));
+		return this.applySync(this._stripe(), 'cancelSubscription', arguments);
 	},
 	_stripe: function() {
 		return this.__stripe.customers;

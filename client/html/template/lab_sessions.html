@@ -33,13 +33,24 @@
                   <td><span class="fw-semi-bold">{{get_subdomain}}</span></td>
                   <td class="hidden-xs">
                     <small>{{get_github_url}}</small>
+										{{#if isSubscription}}
+											<small>
+												<a class='cancel_subscription'>cancel</a>
+											</small>
+										{{else}}
+											{{#unless ec2.active}}
+												<small>
+													<a class='remove_instance'>remove instance</a>
+												</small>
+											{{/unless}}
+										{{/if}}
                   </td>
                   <td class="hidden-xs">{{get_last_charged}}</td>
                   <td class="width-150">
                     {{get_units_used}}
                   </td>
                   <td class="">
-                    <span class="label label-success label-{{statusClass}}">{{status}}</span>
+                    <span class="label label-success label-{{statusClass}}">{{ec2.status}}</span>
                   </td>
                   <td class="hidden-xs">
                     {{#if action_button}}

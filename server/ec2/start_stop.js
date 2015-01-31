@@ -1,26 +1,34 @@
 EC2.extend({
-  start: function() {
-		this._startInstances(this._params());
-		this.ec2.active = true;
+  terminate: function() {
+		this._terminateInstances();
+		this.active = false;
   },
-  stop: function() {
-    var params =  this._params();
-		params.Force = true;
-		this._stopInstances(params);
-		this.ec2.active = false;
-  },
-	
-  getStatus: function() {
-    var res = this._describeInstances(this._params());
+	reboot: function(order) {
+		this._stop();
+		var interval = this.setInterval(function() {
+			var status = this.getStatus(order); //status saved in order at order.ec2.status
+			
+			if(status === 'stopped') {
+				this.clearInterval(interval);
+				this._start();
+			}
+		}, 5000);
+	},
+  getStatus: function(order) {
+    var res = this._describeInstances();
 		if(res.error && res.error.name === "InvalidInstanceID.NotFound") return this.status = 'terminated';
-		return this.status = res.data.Reservations[0].Instances[0].state.name;
+		this.status = res.data.Reservations[0].Instances[0].state.name;
+		
+		if(order) order.save();
+		
+		return this.status;
   },
 	getIpAddress: function() {
-		var res = this._describeInstances(this._params());
+		var res = this._describeInstances();
 		return this.ip_address = res.data.Reservations[0].Instances[0].PublicIpAddress;
 	},
 	
-  launch: function() {
+  run: function() {
     var params = {
       ImageId: 'ami-61c6db24', /* custom ami with ubuntu, node, meteor and git */
       MaxCount: 1, /* required */

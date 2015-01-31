@@ -13,28 +13,22 @@
             <i class="fa fa-github"></i>
           </a>
         </li>
-        {{#unless currentUser}}
-        <li>
-          <a href="{{pathFor 'login'}}"
-            class="btn btn-sm btn-transparent">
-            Login
-          </a>
-        </li>
-        <li>
-          <a href="{{pathFor 'signup'}}"
-            class="btn btn-sm btn-transparent">
-            Signup
-          </a>
-        </li>
+        {{#if currentUser}}
+	        <li>
+	          <a href="{{pathFor 'logout'}}"
+	            class="btn btn-sm btn-transparent">
+	            Sign Out
+	            <i class="fa fa-sign-out"></i>
+	          </a>
+	        </li>
         {{else}}
-        <li>
-          <a href="{{pathFor 'logout'}}"
-            class="btn btn-sm btn-transparent">
-            Sign Out
-            <i class="fa fa-sign-out"></i>
-          </a>
-        </li>
-        {{/unless}}
+	        <li>
+            <button id="login-with-github" class="btn btn-block btn-lg btn-success github-login">
+              <span class="small-circle"><i class="fa fa-github"></i></span>
+              <small>Signup/In with Github</small>
+            </button>
+	        </li>
+        {{/if}}
       </ul>
     </div>
   </header>

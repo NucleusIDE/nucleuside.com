@@ -11,7 +11,35 @@ Order.extendHTTP({
 			stripeSubscription.subsribe();
 		}
 		
-		this.activate();
+		this.run();
 		return this._id;
+	},
+	
+  run: function() {
+		this.ec2 = this.ec2 || new EC2;
+		this.ec2.run();
+		this.save(); //the ec2 object props will save ;)
+		
+		this.linkSubdomain(this.ec2.instance_id);
+  },
+	terminate: function() {
+    if(this.is_monthly()) {
+			this.current_plan_start = null;
+			this.current_plan_start = null;
+			this.current_plan_start = null;
+    }
+    else this.last_charged = null;
+		
+		this.ec2.terminate()
+		this.save();
+	},
+	
+	reboot: function() {
+		this.ec2.reboot(this);
+	},
+	
+	cancelSubscription: function() {
+		var subscription = new StripeSubscription(this);
+		subscription.cancel();
 	}
 });
