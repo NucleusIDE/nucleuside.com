@@ -33,9 +33,12 @@ Order.extendHTTP({
 		this.ec2.terminate()
 		this.save();
 	},
-	
 	reboot: function() {
 		this.ec2.reboot(this);
+	},
+	updateStatus: function() {
+		this.ec2.getStatus();
+		this.save();
 	},
 	
 	cancelSubscription: function() {

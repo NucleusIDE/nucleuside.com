@@ -1,5 +1,5 @@
 Meteor.startup(function() {
-  Stripe.setPublishableKey(MasterConfig.keys.stripe());
+  Stripe.setPublishableKey(MasterConfig.stripe());
 	
 	Tracker.autorun(function() {
 	  Meteor.subscribe('self');

@@ -1,8 +1,10 @@
 CloudFlare = function CloudFlare() {
-	this.url = MasterConfig.keys.cloudflare.url;
-	this.token = MasterConfig.keys.cloudflare.token;
-	this.email = MasterConfig.keys.cloudflare.email;
-	this.domain = MasterConfig.keys.cloudflare.domain;
+	var cloudflare = MasterConfig.cloudflare();
+	
+	this.url = cloudflare.url;
+	this.token = cloudflare.token;
+	this.email = cloudflare.email;
+	this.domain = cloudflare.domain;
 };
 
 CloudFlare.extends(Base, {

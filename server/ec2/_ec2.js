@@ -38,8 +38,8 @@ EC2.extends(Base, {
 EC2.extendStatic({
 	onStartup: function() {
 	  AWS.config.update({
-	    accessKeyId: MasterConfig.keys.aws.accessKeyId,
-	    secretAccessKey: MasterConfig.keys.aws.secretAccessKey,
+	    accessKeyId: MasterConfig.aws().accessKeyId,
+	    secretAccessKey: MasterConfig.aws().secretAccessKey,
 	    region: 'us-west-1',
 	    apiVersion: '2014-10-01'
 	  });

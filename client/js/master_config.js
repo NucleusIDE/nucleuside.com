@@ -4,13 +4,12 @@ MasterConfig = {
     return 'development';
   },
 	isProduction: function() {
-		return MasterConfig.mode() == 'production';
+		return this.mode() == 'production';
 	},
-  keys: {
-    stripe: function() {
-    	if(this.isProduction()) return 'pk_test_clkUF9NuYuZhoFD7fiLlwbq0';
-			else return 'sk_live_LIJpVdJGPgquuT1iwDIU5fo6';
-    }
+	
+  stripe: function() {
+  	if(this.isProduction()) return 'pk_test_clkUF9NuYuZhoFD7fiLlwbq0';
+		else return 'sk_live_LIJpVdJGPgquuT1iwDIU5fo6';
   }
 };
 

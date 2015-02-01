@@ -5,12 +5,13 @@ EC2.extend({
   },
 	reboot: function(order) {
 		this._stop();
-		var interval = this.setInterval(function() {
+		
+		this.setIntervalUntil(function() {
 			var status = this.getStatus(order); //status saved in order at order.ec2.status
 			
 			if(status === 'stopped') {
-				this.clearInterval(interval);
 				this._start();
+				return true;
 			}
 		}, 5000);
 	},
@@ -19,7 +20,7 @@ EC2.extend({
 		if(res.error && res.error.name === "InvalidInstanceID.NotFound") return this.status = 'terminated';
 		this.status = res.data.Reservations[0].Instances[0].state.name;
 		
-		if(order) order.save();
+		if(order) order.save(); //a little awkward, i know
 		
 		return this.status;
   },

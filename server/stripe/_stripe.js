@@ -4,6 +4,6 @@ Stripe.extends(Base, {});
 
 Stripe.extendStatic({
 	onStartup: function() {
-		this.prototype.__stripe = StripeAPI(MasterConfig.keys.stripe);
+		this.prototype.__stripe = StripeAPI(MasterConfig.stripe());
 	}
 });

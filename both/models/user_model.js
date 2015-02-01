@@ -16,10 +16,8 @@ User.modelExtends(Meteor.users, {
   get_card: function() {
     return this.card_number;
   },
-  is_admin: function(secure) {
-    if(secure && !Meteor.isServer) return false;
-
-    return Roles.userIsInRole(Meteor.userId(), ['admin']);
+  is_admin: function() {
+    return Roles.userIsInRole(this._id, ['admin']);
   },
 	add_new_card: function(stripe_card, last4) {
     BlockUI.block();

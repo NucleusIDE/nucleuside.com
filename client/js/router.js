@@ -1,25 +1,10 @@
 Router.configure({});
 Router.setTemplateNameConverter(function (str) { return str; });
 
-Tracker.autorun(function(stop) {
-  //if (!Router.current()) return;
-  //var current_route = Router.current().route.options.name;
-  if(Meteor.user()) Router.go("lab_sessions");
-});
-
 
 Router.map(function() {
   this.route("/", {
     name: "landing"
-  });
-
-  this.route("/logout", {
-    action: function() {
-      Meteor.logout(function() {
-        this.redirect("home");
-      }.bind(this));
-    },
-    name: "logout"
   });
 
   this.route("/billing-wizard", {
@@ -64,4 +49,20 @@ Router.map(function() {
     },
 		name: 'invoice'
   });
+	
+  this.route("/logout", {
+    action: function() {
+      Meteor.logout(function() {
+        this.redirect("home");
+      }.bind(this));
+    },
+    name: "logout"
+  });
+});
+
+
+Tracker.autorun(function(stop) {
+  //if (!Router.current()) return;
+  //var current_route = Router.current().route.options.name;
+  if(Meteor.user()) Router.go("lab_sessions");
 });
