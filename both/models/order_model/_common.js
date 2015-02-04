@@ -11,8 +11,8 @@
  * github_url                   String
  * subdomain                    String
  * password                     String
- * aws_instance_stopped:        Boolean
  * hide													Boolean
+ *
  */
 
 Orders = new Mongo.Collection('orders');
@@ -23,7 +23,7 @@ Orders.before.insert(function (userId, doc) {
 
 
 Order = function Order(doc) {
-	if(doc.ec2) this.ec2 = new EC2(doc.ec2);
+	if(Meteor.isServer && doc && doc.ec2) this.ec2 = new EC2(doc.ec2);
 };
 
 Order.modelExtends(Orders, {
@@ -72,7 +72,7 @@ Order.modelExtends(Orders, {
     this.update({last_charged: date});
   },
   is_running: function() {
-    return ! this.aws_instance_stopped;
+    return this.ec2.status === 'running';
   },
   is_monthly: function() {
     return this.billing_method === BILLING_METHODS.monthly.name;

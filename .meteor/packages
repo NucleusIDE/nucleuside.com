@@ -20,3 +20,6 @@ reactive-var
 alanning:roles
 gandev:server-eval
 http
+zimme:iron-router-auth
+aldeed:autoform
+forwarder:autoform-wizard

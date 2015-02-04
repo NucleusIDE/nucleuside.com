@@ -17,8 +17,10 @@ Meteor.publish('self', function() {
 Meteor.publish("my-orders", function() {
 	var user = Meteor.users.findOne(this.userId);
 	
-	if(user.is_admin()) return Orders.find();
-  else Orders.find({user_id: this.userId, hide: {$not: true}});
+	if(!user) return [];
+	
+	if(user.is_admin()) return Orders.find({hide: {$ne: true}});
+  else return Orders.find({user_id: this.userId, hide: {$ne: true}});
 });
 
 Meteor.publish("my-order", function(order_id) {

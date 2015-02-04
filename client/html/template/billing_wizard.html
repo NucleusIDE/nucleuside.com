@@ -1,8 +1,4 @@
-<template name="billing_wizard">
-  {{> header}}
-
-  {{> sidebar}}
-
+<template name="wiz">
   <div class="wrap">
     <div class="content container signup-wizard">
       <h2 class="page-title"> Signup <small>for trip to Mars</small></h2>
@@ -10,63 +6,8 @@
         <div class="col-lg-7 col-lg-offset-1">
           <section class="widget">
 						
-            <header></header>
-						
             <div class="body">
-              <div id="wizard" class="form-wizard">
-								
-                <ul class="wizard-navigation nav-justified">
-                  <li><a class="step-1" href="#"><small>1.</small><strong> Billing Option </strong></a></li>
-                  <li><a class="step-2" href="#"><small>2.</small> <strong> Order Details  </strong></a></li>
-                  <li><a class="step-3" href="#"><small>3.</small> <strong>Review</strong></a></li>
-                  <li><a class="step-4" href="#"><small>4.</small> <strong>Thank you!</strong></a></li>
-                </ul>
-								
-                <div id="bar" class="progress progress-small">
-                  <div class="progress-bar progress-bar-inverse"></div>
-                </div>
-								
-								{{flash}}
-								
-								
-                <div class="tabs">
-									
-									{{#with order}}
-	                  {{#is_equal key=steps_done val=1}}
-	                  	{{> billing_option}}
-	                  {{/is_equal}}
-
-	                  {{#is_equal key=steps_done val=2}}
-	                  	{{> order_details}}
-	                  {{/is_equal}}
-
-	                  {{#is_equal key=steps_done val=3}}
-	                  	{{> review}}
-	                  {{/is_equal}}
-
-	                  {{#is_equal key=steps_done val=4}}
-	                  	{{> thank_you}}
-	                  {{/is_equal}}
-									{{/with}}
-
-								  <div class="description ml mr mt-n-md">
-								    <ul class="pager wizard">
-								      <li class="previous">
-								        <button disabled={{cant_go_previous}} class="btn btn-primary pull-left"><i class="fa fa-caret-left"></i> Previous</button>
-								      </li>
-								      <li class="next">
-								        <button class="btn btn-primary pull-right" disabled={{cant_go_next}}>Next <i class="fa fa-caret-right"></i></button>
-								      </li>
-								      <li class="finish" style="display: none">
-								        <button class="btn btn-success pull-right" >Finish <i class="fa fa-check"></i></button>
-								      </li>
-								    </ul>
-								  </div>
-									
-                </div>
-								
-								
-              </div>
+ 						 	{{> wizard id="order-wizard" route="wiz" steps=steps stepsTemplate="steps" model=order}}
             </div>
           
 					</section>
@@ -80,107 +21,165 @@
 </template>
 
 
+<template name="steps">
+	<ul class="wizard-navigation nav-justified">
+		{{#each wizard.steps}}
+			<li>
+				<a class="{{stepClass id}}" href="{{pathFor wizard.route step=id}}">
+					<small>{{num}}.</small><strong> {{title}} </strong>
+				</a>
+			</li>
+		{{/each}}
+	</ul>
+
+  <div id="bar" class="progress progress-small">
+    <div class="progress-bar progress-bar-inverse" style="width:{{wizard.activeStep.barPercent}}%"></div>
+  </div>
+	
+	{{flash}}
+</template>
+
+
+			
+
+<template name="instance_wizard_back_next">
+  <div class="description ml mr mt-n-md">
+    <ul class="pager wizard">
+			
+			{{#if showPrevious}}
+	      <li class="previous">
+	        <button class="btn btn-primary pull-left">
+						<i class="fa fa-caret-left"></i> Previous
+					</button>
+	      </li>
+			{{/if}}
+      <li class="next">
+        <button class="btn btn-primary pull-right" type="submit">Next 
+					<i class="fa fa-caret-right"></i>
+				</button>
+      </li>
+    </ul>
+  </div>
+</template>
+
 
 <template name="billing_option">
-  <div class="tab-pane" id="tab1">
-    <form class="form-horizontal mt-sm" action='#'>
-      <div class="billing-buttons col-md-12 text-align-center">
-				
-        <button class="{{selected 'hourly'}} btn-lg btn-block hourly">Hourly* ($1/hr )</button>
-        	<div class="or">- OR -</div>
-        <button class="{{selected 'monthly'}} btn-lg btn-block monthly">Monthly  ($160/month)</button>
-				
-        <span class="help-block pull-left">*min 2 hours billed. Charged every week</span>
-      </div>
-    </form>
+{{#autoForm schema=step.schema id=step.formId doc=model}}
+  <div class="billing-buttons col-md-12 text-align-center">
+	
+		{{> afFieldInput name='billing_method' type='hidden'}}
+		
+    <a class="{{selected 'hourly'}} btn-lg btn-block hourlyButton">Hourly* ($1.5/hr )</a>
+		
+    	<div class="or">- OR -</div>
+			
+    <a class="{{selected 'monthly'}} btn-lg btn-block monthlyButton">Monthly  ($160/month)</a>
+	
+    <span class="help-block pull-left" style="margin-top: 60px;">*min 2 hours billed. Charged every week</span>
   </div>
+
+	{{> instance_wizard_back_next}}
+{{/autoForm}}
 </template>
 
 
 <template name="order_details">
-  <div class="tab-pane" id="tab2">
-    <form class="form-horizontal mt-sm" action='' method="POST">
-      <fieldset>
-        <div class="form-group">
-          <label for="github-url" class="control-label col-md-3">Github URL</label>
-          <div class="col-md-8">
-            <div class="col-md-10">
-              <input type="url" id="github-url" name="github-url" placeholder="Github URL of your Project" class="form-control" value="{{this.github_url}}" >
-              <span class="help-block pull-left">Github URL of your project</span>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="courier" class="control-label col-md-3">Subdomain</label>
-
-          <div class="col-md-8">
-            <div class="col-md-10 input-group" style="margin-left:15px;">
-              <div class="form-inline input-group">
-                <input type="text" class="form-control" id="subdomain" placeholder="my-project" value="{{this.subdomain}}">
-                <div class="input-group-addon">.nucleuside.com</div>
-              </div>
-              <span class="help-block pull-left">Your project will be accessible here</span>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-md-3" for="password">Password</label>
-          <div class="col-md-8">
-            <div class="col-md-10"><input type="password" id="domain-passwd" name="password" placeholder="(optional)" class="form-control" value="{{this.password}}">
-              <span class="help-block">Wanna password protect your subdomain?</span></div>
-          </div>
-        </div>
-      </fieldset>
-    </form>
-  </div>
+<div class="tab-pane" id="tab2">
+	{{#autoForm schema=step.schema id=step.formId doc=model}}
+    <fieldset>
+			<div class="form-group">
+	      <label for="github_url" class="control-label col-md-3 wizard-label">Github URL</label>
+	      <div class="col-md-8">
+	        <div class="col-md-10">
+	          {{> afFieldInput name='github_url'}}
+	          <span class="help-block pull-left">Github URL of your project</span>
+	        </div>
+	      </div>
+	    </div>
+			
+	    <div class="form-group">
+	      <label for="subomdain" class="control-label col-md-3 wizard-label">Subdomain</label>
+	      <div class="col-md-8">
+	        <div class="col-md-10 input-group" style="margin-left:15px;">
+	          <div class="form-inline input-group">
+	            {{> afFieldInput name='subdomain' style="width:280px;"}}
+	            <div class="input-group-addon" style="position:relative; left:-30px;">.nucleuside.com</div>
+	          </div>
+	          <span class="help-block pull-left">Your project will be accessible here</span>
+	        </div>
+	      </div>
+	    </div>
+			
+	    <div class="form-group">
+	      <label class="control-label col-md-3 wizard-label" for="password">Password</label>
+	      <div class="col-md-8">
+	        <div class="col-md-10">
+	          {{> afFieldInput name='password'}}
+	          <span class="help-block pull-left">Want to password protect your subdomain?</span>
+	        </div>
+	      </div>
+	    </div>	
+    </fieldset>
+		
+    {{> instance_wizard_back_next}}
+  {{/autoForm}}
+</div>
 </template>
 
 
+
+
 <template name="review">
-  <div class="tab-pane" id="tab3">
-    <form class="form-horizontal mt-sm" action='' method="POST">
-      <fieldset>
-        <div class="form-group">
-          <label for="subdomain" class="col-sm-4 control-label">Subdomain</label>
-          <div class="col-sm-7">
-            <input type="text" id="normal-field" class="form-control input-transparent" disabled="disabled" value="{{this.subdomain}}.nucleuside.com">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="hint-field" class="col-sm-4 control-label">
-            Billing Option
-          </label>
-          <div class="col-sm-7">
-            <input type="text" id="transparent-field" class="form-control input-transparent" disabled="disabled" value="{{this.billing_method}}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="hint-field" class="col-sm-4 control-label">
-            Github Url
-          </label>
-          <div class="col-sm-7">
-            <input type="text" id="transparent-field" class="form-control input-transparent" disabled="disabled" value="{{this.github_url}}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="hint-field" class="col-sm-4 control-label">
-            Card
-          </label>
-          <div class="col-sm-7">
-            <input type="text" id="hint-field" class="form-control input-transparent" disabled="disabled" value="************{{currentUser.get_card}}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="hint-field" class="col-sm-4 control-label">
-            Amount
-          </label>
-          <div class="col-sm-7">
-            <input type="text" id="hint-field" class="form-control input-transparent" disabled="disabled" value="{{this.display_amount}}">
-          </div>
-        </div>
-      </fieldset>
-    </form>
-  </div>
+{{#autoForm schema=wizard.steps.[1].schema id=step.formId doc=model}}
+  {{#with transform data 'Order'}}
+	  <div class="tab-pane" id="tab3">
+	    <form class="form-horizontal mt-sm" action='' method="POST">
+	      <fieldset>
+	        <div class="form-group">
+	          <label for="subdomain" class="col-sm-4 control-label">Subdomain</label>
+	          <div class="col-sm-7">
+	            <input type="text" id="normal-field" class="form-control input-transparent" disabled="disabled" value="{{subdomain}}.nucleuside.com">
+	          </div>
+	        </div>
+	        <div class="form-group">
+	          <label for="hint-field" class="col-sm-4 control-label">
+	            Billing Option
+	          </label>
+	          <div class="col-sm-7">
+	            <input type="text" id="transparent-field" class="form-control input-transparent" disabled="disabled" value="{{billing_method}}">
+	          </div>
+	        </div>
+	        <div class="form-group">
+	          <label for="hint-field" class="col-sm-4 control-label">
+	            Github Url
+	          </label>
+	          <div class="col-sm-7">
+	            <input type="text" id="transparent-field" class="form-control input-transparent" disabled="disabled" value="{{github_url}}">
+	          </div>
+	        </div>
+	        <div class="form-group">
+	          <label for="hint-field" class="col-sm-4 control-label">
+	            Card
+	          </label>
+	          <div class="col-sm-7">
+	            <input type="text" id="hint-field" class="form-control input-transparent" disabled="disabled" value="************{{currentUser.get_card}}">
+	          </div>
+	        </div>
+	        <div class="form-group">
+	          <label for="hint-field" class="col-sm-4 control-label">
+	            Amount
+	          </label>
+	          <div class="col-sm-7">
+	            <input type="text" id="hint-field" class="form-control input-transparent" disabled="disabled" value="{{display_amount}}">
+	          </div>
+	        </div>
+	      </fieldset>
+	    </form>
+	  </div>
+	{{/with}}
+	
+	{{> instance_wizard_back_next}}
+{{/autoForm}}
 </template>
 
 
@@ -189,4 +188,8 @@
     <h2>Thank you!</h2>
     <p class="mb-lg">Your submission has been received.</p>
   </div>
+</template>
+
+
+<template name="billing_wizard">
 </template>

@@ -10,13 +10,17 @@ Template.lab_sessions.helpers({
 			default: 							return 'primary';
 		}
 	},
+	showActionButton: function() {
+		if(this.is_monthly()) return this.is_running() ? true : false;
+		else return this.ec2.status == 'running' || this.ec2.status == 'terminated' ? true : false;
+	},
   action_button_text: function() {
-    if(this.is_monthly()) return order.is_running() ? 'reboot' : false;
-    return order.is_running() ? 'stop' : 'start';
+    if(this.is_monthly()) return this.is_running() ? 'reboot' : false;
+    return this.is_running() ? 'stop' : 'start';
   },
   action_button_class: function() {
-    if(this.is_monthly()) return order.is_running() ? 'primary reboot_instance' : false;
-		return order.is_running() ? 'danger stop_instance' : 'success start_instance';
+    if(this.is_monthly()) return this.is_running() ? 'primary reboot_instance' : '';
+		return this.is_running() ? 'danger stop_instance' : 'success start_instance';
   }
 });
 
@@ -37,7 +41,7 @@ Template.lab_sessions.events({
   },
 	
 	'click .remove_instance': function(e) {
-		this.update({hide: true});
+		this.hideInstance();
 	},
 	'click .cancel_subscription': function(e) {
 		this.cancelSubscription();

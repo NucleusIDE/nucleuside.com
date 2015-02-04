@@ -1,13 +1,12 @@
 EC2.extend({
   terminate: function() {
 		this._terminateInstances();
-		this.active = false;
   },
 	reboot: function(order) {
 		this._stop();
-		
 		this.setIntervalUntil(function() {
 			var status = this.getStatus(order); //status saved in order at order.ec2.status
+			console.log('EC2 STATUS', status);
 			
 			if(status === 'stopped') {
 				this._start();
@@ -15,14 +14,26 @@ EC2.extend({
 			}
 		}, 5000);
 	},
+	monitorStatus: function(order) {
+		this.setIntervalUntil(function() {
+			var status = this.getStatus(order); //status saved in order at order.ec2.status	
+			console.log('EC2 STATUS', status);
+			if(status === 'running' || status == 'terminated' || status == 'stopped') return true;
+		}, 5000, 100);
+	},
   getStatus: function(order) {
-    var res = this._describeInstances();
-		if(res.error && res.error.name === "InvalidInstanceID.NotFound") return this.status = 'terminated';
-		this.status = res.data.Reservations[0].Instances[0].state.name;
+    var res = this._describeInstances(),
+			status;
+			
+		if(res.error && res.error.name === "InvalidInstanceID.NotFound") status = 'terminated';
+		else status = res.data.Reservations[0].Instances[0].State.Name;
 		
-		if(order) order.save(); //a little awkward, i know
+		if(order) {
+			order.ec2.status = status; 
+			order.save();
+		}
 		
-		return this.status;
+		return status;
   },
 	getIpAddress: function() {
 		var res = this._describeInstances();
@@ -52,7 +63,6 @@ EC2.extend({
 		}
 		else {
 			this.status = 'pending';
-			this.aws_instance_stopped = false;
 			return this.instance_id = res.data.Instances[0].InstanceId;
 		}
   }

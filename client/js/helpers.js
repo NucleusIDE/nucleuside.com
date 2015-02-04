@@ -3,6 +3,16 @@ Blaze.registerHelper("session", function(key) {
 });
 
 
+Blaze.registerHelper("global", function(variable) {
+	if(prop) return window[variable][prop];
+	return window[variable];
+});
+
+
+Blaze.registerHelper("transform", function(dataObject, className) {
+  return new window[className](dataObject);
+});
+
 Template.is_equal.helpers({
   yes: function(key, val) {
     return key === val;

@@ -1,0 +1,24 @@
+.wrap {
+	min-height: 700px;
+}
+
+.logo {
+	position: static !important;
+}
+
+.wizard-label {
+	text-align:right;
+	margin-top: 5px;
+}
+
+.hourlyButton, .monthlyButton {
+	outline: none;
+	text-decoration: none !important;
+	cursor: pointer;
+	width: 60%;
+	margin: 0 auto;
+}
+
+.hourlyButton {
+	margin-top: 60px;
+}

@@ -1,93 +1,135 @@
-Template.billing_wizard.rendered = function() {
-	Session.set("billing_steps_done", 1);
-	Session.set("billing_method", 'hourly');
-	Session.set("wizard_locked", false);
-	$("select").select2();
-	
-	
-	/**
-	 * Redirect Flow + create_order on flow completion
-	 */
-	this.autorun(function() {
-		if (Session.get("wizard_locked")) return;
-		
-		var steps_done = Session.get("billing_steps_done"),
-		order = Template.currentData();
-		console.log('ROUTER', order);
-		order.populateModel();
-
-	  if(steps_done == 3 && !order.isValidOrder()) return Session.set("billing_steps_done", 2);
-
-	  if(steps_done == 4) order.createOrder();
-	});
-
-
-
-	/**
-	 * Autorun to update the progress bar width below the signup form
-	 */
-	this.autorun(function() {
-		var steps_done = Session.get("billing_steps_done");
-		$(".progress-bar-inverse").width((steps_done * 25) + '%');
-	});
-};
-
-
-Template.billing_wizard.events({
-	"blur #subdomain": function() {
-		var order = Template.currentData();
-		order.subdomain = $("#subdomain").val().trim();
-		order.setSubdomainUsage();
-	},
-  "click .step-1": function() {
-    Session.set("billing_steps_done", 1);
-  },
-  "click .step-2": function() {
-    Session.set("billing_steps_done", 2);
-  },
-  "click .step-3": function() {
-    Session.set("billing_steps_done", 3);
-  },
-  "click .step-4": function() {
-    Session.set("billing_steps_done", 4);
-  },
-  "click .next > button": function() {
-    var steps_done = Session.get("billing_steps_done");
-		if(steps_done < 4) Session.set("billing_steps_done", steps_done + 1);
-  },
-  "click .previous > button": function() {
-    var steps_done = Session.get("billing_steps_done");
-		if(steps_done > 1) Session.set("billing_steps_done", steps_done - 1);
-  },
-  "click .hourly": function(e) {
-		e.preventDefault();
-    Session.set("billing_method", 'hourly');
-  },
-  "click .monthly": function(e) {
-		e.preventDefault();
-    Session.set("billing_method", 'monthly');
+Template.wiz.helpers({
+  steps: function() {
+    return [{
+      id: 'billing-option',
+      title: 'Billing Option',
+      template: 'billing_option',
+      formId: 'billing_option',
+			num: 1,
+			barPercent: function() {return this.num * 25;},
+			schema: function() {
+				return new SimpleSchema({
+		  		billing_method: {
+				    type: String,
+						defaultValue: 'hourly'
+				  }
+				});
+			},
+			onSubmit: function(data, wizard) {
+				console.log(wizard.model);
+				wizard.next({});
+			}
+    },{
+      id: 'instance-details',
+      title: 'Order Details',
+      template: 'order_details',
+      formId: 'order_details',
+			num: 2,
+			barPercent: function() {return this.num * 25;},
+			schema: function() {
+				return new SimpleSchema({
+		  		github_url: {
+				    type: String,
+				    label: "Github URL",
+						autoform: {
+							placeholder: 'Github URL of your Project'
+						}
+				  },
+		  		subdomain: {
+				    type: String,
+				    label: "Subdomain",
+						autoform: {
+							placeholder: 'my-project'
+						}
+				  },
+		  		password: {
+				    type: String,
+				    label: "Password",
+						optional: true,
+						autoform: {
+							placeholder: '(optional)'
+						}
+				  }
+				});
+			},
+			onSubmit: function(data, wizard) {
+				_.extend(wizard.model, data);
+				
+				if(model.isValidOrder()) wizard.next({});
+			}
+    }, {
+      id: 'review',
+      title: 'Review',
+      template: 'review',
+      formId: 'review',
+			num: 3,
+			barPercent: function() {return this.num * 25;},
+      onSubmit: function(data, wizard) {
+				_.extend(wizard.model, data);  
+				wizard.model.createOrder();
+				this.done();
+				wizard.next();
+      }	
+    }, {
+      id: 'complete',
+      title: 'Thank You!',
+      template: 'thank_you',
+      formId: 'thank_you',
+			num: 4,
+			barPercent: function() {return this.num * 25;}
+    }]
   }
 });
 
+Template.steps.helpers({
+  stepClass: function(id) {
+    var activeStep = this.wizard.activeStep(),
+			step  = this.wizard.getStep(id);
+		
+    if(activeStep && activeStep.id === step.id) return 'active ';
+    if(step.data()) return 'completed ';
+    return 'disabled ';
+  }
+});
 
-Template.billing_wizard.helpers({
-  "cant_go_previous": function() {
-    return Session.get("billing_steps_done") === 1 || Session.get("wizard_locked");
+Template.instance_wizard_back_next.helpers({
+  showPrevious: function() {
+    return this.wizard.activeStep().num != 1;
   },
-  "cant_go_next": function() {
-    return Session.get("billing_steps_done") === 4;
+});
+
+wiz = null;
+Template.instance_wizard_back_next.events({
+  "click .previous > button": function(e) {
+    this.wizard.previous();
   },
-  steps_done: function() {
-    return Session.get("billing_steps_done");
+});
+
+Template.billing_option.events({
+  "click .hourlyButton": function(e) {
+		this.wizard.model.billing_method = 'hourly';
   },
-  order: function() {
-    return Template.currentData();
+  "click .monthlyButton": function(e) {
+		this.wizard.model.billing_method = 'monthly';
   }
 });
 
 Template.billing_option.helpers({
 	selected: function(cycle) {
-		if(cycle == 'hourly') return Session.get('billing_method') == 'hourly' ? 'btn-primary' : 'btn-transparent';
-		else if(cycle == 'monthly') return Session.get('billing_method') == 'monthly' ? 'btn-primary' : 'btn-transparent';
+		var billingMethod = this.wizard.model.billing_method;
+		
+		if(cycle == 'hourly') return billingMethod == 'hourly' ? 'btn-primary' : 'btn-transparent';
+		else if(cycle == 'monthly') return billingMethod == 'monthly' ? 'btn-primary' : 'btn-transparent';
 	}
 });
+
+
+
+Template.wiz.events({
+	"blur #subdomain": function() {
+		var order = Template.currentData();
+		order.subdomain = $("#subdomain").val().trim();
+		order.setSubdomainUsage();
+	}
+});
+

@@ -1,7 +1,4 @@
 <template name="lab_sessions">
-  {{> header}}
-
-  {{> sidebar}}
   <div class="wrap">
     <div class="content container">
       <h2 class="page-title"><span class="fw-semi-bold">My </span>Lab Sessions </h2>
@@ -34,13 +31,15 @@
                   <td class="hidden-xs">
                     <small>{{get_github_url}}</small>
 										{{#if isSubscription}}
+											<br />
 											<small>
 												<a class='cancel_subscription'>cancel</a>
 											</small>
 										{{else}}
 											{{#unless ec2.active}}
+												<br />
 												<small>
-													<a class='remove_instance'>remove instance</a>
+													<a class='remove_instance' href="#">remove instance</a>
 												</small>
 											{{/unless}}
 										{{/if}}
@@ -53,7 +52,7 @@
                     <span class="label label-success label-{{statusClass}}">{{ec2.status}}</span>
                   </td>
                   <td class="hidden-xs">
-                    {{#if action_button}}
+                    {{#if showActionButton}}
                     	<a class="btn btn-{{action_button_class}} instance-action" href="#">{{action_button_text}}</a>
                     {{/if}}
                   </td>

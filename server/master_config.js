@@ -8,7 +8,7 @@ MasterConfig = {
 	},
 	instance_domain: function() {
 		if(this.isProduction()) return "nucleuside.com";
-		else 'moralmoneymatters.com';
+		else return 'moralmoneymatters.com';
 	},
 	
   admins: {
@@ -43,9 +43,7 @@ MasterConfig = {
 		};
 	},
 	
-  stripe_plans: {
-    monthly: function() {
-    	return this.isProduction() ? 'monthly_instance_production' : 'monthly_instance_development';
-    }
+  stripe_plan_monthly: function() {
+  	return this.isProduction() ? 'monthly_instance_production' : 'monthly_instance_development';
   }
 };

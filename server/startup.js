@@ -16,7 +16,7 @@ Meteor.startup(function() {
   ServiceConfiguration.configurations.insert({
     service: "github",
     clientId: MasterConfig.github().clientId,
-    loginStyle: "redirect",
-    secret: MasterConfig.github().secret
+    secret: MasterConfig.github().secret,
+		loginStyle: "popup"
   });
 });

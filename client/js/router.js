@@ -1,16 +1,31 @@
-Router.configure({});
-Router.setTemplateNameConverter(function (str) { return str; });
+PublicController = RouteController.extend({layoutTemplate: 'public_layout'});
 
+Router.configure({
+	layoutTemplate: 'layout', 
+	onBeforeAction: function() {
+		var controllerName = this.route.options.controller;
+
+		if(!Meteor.userId() && controllerName != 'PublicController') {
+			Meteor.loginWithGithub();
+			this.render('home');
+		}
+		else this.next();
+	}
+});
+
+Router.setTemplateNameConverter(function (str) { return str; });
 
 Router.map(function() {
   this.route("/", {
-    name: "landing"
+    name: "home",
+		controller: 'PublicController'
   });
 
   this.route("/billing-wizard", {
     onBeforeAction: function() {
       //Meteor.user().has_valid_card();
 			//Flash.warning("You don't have a card on file. Please add a card first.");
+			this.next();
     },
 		data: function()  {
 			return new Order({user_id: Meteor.userId()}); 
@@ -18,10 +33,15 @@ Router.map(function() {
     name: "billing_wizard"
   });
 
+  this.route("/wiz/:step", {
+    name: "wiz",
+		data: function()  {
+			return {order: new Order({user_id: Meteor.userId(), billing_method: 'hourly'})}; 
+		},
+  });
+	
+	
   this.route("/my-lab-sessions", {
-    waitOn: function() {
-      return Meteor.subscribe('my-orders');
-    },
 		data: function() {
 			return {orders: Orders.find()};
 		},
@@ -62,7 +82,5 @@ Router.map(function() {
 
 
 Tracker.autorun(function(stop) {
-  //if (!Router.current()) return;
-  //var current_route = Router.current().route.options.name;
-  if(Meteor.user()) Router.go("lab_sessions");
+  if(Meteor.user()) Meteor.subscribe('my-orders');
 });

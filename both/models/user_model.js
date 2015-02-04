@@ -19,6 +19,9 @@ User.modelExtends(Meteor.users, {
   is_admin: function() {
     return Roles.userIsInRole(this._id, ['admin']);
   },
+	hasNoInstances: function() {
+		return Orders.find().count() === 0;
+	},
 	add_new_card: function(stripe_card, last4) {
     BlockUI.block();
 		

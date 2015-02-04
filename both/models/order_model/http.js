@@ -18,6 +18,7 @@ Order.extendHTTP({
   run: function() {
 		this.ec2 = this.ec2 || new EC2;
 		this.ec2.run();
+		this.ec2.monitorStatus(this);
 		this.save(); //the ec2 object props will save ;)
 		
 		this.linkSubdomain(this.ec2.instance_id);
@@ -44,5 +45,8 @@ Order.extendHTTP({
 	cancelSubscription: function() {
 		var subscription = new StripeSubscription(this);
 		subscription.cancel();
+	},
+	hideInstance: function() {
+		this.update({hide: true});
 	}
 });
