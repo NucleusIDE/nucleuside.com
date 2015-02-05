@@ -1,82 +1,38 @@
 Template.wiz.helpers({
   steps: function() {
     return [{
-      id: 'billing-option',
-      title: 'Billing Option',
+      path: 'billing-option',
+			form: 'billing_option',
+      title: '1. Billing Option',
       template: 'billing_option',
-      formId: 'billing_option',
-			num: 1,
-			barPercent: function() {return this.num * 25;},
-			schema: function() {
-				return new SimpleSchema({
-		  		billing_method: {
-				    type: String,
-						defaultValue: 'hourly'
-				  }
-				});
-			},
-			onSubmit: function(data, wizard) {
-				console.log(wizard.model);
-				wizard.next({});
-			}
+			barPercent: 20
     },{
-      id: 'instance-details',
-      title: 'Order Details',
+      path: 'instance-details',
+			form: 'order_details',
+      title: '2. Order Details',
       template: 'order_details',
-      formId: 'order_details',
-			num: 2,
-			barPercent: function() {return this.num * 25;},
-			schema: function() {
-				return new SimpleSchema({
-		  		github_url: {
-				    type: String,
-				    label: "Github URL",
-						autoform: {
-							placeholder: 'Github URL of your Project'
-						}
-				  },
-		  		subdomain: {
-				    type: String,
-				    label: "Subdomain",
-						autoform: {
-							placeholder: 'my-project'
-						}
-				  },
-		  		password: {
-				    type: String,
-				    label: "Password",
-						optional: true,
-						autoform: {
-							placeholder: '(optional)'
-						}
-				  }
-				});
-			},
-			onSubmit: function(data, wizard) {
-				_.extend(wizard.model, data);
+			barPercent: 40,
+			onSubmit: function(model, wizard) {
+				var isValid = model.isValidOrder();
+				console.log('MODEL', model, isValid);
 				
-				if(model.isValidOrder()) wizard.next({});
+				return isValid;
 			}
     }, {
-      id: 'review',
-      title: 'Review',
+      path: 'review',
+			form: 'review',
+      title: '3. Review',
       template: 'review',
-      formId: 'review',
-			num: 3,
-			barPercent: function() {return this.num * 25;},
-      onSubmit: function(data, wizard) {
-				_.extend(wizard.model, data);  
-				wizard.model.createOrder();
-				this.done();
-				wizard.next();
+			barPercent: 66,
+      onSubmit: function(model, wizard) { 
+				model.createOrder();
+				return true;
       }	
     }, {
-      id: 'complete',
-      title: 'Thank You!',
+      path: 'complete',
+      title: '4. Thank You!',
       template: 'thank_you',
-      formId: 'thank_you',
-			num: 4,
-			barPercent: function() {return this.num * 25;}
+			barPercent: 100
     }]
   }
 });
@@ -87,14 +43,15 @@ Template.steps.helpers({
 			step  = this.wizard.getStep(id);
 		
     if(activeStep && activeStep.id === step.id) return 'active ';
-    if(step.data()) return 'completed ';
+    if(step.completed) return 'completed ';
     return 'disabled ';
   }
 });
 
 Template.instance_wizard_back_next.helpers({
   showPrevious: function() {
-    return this.wizard.activeStep().num != 1;
+		var path = Template.parentData(1).wizard.activeStep().path;
+    return path != 'billing-option' && path != 'complete';
   },
 });
 
@@ -107,10 +64,10 @@ Template.instance_wizard_back_next.events({
 
 Template.billing_option.events({
   "click .hourlyButton": function(e) {
-		this.wizard.model.billing_method = 'hourly';
+		this.wizard.setData({billing_method: 'hourly'});
   },
   "click .monthlyButton": function(e) {
-		this.wizard.model.billing_method = 'monthly';
+		this.wizard.setData({billing_method: 'monthly'});
   }
 });
 

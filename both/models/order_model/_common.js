@@ -27,6 +27,42 @@ Order = function Order(doc) {
 };
 
 Order.modelExtends(Orders, {
+	schema: function() {
+		return {
+		  		billing_method: {
+				    type: String,
+						defaultValue: 'hourly'
+				  },
+		  		github_url: {
+				    type: String,
+				    label: "Github URL",
+						autoform: {
+							placeholder: 'Github URL of your Project'
+						}
+				  },
+		  		subdomain: {
+				    type: String,
+				    label: "Subdomain",
+						autoform: {
+							placeholder: 'my-project'
+						}
+				  },
+		  		password: {
+				    type: String,
+				    label: "Password",
+						optional: true,
+						autoform: {
+							placeholder: '(optional)'
+						}
+				  }
+				};
+	},
+	forms: function() {
+		return {
+			'billing_option': ['billing_method'],
+			'order_details': ['github_url', 'subdomain', 'password']
+		};
+	},
   get_user: function() {
     return Meteor.users.findOne(this.user_id);
   },
