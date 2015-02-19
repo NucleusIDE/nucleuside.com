@@ -33,11 +33,11 @@ Router.map(function() {
     name: "billing_wizard"
   });
 
-  this.route("/wiz/:step", {
-    name: "wiz",
+  this.route("/new-instance/:step", {
+    name: "new_instance",
 		data: function()  {
-			return {order: new Order({user_id: Meteor.userId(), billing_method: 'hourly'})}; 
-		},
+			return new Order({user_id: Meteor.userId(), billing_method: 'hourly'}); 
+		}
   });
 	
 	

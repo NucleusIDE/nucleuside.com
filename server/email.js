@@ -13,7 +13,7 @@ Meteor.methods({
         order = payment.get_order();
 
     var from = "orders@nucleuside.com",
-        to = payment.user().get_email(),
+        to = payment.user().getEmail(),
         subject = "Invoice for your order on NucleusIDE.com",
         invoice = Meteor.absoluteUrl()  + "invoice/"+ payment._id,
         message = "Hey! \n Here's your invoice for your order #" + order()._id + ": <a href='"+ invoice +" '>" + invoice + " </a>";
@@ -25,7 +25,7 @@ Meteor.methods({
         order = payment.get_order();
 
     var from = "orders@nucleuside.com",
-        to = payment.user().get_email(),
+        to = payment.user().getEmail(),
         subject = "Invoice for your order on NucleusIDE.com",
         invoice = Meteor.absoluteUrl()  + "invoice/"+ payment._id,
         message = "Hey! \n Here's we couldn't finish the payment for your order #" + order._id +" . We are shutting down your instance. Please visit http://nucleuside.com for re-enabling your nucleus instance. Here's your invoice for your order #" + order()._id + ": <a href='"+ invoice +" '>" + invoice + " </a>";

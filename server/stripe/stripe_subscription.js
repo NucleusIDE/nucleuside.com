@@ -22,7 +22,7 @@ StripeSubscription.extends(Stripe, {
 
     return this.order._id;
   },
-	
+
 	
 	create: function() {
 		return this._createSync(this.customer_token, {plan: this.plan_id});
@@ -53,6 +53,6 @@ StripeSubscription.extends(Stripe, {
 		return this.applySync(this._stripe(), 'cancelSubscription', arguments);
 	},
 	_stripe: function() {
-		return this.__stripe.customers;
+		return this._getStripe().customers;
 	}
 });

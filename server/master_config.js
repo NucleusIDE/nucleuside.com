@@ -16,8 +16,8 @@ MasterConfig = {
   },
 	
   stripe: function() {
-  	if(this.isProduction()) return 'sk_test_xZXeiSOixGWQhQxAM7lqmJCP';
-		else return 'sk_live_LIJpVdJGPgquuT1iwDIU5fo6';
+  	if(this.isProduction()) return 'sk_live_LIJpVdJGPgquuT1iwDIU5fo6';
+		else return 'sk_test_xZXeiSOixGWQhQxAM7lqmJCP'; 
   },
   github: function() {
     if(this.isProduction()) {

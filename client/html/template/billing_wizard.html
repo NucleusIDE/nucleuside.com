@@ -1,19 +1,18 @@
-<template name="wiz">
+<template name="new_instance">
   <div class="wrap">
     <div class="content container signup-wizard">
       <h2 class="page-title"> Signup <small>for trip to Mars</small></h2>
       <div class="row">
         <div class="col-lg-7 col-lg-offset-1">
           <section class="widget">
-						
             <div class="body">
- 						 	{{> wizard id="order-wizard" route="wiz" steps=steps stepsTemplate="steps" model=order}}
-            </div>
-          
+ 						 	{{>wizard id="create_instance" model=this}}
+            </div>       
 					</section>
         </div>
       </div>
     </div>
+		
     <div class="loader-wrap hiding hide">
       <i class="fa fa-circle-o-notch fa-spin"></i>
     </div>
@@ -21,57 +20,11 @@
 </template>
 
 
-<template name="steps">
-	<ul class="wizard-navigation nav-justified">
-		{{#each wizard.steps}}
-			<li>
-				<a class="{{stepClass id}}" href="{{pathFor wizard.route step=id}}">
-					<strong> {{title}} </strong>
-				</a>
-			</li>
-		{{/each}}
-	</ul>
-
-  <div id="bar" class="progress progress-small">
-    <div class="progress-bar progress-bar-inverse" style="width:{{wizard.activeStep.barPercent}}%"></div>
-  </div>
-	
-	{{flash}}
-</template>
-
-
-			
-
-<template name="instance_wizard_back_next">
-  <div class="description ml mr mt-n-md">
-    <ul class="pager wizard">
-			
-			{{#if showPrevious}}
-	      <li class="previous">
-	        <button class="btn btn-primary pull-left">
-						<i class="fa fa-caret-left"></i> Previous
-					</button>
-	      </li>
-			{{/if}}
-      <li class="next">
-        <button class="btn btn-primary pull-right" type="submit">Next 
-					<i class="fa fa-caret-right"></i>
-				</button>
-      </li>
-    </ul>
-  </div>
-</template>
-
-
 <template name="billing_option">
   <div class="billing-buttons col-md-12 text-align-center">
-	
-		{{> afFieldInput name='billing_method' type='hidden'}}
-		
+
     <a class="{{selected 'hourly'}} btn-lg btn-block hourlyButton">Hourly* ($1.5/hr )</a>
-		
-    	<div class="or">- OR -</div>
-			
+    	<div class="or">- OR -</div>	
     <a class="{{selected 'monthly'}} btn-lg btn-block monthlyButton">Monthly  ($160/month)</a>
 	
     <span class="help-block pull-left" style="margin-top: 60px;">*min 2 hours billed. Charged every week</span>
@@ -80,91 +33,29 @@
 
 
 <template name="order_details">
-<div class="tab-pane" id="tab2">
+<div class="tab-pane" id="tab2" style="position: relative; left: -32px; top: 14px;">
     <fieldset>
-			<div class="form-group">
-	      <label for="github_url" class="control-label col-md-3 wizard-label">Github URL</label>
-	      <div class="col-md-8">
-	        <div class="col-md-10">
-	          {{> afFieldInput name='github_url'}}
-	          <span class="help-block pull-left">Github URL of your project</span>
-	        </div>
-	      </div>
-	    </div>
+			{{>formGroup name='github_url' style="width:383px" help="Github URL of your project"}}
 			
-	    <div class="form-group">
-	      <label for="subomdain" class="control-label col-md-3 wizard-label">Subdomain</label>
-	      <div class="col-md-8">
-	        <div class="col-md-10 input-group" style="margin-left:15px;">
-	          <div class="form-inline input-group">
-	            {{> afFieldInput name='subdomain' style="width:280px;"}}
-	            <div class="input-group-addon" style="position:relative; left:-30px;">.nucleuside.com</div>
-	          </div>
-	          <span class="help-block pull-left">Your project will be accessible here</span>
-	        </div>
-	      </div>
-	    </div>
+			{{>formGroup name='subdomain' style="width:278px" addon=".nucleus.com" help="Your project will be accessible here"}}
 			
-	    <div class="form-group">
-	      <label class="control-label col-md-3 wizard-label" for="password">Password</label>
-	      <div class="col-md-8">
-	        <div class="col-md-10">
-	          {{> afFieldInput name='password'}}
-	          <span class="help-block pull-left">Want to password protect your subdomain?</span>
-	        </div>
-	      </div>
-	    </div>	
+			{{>formGroup name='password' style="width:258px" help="Want to password protect your subdomain?"}}
     </fieldset>
 </div>
 </template>
 
 
-
-
 <template name="review">
-	  <div class="tab-pane" id="tab3">
-	    <form class="form-horizontal mt-sm" action='' method="POST">
+	  <div class="tab-pane" id="tab3" style="position: relative; left: -30px; top: 15px;">
+	    <div class="form-horizontal mt-sm">
 	      <fieldset>
-	        <div class="form-group">
-	          <label for="subdomain" class="col-sm-4 control-label">Subdomain</label>
-	          <div class="col-sm-7">
-	            <input type="text" id="normal-field" class="form-control input-transparent" disabled="disabled" value="{{model.subdomain}}.nucleuside.com">
-	          </div>
-	        </div>
-	        <div class="form-group">
-	          <label for="hint-field" class="col-sm-4 control-label">
-	            Billing Option
-	          </label>
-	          <div class="col-sm-7">
-	            <input type="text" id="transparent-field" class="form-control input-transparent" disabled="disabled" value="{{model.billing_method}}">
-	          </div>
-	        </div>
-	        <div class="form-group">
-	          <label for="hint-field" class="col-sm-4 control-label">
-	            Github Url
-	          </label>
-	          <div class="col-sm-7">
-	            <input type="text" id="transparent-field" class="form-control input-transparent" disabled="disabled" value="{{model.github_url}}">
-	          </div>
-	        </div>
-	        <div class="form-group">
-	          <label for="hint-field" class="col-sm-4 control-label">
-	            Card
-	          </label>
-	          <div class="col-sm-7">
-	            <input type="text" id="hint-field" class="form-control input-transparent" disabled="disabled" value="************{{currentUser.get_card}}">
-	          </div>
-	        </div>
-	        <div class="form-group">
-	          <label for="hint-field" class="col-sm-4 control-label">
-	            Amount
-	          </label>
-	          <div class="col-sm-7">
-	            <input type="text" id="hint-field" class="form-control input-transparent" disabled="disabled" value="{{model.display_amount}}">
-	          </div>
-	        </div>
+					{{>readOnlyFormGroup label="Subdomain" value=model.subdomain value2=".nucleuside.com"}}	
+					{{>readOnlyFormGroup label="Billing Option" value=model.billing_method}}
+					{{>readOnlyFormGroup label="Github URL" value=model.github_url}}
+					{{>readOnlyFormGroup label="Card" value="************" value2=currentUser.get_card}}
+					{{>readOnlyFormGroup label="Amount" value=model.display_amount}}		
 	      </fieldset>
-	    </form>
+	    </div>
 	  </div>
 </template>
 
@@ -174,8 +65,4 @@
     <h2>Thank you!</h2>
     <p class="mb-lg">Your submission has been received.</p>
   </div>
-</template>
-
-
-<template name="billing_wizard">
 </template>

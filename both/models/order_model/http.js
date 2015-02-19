@@ -8,7 +8,7 @@ Order.extendHTTP({
 
 		if (this.is_monthly()) {
 			var stripeSubscription = new StripeSubscription(this);
-			stripeSubscription.subsribe();
+			stripeSubscription.subscribe();
 		}
 		
 		this.run();

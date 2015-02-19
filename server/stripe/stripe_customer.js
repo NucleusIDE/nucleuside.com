@@ -1,6 +1,6 @@
 StripeCustomer = function StripeCustomer(user, card_token, last_4) {
 	this.user = user;
-	this.email = this.user.get_email();
+	this.email = this.user.getEmail();
 	this.card_token = card_token;
 	this.last_4 = last_4;
 };
@@ -25,7 +25,7 @@ StripeCustomer.extends(Stripe, {
 	
 	addCardToUser: function(customer_token) {
 		this.user.valid_card = true;
-		this.user.card_numer = this.last_4
+		this.user.card_number = this.last_4;
 		
 		if(customer_token) this.user.stripe_customer_token = customer_token;
 		
@@ -40,6 +40,6 @@ StripeCustomer.extends(Stripe, {
 		return this.applySync(this._stripe(), 'update', _.toArray(arguments));
 	},
 	_stripe: function() {
-		return this.__stripe.customers;
+		return this._getStripe().customers;
 	}
 });

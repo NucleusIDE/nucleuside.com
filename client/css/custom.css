@@ -22,3 +22,34 @@
 .hourlyButton {
 	margin-top: 60px;
 }
+
+.wizard-button {
+	text-decoration: none !important;
+	cursor: pointer;
+}
+
+.alert {
+	position: relative;
+}
+
+button.close {
+	position: absolute;
+	top: 0px;
+	right: 5px;
+}
+
+.has-error .form-control {
+	border-color: rgb(240, 65, 28) !important;
+	-webkit-box-shadow: -2px 0px 13px rgba(240, 16, 16, 0.5) !important;
+	box-shadow: -2px 0px 13px rgba(240, 16, 16, 0.5) !important;
+}
+
+.has-error .input-group-addon {
+	border-color: rgb(166, 55, 31) !important;
+	-webkit-box-shadow: -2px 0px 21px rgba(240, 16, 16, 0.6) !important;
+	box-shadow: -2px 0px 21px rgba(240, 16, 16, 0.6) !important;
+}
+
+.control-label {
+	text-align: right !important;
+}

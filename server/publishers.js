@@ -19,7 +19,7 @@ Meteor.publish("my-orders", function() {
 	
 	if(!user) return [];
 	
-	if(user.is_admin()) return Orders.find({hide: {$ne: true}});
+	if(user.isAdmin()) return Orders.find({hide: {$ne: true}});
   else return Orders.find({user_id: this.userId, hide: {$ne: true}});
 });
 

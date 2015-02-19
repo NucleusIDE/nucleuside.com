@@ -21,7 +21,7 @@ StripeCharge.extends(Stripe, {
 		return this.applySync(this._stripe(), 'create', _.toArray(arguments));
 	},
 	_stripe: function() {
-		return this.__stripe.charges;
+		return this._getStripe().charges;
 	},
 	
 	handleResponse: function(res) {
@@ -64,7 +64,7 @@ StripeCharge.extendStaticServer({
 		var orders = this.ordersToCharge();
 	
 		orders.forEach(function(order) {
-			if(order.get_user().is_admin()) return;
+			if(order.get_user().isAdmin()) return;
 			
 			var stripeCharge = new StripeCharge(order);
 			stripeCharge.charge();

@@ -1,21 +1,4 @@
-/**
- * Attributes
- *
- * user_id                      Mongo ID
- * num                          Integer
- * billing_method               String
- * units_used                   Integer
- * last_charged                 Date - we bill in relation to this. Like 4 days after start date. For hourly orders, this field is also used to determine if the order is active or not
- * current_plan_start           Unix timestamp - set by stripe - for monthly orders, determine the active status of order
- * current_plan_end             Unix timestamp - set by stripe
- * github_url                   String
- * subdomain                    String
- * password                     String
- * hide													Boolean
- *
- */
-
-Orders = new Mongo.Collection('orders');
+Orders = new Meteor.Collection('orders');
 
 Orders.before.insert(function (userId, doc) {
   doc.created_at = moment().toDate();
@@ -29,38 +12,117 @@ Order = function Order(doc) {
 Order.modelExtends(Orders, {
 	schema: function() {
 		return {
-		  		billing_method: {
-				    type: String,
-						defaultValue: 'hourly'
-				  },
-		  		github_url: {
-				    type: String,
-				    label: "Github URL",
-						autoform: {
-							placeholder: 'Github URL of your Project'
-						}
-				  },
-		  		subdomain: {
-				    type: String,
-				    label: "Subdomain",
-						autoform: {
-							placeholder: 'my-project'
-						}
-				  },
-		  		password: {
-				    type: String,
-				    label: "Password",
-						optional: true,
-						autoform: {
-							placeholder: '(optional)'
-						}
-				  }
-				};
+  		billing_method: {
+		    type: String,
+				defaultValue: 'hourly'
+		  },
+  		github_url: {
+		    type: String,
+		    label: "Github URL",
+				regEx: SimpleSchema.RegEx.Url,
+				autoform: {
+					placeholder: 'Github URL of your Project'
+				}, 
+				custom: function(simpleSchema) {
+					if(this.github_url.indexOf('github.com') === -1) return 'mustBeGithubUrl';
+				}
+		  },
+  		subdomain: {
+		    type: String,
+		    label: "Subdomain",
+				autoform: {
+					placeholder: 'my-project'
+				},
+				customAsync: function(callback) {
+					this.isSubdomainUsed(function(isUsed) {
+						callback(isUsed ? 'The subdomain you entered is already in use.' : null);
+					});
+				}
+		  },
+  		password: {
+		    type: String,
+		    label: "Password",
+				optional: true,
+				autoform: {
+					placeholder: '(optional)'
+				}
+		  },
+			
+			user_id: {
+				type: String,		
+			},
+			num: {
+				type: Number,		
+			},
+			units_used: {
+				type: Number,		
+			},
+			last_charged: {
+				type: Date,		
+			},
+			current_plan_start: {
+				type: Number,		//we should converte these to/from Date objects
+			},
+			current_plan_end: {
+				type: Number,		
+			},
+			hide: {
+				type: Boolean,		
+			}
+			
+		};
+	},
+	defineErrorMessages: function() {
+		return {
+			mustBeGithubUrl: 'You must enter a Github URL'
+		};
 	},
 	forms: function() {
 		return {
-			'billing_option': ['billing_method'],
-			'order_details': ['github_url', 'subdomain', 'password']
+			'billing_option': {
+				keys: ['billing_method']
+			},
+			'order_details': {
+				keys: ['github_url', 'subdomain', 'password']
+				
+				/**
+				onSubmit: function(autoform, wizard) {
+					console.log('EXAMPLE ONSUBMIT FROM FORM DEFINITION');
+					autoform.done();
+				**/
+			}
+		};
+	},
+	wizards: function() {
+		return {
+			'create_instance': [{
+		      path: 'billing-option',
+		      title: '1. Billing Option',
+		      template: 'billing_option',
+					//defaultData: {billing_method: 'monthly'},
+					barPercent: 20
+		    },{
+		      path: 'instance-details',
+					form: 'order_details',
+		      title: '2. Order Details',
+		      template: 'order_details',
+					barPercent: 40
+		    }, {
+		      path: 'review',
+		      title: '3. Review',
+		      template: 'review',
+					barPercent: 66,
+		      onComplete: function(autoform, wizard) { 
+						this.createOrder();
+						autoform.done(null, this);
+		      }	
+		    }, {
+		      path: 'complete',
+		      title: '4. Thank You!',
+		      template: 'thank_you',
+					barPercent: 100
+		    }],
+			'another_wizard': {}
 		};
 	},
   get_user: function() {

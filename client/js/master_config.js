@@ -8,8 +8,8 @@ MasterConfig = {
 	},
 	
   stripe: function() {
-  	if(this.isProduction()) return 'pk_test_clkUF9NuYuZhoFD7fiLlwbq0';
-		else return 'sk_live_LIJpVdJGPgquuT1iwDIU5fo6';
+  	if(this.isProduction()) return 'pk_live_EHIjjs57lpmzmSNt5RXaVWOv';
+		else return 'pk_test_clkUF9NuYuZhoFD7fiLlwbq0';
   }
 };
 
