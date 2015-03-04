@@ -1,18 +1,18 @@
 Template.lab_sessions.helpers({
 	statusClass: function() {
-		switch(this.ec2.status) {
+		switch(this.ec2().status) {
 			case 'running': 			return 'success';
 			case 'pending': 			return 'warning';
 			case 'stopping': 			return 'warning';
 			case 'stopped': 			return 'danger';
-			case 'shutting-down': return 'danger';
+			case 'shutting-down': return 'warning';
 			case 'terminated': 		return 'danger';
 			default: 							return 'primary';
 		}
 	},
 	showActionButton: function() {
 		if(this.is_monthly()) return this.is_running() ? true : false;
-		else return this.ec2.status == 'running' || this.ec2.status == 'terminated' ? true : false;
+		else return this.ec2().status == 'running' || this.ec2().status == 'terminated' ? true : false;
 	},
   action_button_text: function() {
     if(this.is_monthly()) return this.is_running() ? 'reboot' : false;
@@ -34,10 +34,10 @@ Template.lab_sessions.events({
     this.reboot();
   },
   'click .start_instance': function(e) {
-    this.start();
+    this.run();
   },
   'click .stop_instance': function(e) {
-    this.stop();
+    this.terminate();
   },
 	
 	'click .remove_instance': function(e) {

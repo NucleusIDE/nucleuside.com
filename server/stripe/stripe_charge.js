@@ -1,10 +1,9 @@
-StripeCharge = function StripeCharge(order) {
-	this.order = order;
-	this.cost = this.order.get_cost_to_charge(); //the cost is main thing we need in this block
-	this.customer_token = this.order.get_user().stripe_customer_token; //the stripe customer token is the second thing we need
-};
-
-StripeCharge.extends(Stripe, {
+Ultimate('StripeCharge').extends(Stripe, {
+	construct: function(order) {
+		this.order = order;
+		this.cost = this.order.get_cost_to_charge(); //the cost is main thing we need in this block
+		this.customer_token = this.order.get_user().stripe_customer_token; //the stripe customer token is the second thing we need
+	},
 	charge: function() {
 		var res = this._createSync({
       amount: this.cost*100,
@@ -50,7 +49,7 @@ StripeCharge.extends(Stripe, {
 
 /**  STATIC METHODS BIATCH! -- yes, that's where this this interval shit goes **/
 
-StripeCharge.extendStaticServer({
+StripeCharge.extendStatic({
 	onStartup: function() {
 		this.setWeeklyInterval();
 	},

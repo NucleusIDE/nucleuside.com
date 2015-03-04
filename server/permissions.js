@@ -1,7 +1,7 @@
 Orders.allow({
   insert: function(userId, doc) {
     //we create orders on server only
-    return false;
+    return true;
   },
   update: function(userId, doc, fields, modifier) {
     return false;

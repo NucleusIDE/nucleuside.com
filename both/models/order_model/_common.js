@@ -1,15 +1,4 @@
-Orders = new Meteor.Collection('orders');
-
-Orders.before.insert(function (userId, doc) {
-  doc.created_at = moment().toDate();
-});
-
-
-Order = function Order(doc) {
-	if(Meteor.isServer && doc && doc.ec2) this.ec2 = new EC2(doc.ec2);
-};
-
-Order.modelExtends(Orders, {
+Ultimate('Order').extends(UltimateModel, 'orders', {
 	schema: function() {
 		return {
   		billing_method: {
@@ -72,6 +61,9 @@ Order.modelExtends(Orders, {
 			
 		};
 	},
+	defaultValues: {
+		billing_method: 'monthly'
+	},
 	defineErrorMessages: function() {
 		return {
 			mustBeGithubUrl: 'You must enter a Github URL'
@@ -99,22 +91,29 @@ Order.modelExtends(Orders, {
 		      path: 'billing-option',
 		      title: '1. Billing Option',
 		      template: 'billing_option',
-					//defaultData: {billing_method: 'monthly'},
 					barPercent: 20
 		    },{
 		      path: 'instance-details',
 					form: 'order_details',
 		      title: '2. Order Details',
 		      template: 'order_details',
-					barPercent: 40
+					barPercent: 45,
+					onNext: function(wizard, autoform) {
+						if(Meteor.user().valid_card) {
+							wizard.setStepsCompleted(2);
+							Session.set('redirect_to_new_instance_wizard_step_3', true);
+							Router.go('payment_details');
+						}
+						else wizard.next();
+					}
 		    }, {
 		      path: 'review',
 		      title: '3. Review',
 		      template: 'review',
-					barPercent: 66,
-		      onComplete: function(autoform, wizard) { 
+					barPercent: 63,
+		      onNext: function(wizard) { 
 						this.createOrder();
-						autoform.done(null, this);
+						wizard.next();
 		      }	
 		    }, {
 		      path: 'complete',
@@ -170,7 +169,7 @@ Order.modelExtends(Orders, {
     this.update({last_charged: date});
   },
   is_running: function() {
-    return this.ec2.status === 'running';
+    return this.ec2().status === 'running';
   },
   is_monthly: function() {
     return this.billing_method === BILLING_METHODS.monthly.name;
@@ -187,6 +186,6 @@ Order.modelExtends(Orders, {
   }
 });
 
-
-
-
+Orders.before.insert(function (userId, doc) {
+  doc.created_at = moment().toDate();
+});

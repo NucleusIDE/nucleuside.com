@@ -14,15 +14,8 @@
 
  **/
 
-Payments = new Meteor.Collection('payments');
 
-Payments.before.insert(function (userId, doc) {
-  doc.num = Payments.find().count() + 1;
-});
-
-PaymentModel = function PaymentModel() {};
-
-PaymentModel.modelExtends(Payments, {
+Ultimate('PaymentModel').extends(UltimateModel, 'payments', {
   user: function() {
     return Meteor.users.findOne(this.user_id);
   },
@@ -99,4 +92,8 @@ PaymentModel.modelExtends(Payments, {
 
     return payment;
   }
+});
+
+Payments.before.insert(function (userId, doc) {
+  doc.num = Payments.find().count() + 1;
 });

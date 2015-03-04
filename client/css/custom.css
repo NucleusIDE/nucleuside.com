@@ -11,7 +11,7 @@
 	margin-top: 5px;
 }
 
-.hourlyButton, .monthlyButton {
+.billing-buttons > a {
 	outline: none;
 	text-decoration: none !important;
 	cursor: pointer;
@@ -19,9 +19,6 @@
 	margin: 0 auto;
 }
 
-.hourlyButton {
-	margin-top: 60px;
-}
 
 .wizard-button {
 	text-decoration: none !important;
@@ -52,4 +49,30 @@ button.close {
 
 .control-label {
 	text-align: right !important;
+}
+
+.modal-header button.close {
+	margin-top: 4px;
+	color: white;
+	opacity: .7;
+}
+
+.modal-header button.close:hover {
+	opacity: 1;
+}
+
+
+.modal {
+	color: white;
+}
+
+.modal-content {
+	background: rgb(113, 127, 118);
+	opacity: .97;
+}
+
+.modal h4 {
+	color: white;
+	font-size: 24px;
+	text-shadow: 1px 1px 1px rgb(36, 66, 53);
 }

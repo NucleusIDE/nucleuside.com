@@ -20,19 +20,18 @@
 
                   <div id="payment-details">
 										{{#if currentUser}}
-											{{#ultimateForm id='payment_details' model=currentUser validation='blur' class='form-horizontal mt-sm'}}
+											{{#ultimate_form id='payment_details' model=this class='form-horizontal mt-sm'}}
 											
 	                      <fieldset>											
-													{{>formGroup name='name_on_card' style="width:258px"}}
-													{{>formGroup name='card_number' style="width:258px"}}
+													{{>form_group name='number' style="width:258px" value="4242424242424242"}}
 													
-	                       	{{>ccExpGroup month='expiration_month' year='expiration_year' monthStyle='width: 110px; float:left;' yearStyle='margin-left:20px; width:80px; float:left;'}}
+	                       	{{>cc_exp_group month='expMonth' year='expYear' monthStyle='width: 110px; float:left;' yearStyle='margin-left:20px; width:80px; float:left;'}}
 													
-													{{>formGroup name='cvc' style="width:110px;"}}
-													{{>autoSubmit value='Save' style='width: 208px;'}}
+													{{>form_group name='cvc' style="width:110px;" value="123"}}
+													{{>auto_submit value='Save' style='width: 208px;'}}
 	                      </fieldset>
 											
-											{{/ultimateForm}}
+											{{/ultimate_form}}
 										{{/if}}
                   </div>
 									

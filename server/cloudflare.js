@@ -1,13 +1,12 @@
-CloudFlare = function CloudFlare() {
-	var cloudflare = MasterConfig.cloudflare();
+Ultimate('CloudFlare').extends({
+	construct: function() {
+		var cloudflare = MasterConfig.cloudflare();
 	
-	this.url = cloudflare.url;
-	this.token = cloudflare.token;
-	this.email = cloudflare.email;
-	this.domain = cloudflare.domain;
-};
-
-CloudFlare.extends(Base, {
+		this.url = cloudflare.url;
+		this.token = cloudflare.token;
+		this.email = cloudflare.email;
+		this.domain = cloudflare.domain;
+	},
 	linkSubdomain: function(subdomain, ipAddress) {
 	  var res = this.POST(this.url, {
       params: {

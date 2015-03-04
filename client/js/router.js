@@ -36,7 +36,7 @@ Router.map(function() {
   this.route("/new-instance/:step", {
     name: "new_instance",
 		data: function()  {
-			return new Order({user_id: Meteor.userId(), billing_method: 'hourly'}); 
+			return new Order().reactive('new_instance'); 
 		}
   });
 	
@@ -56,7 +56,10 @@ Router.map(function() {
   });
 
   this.route("/payment-details", {
-    name: "payment_details"
+    name: "payment_details",
+		data: function()  {
+			return new CreditCard().reactive('new_credit_card', true); 
+		}
   });
 
   this.route("invoice", {

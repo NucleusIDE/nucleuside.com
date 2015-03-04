@@ -16,9 +16,8 @@ Order.extendHTTP({
 	},
 	
   run: function() {
-		this.ec2 = this.ec2 || new EC2;
-		this.ec2.run();
-		this.ec2.monitorStatus(this);
+		this.ec2().run();
+		this.ec2().monitorStatus(this);
 		this.save(); //the ec2 object props will save ;)
 		
 		this.linkSubdomain(this.ec2.instance_id);
@@ -31,14 +30,16 @@ Order.extendHTTP({
     }
     else this.last_charged = null;
 		
-		this.ec2.terminate()
+		console.log('EC2', this.ec2());
+		this.ec2().terminate()
+		this.ec2().monitorStatus(this);
 		this.save();
 	},
 	reboot: function() {
-		this.ec2.reboot(this);
+		this.ec2().reboot(this);
 	},
 	updateStatus: function() {
-		this.ec2.getStatus();
+		this.ec2().getStatus();
 		this.save();
 	},
 	

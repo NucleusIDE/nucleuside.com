@@ -1,17 +1,22 @@
-Template.billing_option.events({
-  "click .hourlyButton": function(e) {
-		this.model.set('billing_method', 'hourly');
-  },
-  "click .monthlyButton": function(e) {
-		this.model.set('billing_method', 'monthly');
-  }
-});
-
-Template.billing_option.helpers({
-	selected: function(cycle) {
-		var billingMethod = this.model.billing_method;
+Ultimate('NewInstanceTemplate').extends(UltimateTemplate, 'billing_option', {
+	autorun: function() {
+		console.log('YO', this.get('animal'));
+	},
+	subscribe: 'self',
+	created: function() {
+		this.autorun(function() {
+			sub = this.subscribe('self');
+			console.log('AUTORUN', this.get('animal'));
+		});
 		
-		if(cycle == 'hourly') return billingMethod == 'hourly' ? 'btn-primary' : 'btn-transparent';
-		else if(cycle == 'monthly') return billingMethod == 'monthly' ? 'btn-primary' : 'btn-transparent';
+		this.push("animal", 'cat');
+	},
+	dog: 'JAMES GILLMORE',
+	test: function() {
+		return this.get('animal')[0];
+	},
+	'click a': ['model', 'set', 'billing_method'],
+	'click': function() {
+		this.unshift('animal', 'dog');
 	}
 });

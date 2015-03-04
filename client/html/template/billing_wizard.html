@@ -6,7 +6,7 @@
         <div class="col-lg-7 col-lg-offset-1">
           <section class="widget">
             <div class="body">
- 						 	{{>wizard id="create_instance" model=this}}
+ 						 	{{>ultimate_wizard id="create_instance" model=this}}
             </div>       
 					</section>
         </div>
@@ -21,12 +21,21 @@
 
 
 <template name="billing_option">
-  <div class="billing-buttons col-md-12 text-align-center">
+  <div class="billing-buttons col-md-12 text-align-center" style="padding-top: 60px">
 
-    <a class="{{selected 'hourly'}} btn-lg btn-block hourlyButton">Hourly* ($1.5/hr )</a>
-    	<div class="or">- OR -</div>	
-    <a class="{{selected 'monthly'}} btn-lg btn-block monthlyButton">Monthly  ($160/month)</a>
-	
+
+    <a class="btn-{{umSelected 'hourly' 'billing_method' 'transparent' 'primary'}} btn-lg btn-block" v="hourly">Hourly* ($1.5/hr )</a>
+		
+			<div style="height:25px;"></div>
+			
+    <a class="btn-{{umSelected 'monthly' 'billing_method' 'transparent' 'primary'}} btn-lg btn-block" v="monthly">Monthly  ($160/month)</a>
+		
+			<div class="or" style="height:25px; margin-top: 20px;">- OR -{{dog}} + {{test}}</div>	
+			
+		<a class="btn-{{umSelected 'trial' 'billing_method' 'transparent' 'primary'}} btn-lg btn-block" v="trial">FREE 10 Minute Trial!</a>
+		
+		
+		
     <span class="help-block pull-left" style="margin-top: 60px;">*min 2 hours billed. Charged every week</span>
   </div>
 </template>
@@ -35,11 +44,11 @@
 <template name="order_details">
 <div class="tab-pane" id="tab2" style="position: relative; left: -32px; top: 14px;">
     <fieldset>
-			{{>formGroup name='github_url' style="width:383px" help="Github URL of your project"}}
+			{{>form_group name='github_url' style="width:383px" help="Github URL of your project"}}
 			
-			{{>formGroup name='subdomain' style="width:278px" addon=".nucleus.com" help="Your project will be accessible here"}}
+			{{>form_group name='subdomain' style="width:278px" addon=".nucleus.com" help="Your project will be accessible here"}}
 			
-			{{>formGroup name='password' style="width:258px" help="Want to password protect your subdomain?"}}
+			{{>form_group name='password' style="width:258px" help="Want to password protect your subdomain?"}}
     </fieldset>
 </div>
 </template>
@@ -49,11 +58,11 @@
 	  <div class="tab-pane" id="tab3" style="position: relative; left: -30px; top: 15px;">
 	    <div class="form-horizontal mt-sm">
 	      <fieldset>
-					{{>readOnlyFormGroup label="Subdomain" value=model.subdomain value2=".nucleuside.com"}}	
-					{{>readOnlyFormGroup label="Billing Option" value=model.billing_method}}
-					{{>readOnlyFormGroup label="Github URL" value=model.github_url}}
-					{{>readOnlyFormGroup label="Card" value="************" value2=currentUser.get_card}}
-					{{>readOnlyFormGroup label="Amount" value=model.display_amount}}		
+					{{>read_only_form_group label="Subdomain" value=model.subdomain value2=".nucleuside.com"}}	
+					{{>read_only_form_group label="Billing Option" value=model.billing_method}}
+					{{>read_only_form_group label="Github URL" value=model.github_url}}
+					{{>read_only_form_group label="Card" value="************" value2=currentUser.get_card}}
+					{{>read_only_form_group label="Amount" value=model.display_amount}}		
 	      </fieldset>
 	    </div>
 	  </div>

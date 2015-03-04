@@ -29,7 +29,7 @@ EC2.extend({
 		else status = res.data.Reservations[0].Instances[0].State.Name;
 		
 		if(order) {
-			order.ec2.status = status; 
+			order._ec2.status = status; 
 			order.save();
 		}
 		

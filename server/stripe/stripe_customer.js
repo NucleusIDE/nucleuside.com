@@ -1,11 +1,10 @@
-StripeCustomer = function StripeCustomer(user, card_token, last_4) {
-	this.user = user;
-	this.email = this.user.getEmail();
-	this.card_token = card_token;
-	this.last_4 = last_4;
-};
-
-StripeCustomer.extends(Stripe, {
+Ultimate('StripeCustomer').extends(Stripe, {
+	construct: function(userId, card_token, last_4) {
+		this.user = Meteor.users.findOne(userId);
+		this.email = this.user.getEmail();
+		this.card_token = card_token;
+		this.last_4 = last_4;
+	},
 	generateCustomer: function() {
 		if(!this.user.stripe_customer_token) this.createCustomer();
 		else this.updateCustomer();
