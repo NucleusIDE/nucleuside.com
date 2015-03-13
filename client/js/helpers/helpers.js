@@ -1,15 +1,15 @@
-Blaze.registerHelper("session", function(key) {
+Template.registerHelper("session", function(key) {
   return Session.get(key);
 });
 
 
-Blaze.registerHelper("global", function(variable) {
+Template.registerHelper("global", function(variable) {
 	if(prop) return window[variable][prop];
 	return window[variable];
 });
 
 
-Blaze.registerHelper("transform", function(dataObject, className) {
+Template.registerHelper("transform", function(dataObject, className) {
   return new window[className](dataObject);
 });
 
