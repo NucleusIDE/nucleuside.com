@@ -1,12 +1,9 @@
-Template.billing_history.helpers({
+Ultimate('billing_history').extends(UltimateComponent, {
   payments: function() {
     var user = Meteor.user();
     return Payments.find({user_id: user._id});
-  }
-});
-
-Template.billing_history.events({
-  "click tr.clickable": function() {
+  },
+  'click tr.clickable': function() {
     Router.go("invoice", {payment_id: this._id});
   }
 });

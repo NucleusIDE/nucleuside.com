@@ -14,24 +14,28 @@ EC2.extend({
 			}
 		}, 5000);
 	},
-	monitorStatus: function(order) {
+	monitorStatus: function(cbs) {
 		this.setIntervalUntil(function() {
-			var status = this.getStatus(order); //status saved in order at order.ec2.status	
+			var status = this.getStatus(); //status saved in order at order.ec2.status	
+			
 			console.log('EC2 STATUS', status);
-			if(status === 'running' || status == 'terminated' || status == 'stopped') return true;
+			
+			if(_.isObject(cbs)) {
+				if(status == 'running' && cbs.onRunning) cbs.onRunning.call();
+				if(status == 'terminated' && cbs.onTerminated) cbs.onTerminated.call();
+				if(status == 'stopped' && cbs.onStopped) cbs.onStopped.call();
+				if(cbs.onStatus) cbs.onStatus.call(null, status);
+			}
+			
+			if(status == 'running' || status == 'terminated' || status == 'stopped') return true;
 		}, 5000, 100);
 	},
-  getStatus: function(order) {
+  getStatus: function() {
     var res = this._describeInstances(),
 			status;
 			
 		if(res.error && res.error.name === "InvalidInstanceID.NotFound") status = 'terminated';
 		else status = res.data.Reservations[0].Instances[0].State.Name;
-		
-		if(order) {
-			order._ec2.status = status; 
-			order.save();
-		}
 		
 		return status;
   },

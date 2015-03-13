@@ -27,9 +27,9 @@
               <tbody>
                 {{#each orders}}
                 <tr>
-                  <td><span class="fw-semi-bold">{{get_subdomain}}</span></td>
+                  <td><span class="fw-semi-bold">{{subdomain}}</span></td>
                   <td class="hidden-xs">
-                    <small>{{get_github_url}}</small>
+                    <small>{{github_url}}</small>
 										{{#if isSubscription}}
 											<br />
 											<small>
@@ -44,12 +44,12 @@
 											{{/unless}}
 										{{/if}}
                   </td>
-                  <td class="hidden-xs">{{get_last_charged}}</td>
+                  <td class="hidden-xs">{{lastCharged}}</td>
                   <td class="width-150">
                     {{get_units_used}}
                   </td>
                   <td class="">
-                    <span class="label label-success label-{{statusClass}}">{{ec2.status}}</span>
+                    <span class="label label-success label-{{statusClass}}">{{status}}</span>
                   </td>
                   <td class="hidden-xs">
                     {{#if showActionButton}}

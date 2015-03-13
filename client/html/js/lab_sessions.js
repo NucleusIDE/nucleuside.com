@@ -10,17 +10,23 @@ Template.lab_sessions.helpers({
 			default: 							return 'primary';
 		}
 	},
+	status: function() {
+		if(this.trial_start_time && this.ec2().status == 'running') {
+			return UltimateUtilities.countdown(this.trial_start_time, 10);
+		}
+		else return this.ec2().status;
+	},
 	showActionButton: function() {
-		if(this.is_monthly()) return this.is_running() ? true : false;
+		if(this.isMonthly()) return this.isRunning() ? true : false;
 		else return this.ec2().status == 'running' || this.ec2().status == 'terminated' ? true : false;
 	},
   action_button_text: function() {
-    if(this.is_monthly()) return this.is_running() ? 'reboot' : false;
-    return this.is_running() ? 'stop' : 'start';
+    if(this.isMonthly()) return this.isRunning() ? 'reboot' : false;
+    return this.isRunning() ? 'stop' : 'start';
   },
   action_button_class: function() {
-    if(this.is_monthly()) return this.is_running() ? 'primary reboot_instance' : '';
-		return this.is_running() ? 'danger stop_instance' : 'success start_instance';
+    if(this.isMonthly()) return this.isRunning() ? 'primary reboot_instance' : '';
+		return this.isRunning() ? 'danger stop_instance' : 'success start_instance';
   }
 });
 

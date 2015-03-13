@@ -52,6 +52,13 @@ Ultimate('StripeCharge').extends(Stripe, {
 StripeCharge.extendStatic({
 	onStartup: function() {
 		this.setWeeklyInterval();
+		this.killOldTrials();
+	},
+	killOldTrials: function() {
+		var orders = Orders.find({trial_start_time: {$lt: moment().substract(10, 'minutes').toDate()}});
+		orders.forEach(function(order) {
+			order.terminate();
+		});
 	},
 	setWeeklyInterval: function() {
 		this.setTimeout(this.chargeOrder, 10 * 60 * 1000); //charge some orders on every startup

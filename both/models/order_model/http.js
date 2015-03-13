@@ -14,11 +14,13 @@ Order.extendHTTP({
 		this.run();
 		return this._id;
 	},
+
 	
   run: function() {
 		this.ec2().run();
-		this.ec2().monitorStatus(this);
 		this.save(); //the ec2 object props will save ;)
+		
+		this.monitorStatus({onRunning: this.terminateTrial.bind(this)});
 		
 		this.linkSubdomain(this.ec2.instance_id);
   },
@@ -32,7 +34,7 @@ Order.extendHTTP({
 		
 		console.log('EC2', this.ec2());
 		this.ec2().terminate()
-		this.ec2().monitorStatus(this);
+		this.monitorStatus();
 		this.save();
 	},
 	reboot: function() {
@@ -42,6 +44,30 @@ Order.extendHTTP({
 		this.ec2().getStatus();
 		this.save();
 	},
+	
+	
+	monitorStatus: function(callbacks) {
+		var cbs = {
+			onStatus: function(status) {
+				this._ec2.status = status; 
+				this.save();
+			}.bind(this)
+		};
+		
+		_.extend(cbs, callbacks);
+		
+		this.ec2().monitorStatus(cbs);
+	},
+	terminateTrial: function() {
+		if(this.billing_method != 'trial') return;
+		
+		this.set('trial_start_time', new Date);
+		
+		this.setTimeout(function() {
+			this.terminate();
+		}, 1000 * 60 * 10),
+	},
+	
 	
 	cancelSubscription: function() {
 		var subscription = new StripeSubscription(this);
