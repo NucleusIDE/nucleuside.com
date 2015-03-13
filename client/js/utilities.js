@@ -1,6 +1,6 @@
-Ultimate('UltimateUtilities').extends();
+Ultimate('Utilities').extends();
 
-UltimateUtilities.extendStatic({
+Utilities.extendStatic({
 	countdown: function(oldDate, minutes, seconds) {
 		var totalSeconds = seconds ? (minutes * 60) + seconds : minutes * 60;
 			totalSecondsRemaining = totalSeconds - Math.floor((new Date - oldDate)/1000)
