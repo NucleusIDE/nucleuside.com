@@ -2,12 +2,12 @@
   <nav id="sidebar" class="sidebar nav-collapse collapse">
     <ul id="side-nav" class="side-nav">
       <li class="">
-        <a href="{{pathFor 'lab_sessions'}}"><i class="fa fa-home"></i> <span class="name">Sessions</span></a>
+        <a href="{{pathFor 'instances'}}"><i class="fa fa-home"></i> <span class="name">Instances</span></a>
       </li>
       <li class="panel">
         <a class="accordion-toggle " data-parent="#side-nav" href="{{pathFor 'new_instance' data=step}}">
           <i class="fa fa-plus"></i>
-          <span class="name">Create New Session</span>
+          <span class="name">New Instance</span>
         </a>
       </li>
       <li class="panel">
@@ -19,39 +19,15 @@
       </li>
       <li class="panel">
         <a class="accordion-toggle "
-           data-parent="#side-nav" href="{{pathFor 'payment_details'}}">
+           data-parent="#side-nav" href="{{pathFor 'payment_info'}}">
           <i class="fa fa-dollar"></i>
-          <span class="name">Payment Details</span>
+          <span class="name">Payment Info</span>
         </a>
       </li>
       <li></li>
       <li class="visible">
-        <a href="{{pathFor 'logout'}}"><i class="fa fa-sign-out"></i> <span class="name">Sign Out</span></a>
+        <a href="{{pathFor 'logout'}}"><i class="fa fa-sign-out"></i> <span class="name">Log Out</span></a>
       </li>
     </ul>
-
-    <!-- <h5 class="sidebar-nav-title">Labels <a class="action-link" href="#"><i class="glyphicon glyphicon-plus"></i></a></h5> -->
-    <!-- some styled links in sidebar. ready to use as links to email folders, projects, groups, etc -->
-    <!-- <ul class="sidebar-labels">
-    <li>
-    <a href="#">
-    <i class="fa fa-circle text-warning"></i>
-    <span class="label-name">My Recent</span>
-    </a>
-    </li>
-    <li>
-    <a href="#">
-    <i class="fa fa-circle text-gray"></i>
-    <span class="label-name">Starred</span>
-    </a>
-    </li>
-    <li>
-    <a href="#">
-    <i class="fa fa-circle text-danger"></i>
-    <span class="label-name">Background</span>
-    </a>
-    </li>
-    </ul> -->
-
   </nav>
 </template>

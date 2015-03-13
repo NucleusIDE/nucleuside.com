@@ -21,18 +21,6 @@ Router.map(function() {
 		controller: 'PublicController'
   });
 
-  this.route("/billing-wizard", {
-    onBeforeAction: function() {
-      //Meteor.user().has_valid_card();
-			//Flash.warning("You don't have a card on file. Please add a card first.");
-			this.next();
-    },
-		data: function()  {
-			return new Order({user_id: Meteor.userId()}); 
-		},
-    name: "billing_wizard"
-  });
-
   this.route("/new-instance/:step", {
     name: "new_instance",
 		data: function()  {
@@ -41,11 +29,11 @@ Router.map(function() {
   });
 	
 	
-  this.route("/my-lab-sessions", {
+  this.route("/instances", {
 		data: function() {
 			return {orders: Orders.find()};
 		},
-    name: "lab_sessions"
+    name: "instances"
   });
 
   this.route("/billing-history", {
@@ -55,8 +43,8 @@ Router.map(function() {
     name: "billing_history"
   });
 
-  this.route("/payment-details", {
-    name: "payment_details",
+  this.route("/payment-info", {
+    name: "payment_info",
 		data: function()  {
 			return new CreditCard().reactive('new_credit_card', true); 
 		}
@@ -65,7 +53,7 @@ Router.map(function() {
   this.route("invoice", {
     path: "/invoice/:payment_id",
     waitOn: function() {
-      return [Meteor.subscribe('my-payment', this.params.payment_id)];
+      return Meteor.subscribe('my-payment', this.params.payment_id);
     },
     data: function() {
 			return Payments.findOne(this.params.payment_id);
