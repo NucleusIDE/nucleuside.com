@@ -55,3 +55,16 @@ Ultimate('StripeSubscription').extends(Stripe, {
 		return this._getStripe().customers;
 	}
 });
+
+
+
+StripeSubscription.extendStatic({
+	subscribe: function(order) {
+		var subscription = new StripeSubscription(order);
+		subscription.subscribe();
+	},
+	cancel: function(order) {
+		var subscription = new StripeSubscription(order);
+		subscription.cancel();
+	}
+});

@@ -1,4 +1,4 @@
-Order.extendClient({
+Instance.extendClient({
 	createOrder: function() {
     BlockUI.block();
 		

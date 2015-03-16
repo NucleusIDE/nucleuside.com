@@ -1,15 +1,15 @@
-Template.invoice.helpers({
+Ultimate('invoice').extends(UltimateTemplate, {
   items: function() {
     return [{
       sno: 1,
-      item: this.get_subdomain(),
-      desc: this.order_billing_method + " instance of Nucleus IDE",
-      qty: this.get_units_used(),
-      ppu: this.get_cost_per_unit(),
-      total: this.get_amount()
+      item: this.subdomain,
+      desc: this.billing_method + " instance of Nucleus IDE",
+      qty: this.units_used,
+      ppu: this.cost_per_unit,
+      total: this.amount
     }];
   },
   total: function() {
-    return "$ " + this.get_amount();
+    return "$ " + this.amount;
   }
 });

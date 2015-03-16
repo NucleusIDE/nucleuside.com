@@ -1,28 +1,13 @@
 Router.route('stripe_subscription_hook', {
   path: '/stripe-subscription-hook',
   action: function() {
-    var stripe_response = this.request.body.type;
-    var stripe_subscription_id = this.request.body.data.object.id;
+    var stripeResponse = this.request.body.type,
+			stripeSubscriptionId = this.request.body.data.object.id,
+			nextPaymentAttempt = this.request.body.next_payment_attempt,
+			order = Orders.findOne({stripe_subscription_id: stripeSubscriptionId});
 
-    var order = Orders.findOne({stripe_subscription_id: stripe_subscription_id});
-
-    if (stripe_response === "invoice.payment_failed") {
-      var payment = new PaymentModel.create_payment('FAIL', order._id);
-
-      payment.stripe_subscription_id = this.request.body.data.object.id;
-      payment.next_attempt = moment(this.request.body.next_payment_attempt).toDate();
-      payment.save();
-
-      Meteor.call("send_payment_failed_email", order._id);
-    }
-    if (stripe_response === "invoice.payment_succeeded") {
-      var payment = new PaymentModel.create_payment('SUCCESS', order._id);
-      payment.stripe_subscription_id = this.request.body.data.object.id;
-      payment.save();
-
-      order.set_last_charged(moment().toDate());
-      Meteor.call("send_invoice_email", order._id);
-    }
+    if(stripeResponse == "invoice.payment_succeeded") Payment.createSuccess(order);
+    else if(stripeResponse == "invoice.payment_failed") Payment.createFail(order, nextPaymentAttempt);
 
     this.response.writeHead(200, {'Content-Type': 'text/html'});
     this.response.end('');

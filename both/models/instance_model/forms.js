@@ -11,13 +11,15 @@ Order.extend({
 				onSubmit: function(autoform, wizard) {
 					console.log('EXAMPLE ONSUBMIT FROM FORM DEFINITION');
 					autoform.done();
+				}
 				**/
 			}
 		};
 	},
 	wizards: function() {
 		return {
-			'create_instance': [{
+			'create_instance': [
+				{
 		      path: 'billing-option',
 		      title: '1. Billing Option',
 		      template: 'billing_option',
@@ -63,7 +65,8 @@ Order.extend({
 		      title: '4. Thank You!',
 		      template: 'thank_you',
 					barPercent: 100
-		    }],
+		    }
+			],
 			'another_wizard': {}
 		};
 	}

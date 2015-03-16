@@ -1,4 +1,4 @@
-Template.lab_sessions.helpers({
+Ultimate('lab_sessions').extends(UltimateTemplate, {
 	statusClass: function() {
 		switch(this.ec2().status) {
 			case 'running': 			return 'success';
@@ -11,45 +11,49 @@ Template.lab_sessions.helpers({
 		}
 	},
 	status: function() {
-		if(this.trial_start_time && this.ec2().status == 'running') {
-			return UltimateUtilities.countdown(this.trial_start_time, 10);
+		if(this.model().trial_started && this.model().ec2().status == 'running') {
+			this.setReactiveIntervalUntil(function() {
+				return this.model().ec2().status != 'running';
+			}, 1000);
+			
+			return Utilities.countdown(this.model().trial_start_time, 10);
 		}
-		else return this.ec2().status;
+		else return this.model().ec2().status;
 	},
 	showActionButton: function() {
-		if(this.isMonthly()) return this.isRunning() ? true : false;
-		else return this.ec2().status == 'running' || this.ec2().status == 'terminated' ? true : false;
+		if(this.model().isMonthly()) return this.model().isRunning() ? true : false;
+		else return this.model().ec2().status == 'running' || this.model().ec2().status == 'terminated' ? true : false;
 	},
   action_button_text: function() {
-    if(this.isMonthly()) return this.isRunning() ? 'reboot' : false;
-    return this.isRunning() ? 'stop' : 'start';
+    if(this.model().isMonthly()) return this.model().isRunning() ? 'reboot' : false;
+    return this.model().isRunning() ? 'stop' : 'start';
   },
   action_button_class: function() {
-    if(this.isMonthly()) return this.isRunning() ? 'primary reboot_instance' : '';
-		return this.isRunning() ? 'danger stop_instance' : 'success start_instance';
-  }
-});
-
-Template.lab_sessions.events({
+    if(this.model().isMonthly()) return this.model().isRunning() ? 'primary reboot_instance' : '';
+		return this.model().isRunning() ? 'danger stop_instance' : 'success start_instance';
+  },
+	
+	
   'click .instance-action': function(e) {
     $(e.currentTarget).html('<i class="fa fa-spinner fa-spin"></i>');
   },
-  'click .reboot_instance-action': function(e) {
-		this.github_url = prompt('Feel free to change your Github URL.', this.github_url);
-		this.save();
-    this.reboot();
+  'click .reboot_instance': function(e) {
+		this.model().github_url = prompt('Feel free to change your Github URL.', this.model().github_url);
+		this.model().save();
+    this.model().reboot();
   },
   'click .start_instance': function(e) {
-    this.run();
+    this.model().run();
   },
   'click .stop_instance': function(e) {
-    this.terminate();
+    this.model().terminate();
   },
 	
 	'click .remove_instance': function(e) {
-		this.hideInstance();
+		this.model().hideInstance();
 	},
 	'click .cancel_subscription': function(e) {
-		this.cancelSubscription();
+		this.model().cancelSubscription();
 	}
 });
+

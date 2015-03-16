@@ -1,7 +1,7 @@
 Order.extendServer({
 	setInitialValues: function() {
-    this.units_used = BILLING_METHODS[this.billing_method].min_units_used;
-    this.cost_per_unit = BILLING_METHODS[this.billing_method].cost_per_unit;
+    this.units_used = Order.BILLING_METHODS[this.billing_method].min_units_used;
+    this.cost_per_unit = Order.BILLING_METHODS[this.billing_method].cost_per_unit;
 		
 		this.created_at = this.last_charged = moment().toDate(); //used in hourly orders only
 	},

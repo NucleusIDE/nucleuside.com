@@ -1,38 +1,23 @@
-Order.extendHTTP({
+Instanec.extendHTTP({
 	subdomainUsedAlready: function(subdomain) {
 		return !!Orders.find({subdomain: subdomain}).count();
 	},
-	_createOrder: function() {
+	_createInstance: function() {
     this.setInitialValues();
     this.save();
-
-		if (this.is_monthly()) {
-			var stripeSubscription = new StripeSubscription(this);
-			stripeSubscription.subscribe();
-		}
-		
+		if(this.is_monthly()) StripeSubscription.subscribe(this);
 		this.run();
-		return this._id;
 	},
 
 	
   run: function() {
 		this.ec2().run();
-		this.save(); //the ec2 object props will save ;)
-		
-		this.monitorStatus({onRunning: this.terminateTrial.bind(this)});
-		
+		this.save(); //the ec2 object props will save ;)	
+		this.monitorStatus({onRunning: this.terminateTrial});
 		this.linkSubdomain(this.ec2.instance_id);
   },
 	terminate: function() {
-    if(this.is_monthly()) {
-			this.current_plan_start = null;
-			this.current_plan_start = null;
-			this.current_plan_start = null;
-    }
-    else this.last_charged = null;
-		
-		console.log('EC2', this.ec2());
+    this.terminated_at = moment().toDate(); //used for hourly usage calculation
 		this.ec2().terminate()
 		this.monitorStatus();
 		this.save();
@@ -41,7 +26,7 @@ Order.extendHTTP({
 		this.ec2().reboot(this);
 	},
 	updateStatus: function() {
-		this.ec2().getStatus();
+		this._ec2.status = this.ec2().getStatus();
 		this.save();
 	},
 	
@@ -51,17 +36,20 @@ Order.extendHTTP({
 			onStatus: function(status) {
 				this._ec2.status = status; 
 				this.save();
-			}.bind(this)
+			}
 		};
 		
 		_.extend(cbs, callbacks);
+		_.each(cbs, function(cb, key) {
+			cbs[key] = cb.bind(this);
+		}.bind(this));
 		
 		this.ec2().monitorStatus(cbs);
 	},
 	terminateTrial: function() {
 		if(this.billing_method != 'trial') return;
 		
-		this.set('trial_start_time', new Date);
+		this.set('trial_started', new Date);
 		
 		this.setTimeout(function() {
 			this.terminate();
@@ -70,8 +58,7 @@ Order.extendHTTP({
 	
 	
 	cancelSubscription: function() {
-		var subscription = new StripeSubscription(this);
-		subscription.cancel();
+		StripeSubscription.cancel(this);
 	},
 	hideInstance: function() {
 		this.update({hide: true});
