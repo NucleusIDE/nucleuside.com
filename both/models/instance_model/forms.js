@@ -57,7 +57,7 @@ Order.extend({
 		      template: 'review',
 					barPercent: 63,
 		      onNext: function(wizard) { 
-						this.createOrder();
+						this.createInstance();
 						wizard.next();
 		      }	
 		    }, {

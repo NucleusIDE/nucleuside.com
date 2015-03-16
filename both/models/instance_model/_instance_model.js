@@ -1,8 +1,5 @@
 Ultimate('Instance').extends(UltimateModel, 'instances', {
-  user: function() {
-    return Meteor.users.findOne(this.user_id);
-  },
-  user: function() {
+  order: function() {
     return Orders.findOne(this.order_id);
   },
 	

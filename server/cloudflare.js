@@ -1,4 +1,4 @@
-Ultimate('CloudFlare').extends({
+Ultimate('Cloudflare').extends({
 	construct: function() {
 		var cloudflare = MasterConfig.cloudflare();
 	
@@ -25,3 +25,9 @@ Ultimate('CloudFlare').extends({
 	}
 });
 
+Cloudflare.extendStatic({
+	linkSubdomain: function(subdomain, ipAddress) {
+		var cloudflare = new CloudFlare;
+		cloudflare.linkSubdomain(subdomain, ipAddress);
+	}
+})
