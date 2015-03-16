@@ -7,8 +7,8 @@ Instance.extendServer({
 	linkSubdomain: function(instanceId) {
 		this.setTimeout(function() {
 			this.ec2().getIpAddress();
-			this.save(); //ip address on this.ec2.ip_address saved
-			Cloudflare.linkSubdomain(this.subdomain, this.ec2.ip_address);
+			this.save(); //this._ec2.ip_address saved
+			Cloudflare.linkSubdomain(this.subdomain, this.ec2().ip_address);
 		}, 5 * 1000); //wait until instance exists
 	},
 	ec2: function() {

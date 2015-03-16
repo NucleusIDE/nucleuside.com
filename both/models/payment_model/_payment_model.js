@@ -33,23 +33,10 @@ Ultimate('Payment').extends(UltimateModel, 'payments', {
   },
 
 	assignProps: function(order, status) {
+		_.extend(this, _.pick(order, 'units_used', 'cost_per_unit', 'github_url', 'subdomain', 'user_id', 'stripe_subscription_id', 'billing_method'));
 		this.status = status;
-    this.billing_method = order.billing_method;
-		
     this.amount = order.costToCharge();
-    this.units_used = order.units_used;
-    this.cost_per_unit = order.cost_per_unit;
-		
-    this.github_url = order.github_url;
-    this.subdomain = order.subdomain;
-		
     this.order_id = order._id;
-    this.user_id = order.user_id; 
-    this.date = moment().toDate();
-		this.invoice_num = Payments.find().count() + 1;
-		
-		if(order.stripe_subscription_id) this.stripe_subscription_id = order.stripe_subscription_id;
-		
 		this.save();
 	},
 	sendEmail: function() {
@@ -84,5 +71,6 @@ PaymentModel.extendStatic({
 
 
 Payments.before.insert(function (userId, doc) {
-  doc.num = Payments.find().count() + 1;
+  doc.date = moment().toDate();
+	doc.num = Payments.find().count() + 1;
 });
