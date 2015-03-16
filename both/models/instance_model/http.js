@@ -1,4 +1,4 @@
-Instanec.extendHTTP({
+Instance.extendHTTP({
 	subdomainUsedAlready: function(subdomain) {
 		return !!Orders.find({subdomain: subdomain}).count();
 	},

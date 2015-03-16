@@ -29,7 +29,6 @@ Ultimate('StripeCustomer').extends(Stripe, {
 		if(customer_token) this.user.stripe_customer_token = customer_token;
 		
 		this.user.save();	
-		console.log('VALID CARD BITCHES!');
 	},
 	
 	_createSync: function() {

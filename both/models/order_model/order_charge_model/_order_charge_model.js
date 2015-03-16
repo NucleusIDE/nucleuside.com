@@ -1,6 +1,6 @@
 Ultimate('OrderCharge').extends(Order, 'orders', {
 	displayAmount: function() {
-		return '$1 / hour used';
+		return '$1.50/hr';
 	},
 	
 	

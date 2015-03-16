@@ -46,9 +46,7 @@ Instance.extend({
 	defaultValues: {
 		billing_method: 'monthly'
 	},
-	defineErrorMessages: function() {
-		return {
-			mustBeGithubUrl: 'You must enter a Github URL'
-		};
+	defineErrorMessages: {
+		mustBeGithubUrl: 'You must enter a Github URL'
 	}
 });

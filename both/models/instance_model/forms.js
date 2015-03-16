@@ -1,20 +1,8 @@
 Order.extend({
-	forms: function() {
-		return {
-			'billing_option': {
-				keys: ['billing_method']
-			},
-			'order_details': {
-				keys: ['github_url', 'subdomain', 'password']
-				
-				/**
-				onSubmit: function(autoform, wizard) {
-					console.log('EXAMPLE ONSUBMIT FROM FORM DEFINITION');
-					autoform.done();
-				}
-				**/
-			}
-		};
+	forms: {
+		'order_details': {
+			keys: ['github_url', 'subdomain', 'password']
+		}
 	},
 	wizards: function() {
 		return {
@@ -25,7 +13,7 @@ Order.extend({
 		      template: 'billing_option',
 					barPercent: 20,
 					onBeforeShow: function(wizard) {
-						var githubUrl = Session.get('free_trial_github_url')
+						var githubUrl = Session.get('free_trial_github_url');
 						
 						if(githubUrl) {
 							Session.set('free_trial_github_url', null);
@@ -37,14 +25,14 @@ Order.extend({
 							wizard.next();
 						}
 					}
-		    },{
+		    }, {
 		      path: 'instance-details',
 					form: 'order_details',
 		      title: '2. Order Details',
 		      template: 'order_details',
 					barPercent: 45,
 					onNext: function(wizard, autoform) {
-						if(Meteor.user().valid_card) {
+						if(!Meteor.user().valid_card) {
 							wizard.setStepsCompleted(2);
 							Session.set('redirect_to_new_instance_wizard_step_3', true);
 							Router.go('payment_details');
@@ -66,8 +54,7 @@ Order.extend({
 		      template: 'thank_you',
 					barPercent: 100
 		    }
-			],
-			'another_wizard': {}
+			]
 		};
 	}
 });

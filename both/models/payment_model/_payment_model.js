@@ -8,9 +8,6 @@ Ultimate('Payment').extends(UltimateModel, 'payments', {
   status: function () {
     return this.isSuccessful() ? "Success" : "Failed";
   },
-  dateFormatted: function () {
-    return moment(this.date).format('ddd MMMM DD YYYY');
-  },
 
 	assignProps: function(order, status) {
 		_.extend(this, _.pick(order, 'units_used', 'cost_per_unit', 'github_url', 'subdomain', 'user_id', 'stripe_subscription_id', 'billing_method'));
