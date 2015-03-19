@@ -1,0 +1,1 @@
+Ultimate('hourly_row').extends(InstanceRow);

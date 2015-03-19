@@ -5,6 +5,8 @@ Ultimate('StripeCharge').extends(Stripe, {
 		this.customer_token = this.order.get_user().stripe_customer_token; //the stripe customer token is the second thing we need
 	},
 	charge: function() {
+		if(this.cost <= 0) return;
+		
 		var res = this._createSync({
       amount: this.cost*100,
       currency: "USD",

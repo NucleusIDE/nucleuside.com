@@ -11,8 +11,5 @@ Instance.extendClient({
 		this.subdomainUsedAlready(this.subdomain, function(err, res) {
 			return res ? callback(true) : callback(false);
 		});
-	},
-	ec2: function() {
-		return this._ec2;
 	}
 });

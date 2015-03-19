@@ -4,9 +4,8 @@ Instance.extendHTTP({
 	},
 	_createInstance: function() {
     this.setInitialValues();
-    this.save();
-		if(this.is_monthly()) StripeSubscription.subscribe(this);
 		this.run();
+		this.createOrder();
 	},
 
 	
@@ -23,24 +22,15 @@ Instance.extendHTTP({
 		this.save();
 	},
 	reboot: function() {
-		this.ec2().reboot(this);
-	},
-	updateStatus: function() {
-		this._ec2.status = this.ec2().getStatus();
-		this.save();
+		this.ec2().stop();
+		this.monitorStatus({onStopped: this.ec2().start});
 	},
 	
 	
 	monitorStatus: function(callbacks) {
-		var cbs = {
-			onStatus: function(status) {
-				this._ec2.status = status; 
-				this.save();
-			}
-		};
+		var cbs = {onStatus: this.save}; //status set on this._ec2.status prior to save()
 		
-		_.extend(cbs, callbacks);
-		_.each(cbs, function(cb, key) {
+		_.each(_.extend(cbs, callbacks), function(cb, key) {
 			cbs[key] = cb.bind(this);
 		}.bind(this));
 		
@@ -49,18 +39,10 @@ Instance.extendHTTP({
 	terminateTrial: function() {
 		if(this.billing_method != 'trial') return;
 		
-		this.set('trial_started', new Date);
+		this.order().set('trial_started', new Date);
 		
 		this.setTimeout(function() {
 			this.terminate();
 		}, 1000 * 60 * 10),
-	},
-	
-	
-	cancelSubscription: function() {
-		StripeSubscription.cancel(this);
-	},
-	hideInstance: function() {
-		this.update({hide: true});
 	}
 });

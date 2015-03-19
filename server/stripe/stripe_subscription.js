@@ -1,7 +1,7 @@
 Ultimate('StripeSubscription').extends(Stripe, {
 	construct: function(order) {
 		this.order = order;
-		this.customer_token = order.get_user().stripe_customer_token;
+		this.customer_token = order.user().stripe_customer_token;
 		this.plan_id = MasterConfig.stripe_plan_monthly();
 		this.stripe_id = this.order.stripe_subscription_id; //only available on pre-existing orders, i.e. when they are canceled
 	},

@@ -22,7 +22,7 @@ StripeCharge.extendStatic({
 		});
 	},
 	ordersToCharge: function() { //after all we'll only collect orders that are old enough to be charged
-		return Orders.find({last_charged: {$lt: moment().subtract(24, 'hours').toDate()}});
+		return Orders.find({billing_method: 'hourly', last_charged: {$lt: moment().subtract(24, 'hours').toDate()}});
 	},
 	
 	

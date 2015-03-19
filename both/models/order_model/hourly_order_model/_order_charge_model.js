@@ -1,11 +1,10 @@
 Ultimate('OrderCharge').extends(Order, 'orders', {
-	displayAmount: function() {
-		return '$1.50/hr';
-	},
+	billing_method: 'hourly',
+	displayAmount: '$1.50/hr',
 	
 	
   costToCharge: function() {
-    eturn this.cost_per_unit * this.hoursUsed();
+    return this.cost_per_unit * this.hoursUsed();
   },
 	hoursUsed: function() {
 		var mom = this.terminated_at ? moment(this.terminated_at) : moment();

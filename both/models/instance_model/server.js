@@ -11,8 +11,10 @@ Instance.extendServer({
 			Cloudflare.linkSubdomain(this.subdomain, this.ec2().ip_address);
 		}, 5 * 1000); //wait until instance exists
 	},
-	ec2: function() {
-		if(!this._ec2) return this._ec2 = new EC2; //this is a new order
-		else return this._ec2._runInstances ? this._ec2 : new EC2(this._ec2); //wrapped as EC2 object already : not wrapped
+	createOrder: function() {
+		var OrderClass = BILLING_METHODS[this.billing_method].class,
+			order = new OrderClass(this._id);
+			
+		order.save();
 	}
 });

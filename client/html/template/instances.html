@@ -1,4 +1,4 @@
-<template name="lab_sessions">
+<template name="instances">
   <div class="wrap">
     <div class="content container">
       <h2 class="page-title"><span class="fw-semi-bold">My </span>Instances </h2>
@@ -25,38 +25,8 @@
                 </tr>
               </thead>
               <tbody>
-                {{#each orders}}
-                <tr>
-                  <td><span class="fw-semi-bold">{{subdomain}}</span></td>
-                  <td class="hidden-xs">
-                    <small>{{github_url}}</small>
-										{{#if isSubscription}}
-											<br />
-											<small>
-												<a class='cancel_subscription'>cancel</a>
-											</small>
-										{{else}}
-											{{#unless ec2.active}}
-												<br />
-												<small>
-													<a class='remove_instance' href="#">remove instance</a>
-												</small>
-											{{/unless}}
-										{{/if}}
-                  </td>
-                  <td class="hidden-xs">{{formattedDatetime 'last_charged'}}</td>
-                  <td class="width-150">
-                    {{get_units_used}}
-                  </td>
-                  <td class="">
-                    <span class="label label-success label-{{statusClass}}">{{status}}</span>
-                  </td>
-                  <td class="hidden-xs">
-                    {{#if showActionButton}}
-                    	<a class="btn btn-{{action_button_class}} instance-action" href="#">{{action_button_text}}</a>
-                    {{/if}}
-                  </td>
-                </tr>
+                {{#each this}}
+									 <tr>{{> rowTemplate}}</tr>
                 {{/each}}
               </tbody>
             </table>
@@ -68,4 +38,53 @@
       <i class="fa fa-circle-o-notch fa-spin"></i>
     </div>
   </div>
+</template>
+
+
+<template name="monthly_row">
+  <td><span class="fw-semi-bold">{{subdomain}}</span></td>
+  <td class="hidden-xs">
+    <small>{{github_url}}</small><br />
+		<small><a class='cancel_subscription'>cancel</a></small>
+  </td>
+  <td class="hidden-xs">{{formattedDatetime 'last_charged'}}</td>
+  <td class="width-150">{{units_used}}</td>
+  <td class=""><span class="label label-success label-{{statusClass}}">{{status}}</span></td>
+  <td class="hidden-xs">
+    {{#if showActionButton}}
+    	<a class="btn btn-{{actionButtonClass}}" href="#">{{actionButtonText}}</a>
+    {{/if}}
+  </td>
+</template>
+
+<template name="hourly_row">
+  <td><span class="fw-semi-bold">{{subdomain}}</span></td>
+  <td class="hidden-xs">
+    <small>{{github_url}}</small><br />
+		<small><a class='remove_instance' href="#">remove instance</a></small>
+  </td>
+  <td class="hidden-xs">{{formattedDatetime 'last_charged'}}</td>
+  <td class="width-150">{{units_used}}</td>
+  <td class=""><span class="label label-success label-{{statusClass}}">{{status}}</span></td>
+  <td class="hidden-xs">
+    {{#if showActionButton}}
+    	<a class="btn btn-{{actionButtonClass}} instance-action" href="#">{{actionButtonText}}</a>
+    {{/if}}
+  </td>
+</template>
+
+<template name="trial_row">
+  <td><span class="fw-semi-bold">{{subdomain}}</span></td>
+  <td class="hidden-xs">
+    <small>{{github_url}}</small><br />
+		<small><a class='remove_instance' href="#">remove instance</a></small>
+  </td>
+  <td class="hidden-xs">{{formattedDatetime 'last_charged'}}</td>
+  <td class="width-150">{{units_used}}</td>
+  <td class=""><span class="label label-success label-{{statusClass}}">{{status}}</span></td>
+  <td class="hidden-xs">
+    {{#if showActionButton}}
+    	<a class="btn btn-{{actionButtonClass}} instance-action" href="#">{{actionButtonText}}</a>
+    {{/if}}
+  </td>
 </template>

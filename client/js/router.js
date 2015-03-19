@@ -31,7 +31,7 @@ Router.map(function() {
 	
   this.route("/instances", {
 		data: function() {
-			return {orders: Orders.find()};
+			return {Instances.find();
 		},
     name: "instances"
   });

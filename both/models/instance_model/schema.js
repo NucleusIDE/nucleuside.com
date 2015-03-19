@@ -37,10 +37,11 @@ Instance.extend({
 	  },
 		
 		user_id: {
-			type: String,		
+			type: String		
 		},
 		hide: {
 			type: Boolean,		
+			optional: true
 		}
 	},
 	defaultValues: {

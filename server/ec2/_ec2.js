@@ -1,7 +1,4 @@
-Ultimate('EC2').extends({
-	construct: function(doc) {
-		if(doc) _.extend(this, doc);
-	},
+Ultimate('EC2').extends(UltimateBehavior, {
 	_runInstances: function(params) {
 		return this.applySync(this.__ec2(), 'runInstances', [params]);
 	},
@@ -23,14 +20,6 @@ Ultimate('EC2').extends({
 	_params: function() {
 		return {InstanceIds: [this.instance_id]};
 	},
-	
-	
-  _start: function() {
-		this._startInstances();
-  },
-  _stop: function() {
-		this._stopInstances({Force: true});
-  },
 	
 	
 	__ec2: function() {

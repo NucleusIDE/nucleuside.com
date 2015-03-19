@@ -1,4 +1,4 @@
-Order.extend({
+OrderCharge.extend({
 	schema: {
 		user_id: {
 			type: String,		
