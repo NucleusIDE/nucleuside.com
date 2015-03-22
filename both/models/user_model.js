@@ -14,3 +14,9 @@ Ultimate('User').extends(UltimateUser, Meteor.users, {
 		return Orders.find().count() === 0;
 	}
 });
+
+User.extendServer({
+	getGithubToken: function() {
+		return this.services.github.accessToken;
+	}
+});

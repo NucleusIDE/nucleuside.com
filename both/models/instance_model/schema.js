@@ -44,7 +44,7 @@ Instance.extend({
 			optional: true
 		}
 	},
-	defaultValues: {
+	defaults: {
 		billing_method: 'monthly'
 	},
 	defineErrorMessages: {

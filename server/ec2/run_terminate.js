@@ -25,6 +25,8 @@ EC2.extend({
 			return this.instance_id = res.data.Instances[0].InstanceId;
 		}
   },
+	
+	
   terminate: function() {
 		this._terminateInstances();
   },
@@ -34,6 +36,8 @@ EC2.extend({
   stop: function() {
 		this._stopInstances({Force: true});
   },
+	
+	
 	monitorStatus: function(cbs) {
 		this.setIntervalUntil(function() {
 			var status = this.getStatus(); //status saved in order at order.ec2.status	
@@ -48,6 +52,7 @@ EC2.extend({
 			if(status == 'running' || status == 'terminated' || status == 'stopped') return true;
 		}, 5000, 100);
 	},
+	
   getStatus: function() {
     var res = this._describeInstances(),
 			status;
@@ -57,6 +62,8 @@ EC2.extend({
 		
 		return this.status = status;
   },
+	
+	
 	getIpAddress: function() {
 		var res = this._describeInstances();
 		return this.ip_address = res.data.Reservations[0].Instances[0].PublicIpAddress;

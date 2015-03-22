@@ -9,7 +9,7 @@ Order.extend({
 			'create_instance': [
 				{
 		      path: 'billing-option',
-		      title: '1. Billing Option',
+		      title: 'Billing Option',
 		      template: 'billing_option',
 					barPercent: 20,
 					onBeforeShow: function(wizard) {
@@ -28,7 +28,7 @@ Order.extend({
 		    }, {
 		      path: 'instance-details',
 					form: 'order_details',
-		      title: '2. Order Details',
+		      title: 'Order Details',
 		      template: 'order_details',
 					barPercent: 45,
 					onNext: function(wizard, autoform) {
@@ -41,7 +41,7 @@ Order.extend({
 					}
 		    }, {
 		      path: 'review',
-		      title: '3. Review',
+		      title: 'Review',
 		      template: 'review',
 					barPercent: 63,
 		      onNext: function(wizard) { 
@@ -50,7 +50,7 @@ Order.extend({
 		      }	
 		    }, {
 		      path: 'complete',
-		      title: '4. Thank You!',
+		      title: 'Thank You!',
 		      template: 'thank_you',
 					barPercent: 100
 		    }

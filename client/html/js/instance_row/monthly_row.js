@@ -1,14 +1,7 @@
 Ultimate('monthly_row').extends(InstanceRow, {
-	showActionButton: function() {
-		return this.model().isRunning();
-	},
-  actionButtonText: function() {
-    return this.model().isRunning() ? 'reboot' : '';
-  },
-  actionButtonClass: function() {
-    return this.model().isRunning() ? 'primary' : '';
-  },
-	
+	showActionButton: ['model.isRunning'],
+  actionButtonText: ['model.isRunning', 'reboot', ''],
+  actionButtonClass: ['model.isRunning', 'primary', ''],
 	
   'click .btn-primary': function(e) {
 		this.model().github_url = prompt('Feel free to change your Github URL.', this.model().github_url);

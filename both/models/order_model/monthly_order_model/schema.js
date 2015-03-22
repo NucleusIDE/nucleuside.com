@@ -1,5 +1,8 @@
 OrderSubscription.extend({
 	schema: {
+		instance_id: {
+			type: String,		
+		},
 		user_id: {
 			type: String,		
 		},
@@ -11,6 +14,9 @@ OrderSubscription.extend({
 		},
 		current_plan_end: {
 			type: Number,		
+		},
+		canceled: {
+			type: Boolean
 		}
 	}
 });

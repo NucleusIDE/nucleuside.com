@@ -7,10 +7,13 @@ Ultimate('Instance').extends(UltimateModel, 'instances', {
   isRunning: function() {
     return this.ec2().status === 'running';
   },
-  is: function(billingMethod) {
+  orderIs: function(billingMethod) {
     return this.billing_method === billingMethod;
   },
 	ec2: function() {
 		return this.composeBehavior('_ec2', EC2, 'client');
+	},
+	status: function() {
+		return this.ec2().status;
 	}
 });

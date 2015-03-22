@@ -1,4 +1,4 @@
-Ultimate('invoice').extends(UltimateTemplate, {
+Ultimate('invoice').extends(UltimateComponent, {
   items: function() {
     return [{
       sno: 1,

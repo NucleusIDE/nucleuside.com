@@ -1,7 +1,7 @@
-Meteor.startup(function() {
-  Stripe.setPublishableKey(MasterConfig.stripe());
+Ultimate('ClientStartup').extends(UltimateStartup, {
+	setupStripe: function() {
+		Stripe.setPublishableKey(MasterConfig.stripe());
+	},
 	
-	Tracker.autorun(function() {
-	  Meteor.subscribe('self');
-	});
+	subscribe: 'self'
 });

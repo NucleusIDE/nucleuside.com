@@ -1,4 +1,4 @@
-Ultimate('OrderCharge').extends(Order, 'orders', {
+Ultimate('HourlyOrder').extends(Order, 'orders', {
 	billing_method: 'hourly',
 	displayAmount: '$1.50/hr',
 	

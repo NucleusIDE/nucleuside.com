@@ -1,4 +1,4 @@
-Ultimate('NewInstanceTemplate').extends(UltimateTemplate, 'billing_option', {
+Ultimate('NewInstanceTemplate').extends(UltimateComponent, 'billing_option', {
 	autorun: function() {
 		console.log('YO', this.get('animal'));
 	},

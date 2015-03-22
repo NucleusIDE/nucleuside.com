@@ -1,6 +1,6 @@
 Ultimate('trial_row').extends(InstanceRow, {
 	status: function() {
-		var trialStart = this.model().trial_started,
+		var trialStart = this.model().order().trial_started,
 			status = this.model().ec2().status;
 		
 		if(trialStart && status == 'running') {

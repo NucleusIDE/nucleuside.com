@@ -10,9 +10,9 @@ Ultimate('Cloudflare').extends({
 	linkSubdomain: function(subdomain, ipAddress) {
 	  var res = this.POST(this.url, {
       params: {
+				a: "rec_new",
         tkn: this.token,
         email: this.email,
-        a: "rec_new",
         z: this.domain,
         type: 'A',
 				ttl: 120,
@@ -20,8 +20,25 @@ Ultimate('Cloudflare').extends({
 				content: ipAddress
       }
     });
-			
-		return res.data;
+		
+		
+		try {
+			return res.data.response.rec.obj.rec_id;
+		}
+		catch(e) {
+			return Meteor.Error('cloudflare-error', 'failed-to-link-subdomain-to-ip-address');
+		}
+	},
+	unLinkSubdomain: function(id) {
+	  this.POST(this.url, {
+      params: {
+				a: "rec_delete",
+        tkn: this.token,
+        email: this.email,
+        z: this.domain,
+				id: id
+      }
+    });
 	}
 });
 
@@ -29,5 +46,9 @@ Cloudflare.extendStatic({
 	linkSubdomain: function(subdomain, ipAddress) {
 		var cloudflare = new CloudFlare;
 		cloudflare.linkSubdomain(subdomain, ipAddress);
+	},
+	unLinkSubdomain: function(id) {
+		var cloudflare = new CloudFlare;
+		cloudflare.unLinkSubdomain(id);
 	}
 })

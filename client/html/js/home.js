@@ -1,4 +1,4 @@
-Ultimate('home').extends(UltimateTemplate, {
+Ultimate('home').extends(UltimateComponent, {
 	rendered: function() {
 		Prism.highlightAll();
 	},
