@@ -1,6 +1,6 @@
 Ultimate('Cloudflare').extends({
 	construct: function() {
-		var cloudflare = MasterConfig.cloudflare();
+		var cloudflare = ConfigServer.cloudflare();
 	
 		this.url = cloudflare.url;
 		this.token = cloudflare.token;

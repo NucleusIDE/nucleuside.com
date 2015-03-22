@@ -1,6 +1,6 @@
 Ultimate('ClientStartup').extends(UltimateStartup, {
 	setupStripe: function() {
-		Stripe.setPublishableKey(MasterConfig.stripe());
+		Stripe.setPublishableKey(ConfigClient.stripe());
 	},
 	
 	subscribe: 'self'

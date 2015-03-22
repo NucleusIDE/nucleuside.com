@@ -26,8 +26,8 @@ Ultimate('EC2').extends(UltimateBehavior, {
 		if(this.___proto.___ec2) return this.___proto.___ec2;
 		
 	  AWS.config.update({
-	    accessKeyId: MasterConfig.aws().accessKeyId,
-	    secretAccessKey: MasterConfig.aws().secretAccessKey,
+	    accessKeyId: ConfigServer.aws.accessKeyId,
+	    secretAccessKey: ConfigServer.aws.secretAccessKey,
 	    region: 'us-west-1',
 	    apiVersion: '2014-10-01'
 	  });

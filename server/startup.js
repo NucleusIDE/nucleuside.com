@@ -18,8 +18,8 @@ Ultimate('ServerStartup').extends(UltimateStartup, {
 	_insertGithubService: function() {
 	  ServiceConfiguration.configurations.insert({
 	    service: "github",
-	    clientId: MasterConfig.github().clientId,
-	    secret: MasterConfig.github().secret,
+	    clientId: ConfigServer.github().clientId,
+	    secret: ConfigServer.github().secret,
 			loginStyle: "popup"
 	  });
 	}

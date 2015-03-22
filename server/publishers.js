@@ -1,37 +1,29 @@
-/**
- * Roles are not published by default
- */
-Meteor.publish(null, function (){
-  return Meteor.roles.find({});
-});
-
-Meteor.publish('self', function() {
-  return Meteor.users.find({_id: this.userId}, {fields: {
-    card_number: 1,
-    valid_card: 1,
-    emails: 1,
-    profile: 1
-  }});
-});
-
-Meteor.publish("my-orders", function() {
-	var user = Meteor.users.findOne(this.userId);
+Ultimate('Publish').extends(UltimatePublish, {
+	roles: true,
+	self: {card_number: 1, valid_card: 1, emails: 1, profile: 1},
 	
-	if(!user) return [];
 	
-	if(user.isAdmin()) return Orders.find({hide: {$ne: true}});
-  else return Orders.find({user_id: this.userId, hide: {$ne: true}});
-});
-
-Meteor.publish("my-order", function(order_id) {
-  return Orders.find({_id: order_id});
-});
-
-Meteor.publish("my-payment", function(payment_id) {
-  var payment = Payments.find({_id: payment_id});
-  return payment;
-});
-
-Meteor.publish("my-payments", function() {
-  return Payments.find({user_id: this.userId});
+	'my-orders': function() {
+		if(!this.user()) return [];
+	
+		if(this.user().isAdmin()) return this._adminOrders();
+	  else this._orders();
+	},
+	_adminOrders: function() {
+		if(this.user().isAdmin()) return Orders.find({hide: {$ne: true}});
+	},
+	_orders: function() {
+		return Orders.find({user_id: this.userId, hide: {$ne: true}});
+	},
+	
+	
+	'my-order': function(orderId) {
+		return Orders.find({_id: orderId});
+	},
+	'my-payment': function(paymentId) {
+	  return Payments.find({_id: paymentId});
+	},
+	'my-payments': function() {
+		return Payments.find({user_id: this.userId});
+	}
 });
