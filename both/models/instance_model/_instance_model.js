@@ -1,4 +1,7 @@
 Ultimate('Instance').extends(UltimateModel, 'instances', {
+	behaviors: [EC2, '_ec2', 'ec2', 'client'],
+	
+	
   order: function() {
     return Orders.findOne(this.order_id);
   },
@@ -10,9 +13,6 @@ Ultimate('Instance').extends(UltimateModel, 'instances', {
   orderIs: function(billingMethod) {
     return this.billing_method === billingMethod;
   },
-	ec2: function() {
-		return this.composeBehavior('_ec2', EC2, 'client');
-	},
 	status: function() {
 		return this.ec2().status;
 	}

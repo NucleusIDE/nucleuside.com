@@ -1,77 +1,40 @@
-PublicController = RouteController.extend({layoutTemplate: 'public_layout'});
-
-Router.configure({
+Ultimate('Router').extends(UltimateRouter, {
 	layoutTemplate: 'layout', 
 	onBeforeAction: function() {
-		var controllerName = this.route.options.controller;
-
-		if(!Meteor.userId() && controllerName != 'PublicController') {
+		if(!Meteor.userId() && this._layout._template != 'public_layout') {
 			Meteor.loginWithGithub();
 			this.render('home');
 		}
 		else this.next();
-	}
-});
-
-Router.setTemplateNameConverter(function (str) { return str; });
-
-Router.map(function() {
-  this.route("/", {
-    name: "home",
-		controller: 'PublicController'
-  });
-
-  this.route("/new-instance/:step", {
-    name: "new_instance",
-		data: function()  {
-			return new Order().reactive('new_instance'); 
-		}
-  });
+	},
 	
-	
-  this.route("/instances", {
-		data: function() {
-			return {Instances.find();
-		},
-    name: "instances"
-  });
-
-  this.route("/billing-history", {
-    waitOn: function() {
-      return Meteor.subscribe('my-payments');
-    },
-    name: "billing_history"
-  });
-
-  this.route("/payment-info", {
-    name: "payment_info",
-		data: function()  {
-			return new CreditCard().reactive('new_credit_card', true); 
-		}
-  });
-
-  this.route("invoice", {
-    path: "/invoice/:payment_id",
+	home: {
+    path: '/',
+		layoutTemplate: 'public_layout'
+  },
+	'/new-instance/:step': function() {
+		return new Order().reactive('new_instance'); 
+	},
+	instances: function() {
+		return Instances.find();
+	},
+	payment_info: function()  {
+		return new CreditCard().reactive('new_credit_card', true); 
+	},
+	billing_history: function() {
+    return Meteor.subscribe('my-payments');
+  },
+	'/invoice/:payment_id': {
     waitOn: function() {
       return Meteor.subscribe('my-payment', this.params.payment_id);
     },
     data: function() {
 			return Payments.findOne(this.params.payment_id);
-    },
-		name: 'invoice'
-  });
-	
-  this.route("/logout", {
-    action: function() {
-      Meteor.logout(function() {
-        this.redirect("home");
-      }.bind(this));
-    },
-    name: "logout"
-  });
-});
-
-
-Tracker.autorun(function(stop) {
-  if(Meteor.user()) Meteor.subscribe('my-orders');
+    }
+  },
+	logout: function() {
+    Meteor.logout(function() {
+      this.redirect("home");
+    }.bind(this));
+  }
 });
