@@ -1,4 +1,4 @@
-Ultimate('User').extends(UltimateUser, Meteor.users, {
+Ultimate('User').extends(UltimateModel, Meteor.users, {
 	schema: {
 		stripe_customer_token: {
 			type: String,		

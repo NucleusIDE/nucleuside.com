@@ -31,7 +31,7 @@ Ultimate('ConfigServer').extends(UltimateConfig, {
 			url: "https://www.cloudflare.com/api_json.html",
 			token: "efb121eb6f63b931c15d2474cbcf8a0e1f85c",
 			email: "coder@nucleuside.com",
-			domain: this.isProduction() ? 'nucleuside.com' : 'moralmoneymatters.com';
+			domain: this.isProduction() ? 'nucleuside.com' : 'moralmoneymatters.com'
 		};
 	}
 });

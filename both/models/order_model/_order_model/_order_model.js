@@ -10,6 +10,8 @@ Ultimate('Order').extends(UltimateModel, 'orders', {
   }
 });
 
+/**
 Orders.before.insert(function (userId, doc) {
   doc.created_at = moment().toDate();
 });
+**/

@@ -1,4 +1,4 @@
-OrderSubscription.extend({
+MonthlyOrder.extend({
 	schema: {
 		instance_id: {
 			type: String,		

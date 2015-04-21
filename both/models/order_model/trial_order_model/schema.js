@@ -1,4 +1,4 @@
-OrderSubscription.extend({
+TrialOrder.extend({
 	schema: {
 		instance_id: {
 			type: String,		
