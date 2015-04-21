@@ -1,4 +1,4 @@
-PaymentModel.extendStatic({
+Payment.extendStatic({
   createSuccess: function(order, stripeChargeId) {
     var payment = new Payment;
 		

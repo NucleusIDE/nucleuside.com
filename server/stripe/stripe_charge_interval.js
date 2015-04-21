@@ -27,7 +27,7 @@ StripeCharge.extendStatic({
 	
 	
 	killOldTrials: function() {
-		var orders = Orders.find({trial_start_time: {$lt: moment().substract(10, 'minutes').toDate()}});
+		var orders = Orders.find({trial_start_time: {$lt: moment().subtract(10, 'minutes').toDate()}});
 		orders.forEach(function(order) {
 			order.terminate();
 		});

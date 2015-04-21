@@ -1,4 +1,4 @@
-Ultimate('Payment').extends(UltimateModel, 'payments', {
+Payment.extend({
   schema: {
 		user_id: {
 			type: String	

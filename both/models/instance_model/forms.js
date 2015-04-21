@@ -1,4 +1,4 @@
-Order.extend({
+Instance.extend({
 	forms: {
 		'order_details': {
 			keys: ['github_url', 'subdomain', 'password']
