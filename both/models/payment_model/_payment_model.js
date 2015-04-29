@@ -1,4 +1,5 @@
-Ultimate('Payment').extends(UltimateModel, 'payments', {
+Ultimate('Payment').extends(UltimateModel, {
+  collection: 'payments',
   order: function() {
     return Orders.findOne(this.order_id);
   },

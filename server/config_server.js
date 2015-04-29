@@ -9,6 +9,7 @@ Ultimate('ConfigServer').extends(UltimateConfig, {
 			secret: "df984df5ccd772a67060cb0aa4704c7aade064e9"
 		}
 	},
+	
 	development: {
 		stripe: {
 			secretKey: 'sk_test_xZXeiSOixGWQhQxAM7lqmJCP', 
@@ -31,7 +32,7 @@ Ultimate('ConfigServer').extends(UltimateConfig, {
 			url: "https://www.cloudflare.com/api_json.html",
 			token: "efb121eb6f63b931c15d2474cbcf8a0e1f85c",
 			email: "coder@nucleuside.com",
-			domain: this.isProduction() ? 'nucleuside.com' : 'moralmoneymatters.com'
+			domain: this.isEnvironment('production') ? 'nucleuside.com' : 'moralmoneymatters.com'
 		};
 	}
 });

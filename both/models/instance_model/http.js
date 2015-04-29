@@ -1,12 +1,25 @@
-Instance.extendHTTP({
+Instance.extendHttp({
 	subdomainUsedAlready: function(subdomain) {
 		return !!Instances.find({subdomain: subdomain, '_ec2.dns_record_id': {$ne: null}}).count();
 	},
-	_createInstance: function() {
+
+
+  processOrder: function() {
     this.setInitialValues();
-		this.run();
 		this.createOrder();
+    this.run();
 	},
+  setInitialValues: function() {
+    this.units_used = Order.BILLING_METHODS[this.billing_method].min_units_used;
+    this.cost_per_unit = Order.BILLING_METHODS[this.billing_method].cost_per_unit;
+    this.last_charged = new Date; //used in hourly orders only
+  },
+  createOrder: function() {
+    var OrderClass = BILLING_METHODS[this.billing_method].class(),
+      order = new OrderClass({instance_id: this._id, user_id: Meteor.userId(), billing_method: this.billing_method});
+
+    this.order_id = order.save();
+  },
 
 	
   run: function() {
@@ -16,7 +29,7 @@ Instance.extendHTTP({
 			this.launchApp();
 			this.terminateTrial();
 		});
-		this.linkSubdomain(this.ec2.instance_id);
+		this.linkSubdomain(this.ec2().instance_id);
   },
 	terminate: function() {
     this.terminated_at = moment().toDate(); //used for hourly usage calculation

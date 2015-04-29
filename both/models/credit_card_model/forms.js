@@ -1,6 +1,6 @@
 CreditCard.extend({
 	forms: {
-		'payment_details': {
+		'payment_info': {
 			keys: ['number', 'expMonth', 'expYear', 'cvc'],
 			onSubmit: function() {
 				this.user_id = Meteor.userId();

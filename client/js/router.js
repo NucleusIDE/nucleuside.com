@@ -1,4 +1,4 @@
-Ultimate('Router').extends(UltimateRouter, {
+Ultimate('ClientRouter').extends(UltimateRouter, {
 	layoutTemplate: 'layout', 
 	onBeforeAction: function() {
 		if(!Meteor.userId() && this._layout._template != 'public_layout') {
@@ -13,7 +13,7 @@ Ultimate('Router').extends(UltimateRouter, {
 		layoutTemplate: 'public_layout'
   },
 	'/new-instance/:step': function() {
-		return new Order().reactive('new_instance'); 
+		return new Instance().reactive('new_instance'); 
 	},
 	instances: function() {
 		return Instances.find();

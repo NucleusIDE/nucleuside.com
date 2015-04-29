@@ -31,7 +31,7 @@ Ultimate('CreditCard').extends(UltimateForm, {
 });
 
 
-CreditCard.extendHTTP({
+CreditCard.extendHttp({
   updateBillingInfo: function(cardToken) {
 		var stripeCustomer = new StripeCustomer(this.user_id, cardToken, this.last4());
 		stripeCustomer.generateCustomer();

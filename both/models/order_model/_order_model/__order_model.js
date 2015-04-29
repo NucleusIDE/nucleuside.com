@@ -1,4 +1,14 @@
-Ultimate('Order').extends(UltimateModel, 'orders', {
+Ultimate('Order').extends(UltimateModel, {
+  schema: {
+    instance_id: {
+      type: String,
+    },
+    user_id: {
+      type: String,
+    },
+  },
+
+  collection: 'orders',
 	instance: function() {
 		return Instances.findOne(this.instance_id);
 	},

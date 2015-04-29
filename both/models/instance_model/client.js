@@ -2,7 +2,7 @@ Instance.extendClient({
 	createInstance: function() {
     BlockUI.block();
 		
-		this._createInstance(function(error, res) {
+		this.processOrder(function(error, res) {
 			BlockUI.unblock();
       if(error) Flash.danger(error.reason);
 		});

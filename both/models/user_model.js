@@ -1,10 +1,10 @@
-Ultimate('User').extends(UltimateModel, Meteor.users, {
+Ultimate('User').extends(UltimateUser, {
 	schema: {
 		stripe_customer_token: {
-			type: String,		
+			type: String
 		},
 		valid_card: {
-			type: Boolean,		
+			type: Boolean,
 		}
 	},
   hasValidCard: function() {
@@ -12,11 +12,5 @@ Ultimate('User').extends(UltimateModel, Meteor.users, {
   },
 	hasNoInstances: function() {
 		return Orders.find().count() === 0;
-	}
-});
-
-User.extendServer({
-	getGithubToken: function() {
-		return this.services.github.accessToken;
 	}
 });

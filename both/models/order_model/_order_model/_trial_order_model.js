@@ -1,6 +1,15 @@
 Ultimate('TrialOrder').extends(Order, 'orders', {
+  schema: function() {
+    return _.extend({}, this.callParent('schema'), {
+      trial_started: {
+        type: Date,
+      }
+    });
+  },
+
 	billing_method: 'trial',
 	displayAmount: 'FREE',
+
   costToCharge: function() { return 0; },
 	
 	

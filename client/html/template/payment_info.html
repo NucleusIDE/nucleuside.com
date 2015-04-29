@@ -1,4 +1,4 @@
-<template name="payment_details">
+<template name="payment_info">
   <div class="wrap">
     <div class="content container signup-wizard">
       <h2 class="page-title"> Payment <small> details</small></h2>
@@ -20,7 +20,7 @@
 
                   <div id="payment-details">
 										{{#if currentUser}}
-											{{#ultimate_form id='payment_details' model=this class='form-horizontal mt-sm'}}
+											{{#ultimate_form id='payment_info' model=this class='form-horizontal mt-sm'}}
 											
 	                      <fieldset>											
 													{{>form_group name='number' style="width:258px" value="4242424242424242"}}

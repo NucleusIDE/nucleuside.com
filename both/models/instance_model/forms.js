@@ -6,7 +6,7 @@ Instance.extend({
 	},
 	wizards: function() {
 		return {
-			'create_instance': [
+			'new_instance': [
 				{
 		      path: 'billing-option',
 		      title: 'Billing Option',
@@ -35,7 +35,7 @@ Instance.extend({
 						if(!Meteor.user().valid_card) {
 							wizard.setStepsCompleted(2);
 							Session.set('redirect_to_new_instance_wizard_step_3', true);
-							Router.go('payment_details');
+							Router.go('payment_info');
 						}
 						else wizard.next();
 					}

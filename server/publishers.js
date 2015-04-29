@@ -1,19 +1,19 @@
 Ultimate('Publish').extends(UltimatePublish, {
 	roles: true,
-	self: {card_number: 1, valid_card: 1, emails: 1, profile: 1},
+	self: ['card_number', 'valid_card', 'emails', 'profile'],
 	
 	
-	'my-orders': function() {
+	'my-instances': function() {
 		if(!this.user()) return [];
-	
-		if(this.user().isAdmin()) return this._adminOrders();
-	  else this._orders();
+
+		if(this.user().isAdmin()) return this._adminInstances();
+	  else this._instances();
 	},
-	_adminOrders: function() {
-		if(this.user().isAdmin()) return Orders.find({hide: {$ne: true}});
+	_adminInstances: function() {
+		return Instances.find({hide: {$ne: true}});
 	},
-	_orders: function() {
-		return Orders.find({user_id: this.userId, hide: {$ne: true}});
+	_instances: function() {
+		return Instances.find({user_id: this.userId, hide: {$ne: true}});
 	},
 	
 	

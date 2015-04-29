@@ -1,4 +1,4 @@
-Ultimate('RouterServer').extends(UltimateRouterServer, {
+Ultimate('ServerRouter').extends(UltimateRouterServer, {
 	get_instance_password: function() {
     var host = self.request.headers.host,
 			cleanedHost = host.replace('http://', '').replace('/', ''),

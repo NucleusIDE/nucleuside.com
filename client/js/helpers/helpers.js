@@ -22,7 +22,7 @@ Template.is_equal.helpers({
 
 /** AUTOMATICALLY UNBLOCK UI AFTER FLASH MESSAGES ARE SHOWN
 		i very rarely recommend syntatic sugar these days (unless it's deeply thought out 
-		foundational stuff like Model.extendHTTP, which we will use heavily like models themselves),
+		foundational stuff like Model.extendHttp, which we will use heavily like models themselves),
 	  but come on this is baby stuff. I guess syntatic sugar in between, in complexity, is the problem. 
 **/
 var oldDanger = Flash.danger,
