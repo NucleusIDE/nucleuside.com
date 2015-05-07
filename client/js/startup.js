@@ -3,8 +3,8 @@ Ultimate('ClientStartup').extends(UltimateStartup, {
 		Stripe.setPublishableKey(ConfigClient.stripe);
 	},
 	
-	subscribe: 'self',
-	autorun: function() {
+	sub: 'self',
+	ar: function() {
 		if(Meteor.user()) Meteor.subscribe('my-instances');
 	}
 });

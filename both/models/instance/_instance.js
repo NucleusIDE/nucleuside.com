@@ -1,6 +1,6 @@
 Ultimate('Instance').extends(UltimateModel, {
   collection: 'instances',
-	//behaviors: ['EC2', '_ec2', 'ec2', 'client'],
+	behaviors: ['EC2', '_ec2', 'ec2', 'client'],
 	
 	
   order: function() {

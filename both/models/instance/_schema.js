@@ -1,12 +1,12 @@
 Instance.extend({
 	schema: {
 		billing_method: {
-	    type: String,
-			defaultValue: 'hourly'
-	  },
+	    	type: String,
+				defaultValue: 'hourly'
+	  		},
 		github_url: {
-	    type: String,
-	    label: "Github URL",
+		    type: String,
+		    label: "Github URL",
 			regEx: SimpleSchema.RegEx.Url,
 			autoform: {
 				placeholder: 'Github URL of your Project'
@@ -14,10 +14,10 @@ Instance.extend({
 			custom: function(simpleSchema) {
 				if(this.github_url.indexOf('github.com') === -1) return 'mustBeGithubUrl';
 			}
-	  },
+		},
 		subdomain: {
-	    type: String,
-	    label: "Subdomain",
+		    type: String,
+		    label: "Subdomain",
 			autoform: {
 				placeholder: 'my-project'
 			},
@@ -26,16 +26,15 @@ Instance.extend({
 					callback(isUsed ? 'The subdomain you entered is already in use.' : null);
 				});
 			}
-	  },
+	  	},
 		password: {
-	    type: String,
-	    label: "Password",
+		    type: String,
+		    label: "Password",
 			optional: true,
 			autoform: {
 				placeholder: '(optional)'
 			}
-	  },
-		
+  		},	
 		user_id: {
 			type: String		
 		},
@@ -45,7 +44,7 @@ Instance.extend({
 		}
 	},
 	defaults: {
-		billing_method: 'monthly'
+		billing_method: 'hourly'
 	},
 	defineErrorMessages: {
 		mustBeGithubUrl: 'You must enter a Github URL'

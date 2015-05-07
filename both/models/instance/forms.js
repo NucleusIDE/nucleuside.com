@@ -8,9 +8,9 @@ Instance.extend({
 		return {
 			'new_instance': [
 				{
-		      path: 'billing-option',
-		      title: 'Billing Option',
-		      template: 'billing_option',
+					path: 'billing-option',
+					title: 'Billing Option',
+					template: 'billing_option',
 					barPercent: 20,
 					onBeforeShow: function(wizard) {
 						var githubUrl = Session.get('free_trial_github_url');
@@ -25,11 +25,11 @@ Instance.extend({
 							wizard.next();
 						}
 					}
-		    }, {
-		      path: 'instance-details',
+			    }, {
+					path: 'instance-details',
 					form: 'order_details',
-		      title: 'Order Details',
-		      template: 'order_details',
+					title: 'Order Details',
+					template: 'order_details',
 					barPercent: 45,
 					onNext: function(wizard, autoform) {
 						if(!Meteor.user().valid_card) {
@@ -39,21 +39,21 @@ Instance.extend({
 						}
 						else wizard.next();
 					}
-		    }, {
-		      path: 'review',
-		      title: 'Review',
-		      template: 'review',
+			    }, {
+					path: 'review',
+					title: 'Review',
+					template: 'review',
 					barPercent: 63,
-		      onNext: function(wizard) { 
+					onNext: function(wizard) { 
 						this.createInstance();
 						wizard.next();
-		      }	
-		    }, {
-		      path: 'complete',
-		      title: 'Thank You!',
-		      template: 'thank_you',
+					}	
+			    }, {
+					path: 'complete',
+					title: 'Thank You!',
+					template: 'thank_you',
 					barPercent: 100
-		    }
+			    }
 			]
 		};
 	}

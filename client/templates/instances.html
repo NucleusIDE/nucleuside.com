@@ -1,0 +1,43 @@
+<template name="instances">
+  <div class="wrap">
+    <div class="content container">
+      <h2 class="page-title"><span class="fw-semi-bold">My </span>Instances </h2>
+
+      <section class="widget">
+        <header>
+          <h4>December <span class="fw-semi-bold">2015 Dog</span></h4>
+          <div class="widget-controls">
+            <a data-widgster="expand" title="Expand" href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
+            <a data-widgster="collapse" title="Collapse" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
+          </div>
+        </header>
+        
+        <div class="body">
+          <div class="mt">
+            <table id="datatable-table" class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th class="no-sort hidden-xs">Github URL</th>
+                  <th class="hidden-xs">Last Billed</th>
+                  <th class="no-sort">Units Used</th>
+                  <th class="no-sort">Status</th>
+                  <th class="hidden-xs"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each this}}
+									 <tr>{{> rowTemplate}}</tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+      </section>
+    </div>
+    <div class="loader-wrap hiding hide">
+      <i class="fa fa-circle-o-notch fa-spin"></i>
+    </div>
+  </div>
+</template>

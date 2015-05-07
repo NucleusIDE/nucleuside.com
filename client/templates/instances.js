@@ -1,8 +1,8 @@
 Ultimate('InstancesGrid').extends(UltimateComponent, {
-  template: 'instances',
+  	template: 'instances',
 	rowTemplate: function() {
 		var billingMethod = this.model().billing_method;
-    return Template[billingMethod + '_row'];
+		return Template[billingMethod + '_row'];
 	}
 });
 

@@ -9,9 +9,9 @@ Ultimate('ClientRouter').extends(UltimateRouter, {
 	},
 	
 	home: {
-    path: '/',
-		layoutTemplate: 'public_layout'
-  },
+    		path: '/',
+			layoutTemplate: 'public_layout'
+  	},
 	'/new-instance/:step': function() {
 		return new Instance().reactive('new_instance'); 
 	},
@@ -22,19 +22,19 @@ Ultimate('ClientRouter').extends(UltimateRouter, {
 		return new CreditCard().reactive('new_credit_card', true); 
 	},
 	billing_history: function() {
-    return Meteor.subscribe('my-payments');
-  },
+    	return Meteor.subscribe('my-payments');
+  	},
 	'/invoice/:payment_id': {
-    waitOn: function() {
-      return Meteor.subscribe('my-payment', this.params.payment_id);
-    },
-    data: function() {
+    	waitOn: function() {
+	      	return Meteor.subscribe('my-payment', this.params.payment_id);
+	    },
+    	data: function() {
 			return Payments.findOne(this.params.payment_id);
-    }
-  },
+	    }
+  	},
 	logout: function() {
-    Meteor.logout(function() {
-      this.redirect("home");
-    }.bind(this));
-  }
+	    Meteor.logout(function() {
+	      	this.redirect("home");
+	    }.bind(this));
+  	}
 });

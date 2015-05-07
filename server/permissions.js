@@ -11,3 +11,17 @@ Ultimate('OrderPermissions').extends(UltimatePermissions, {
   },
   fetch: ['user_id']
 });
+
+
+Ultimate('InstancePermissions').extends(UltimatePermissions, {
+  insert: function(userId, doc) {
+    return true
+  },
+  update: function(userId, doc, fields, modifier) {
+    return true
+  },
+  remove: function(userId, doc) {
+    return doc.user_id === userId;
+  },
+  fetch: ['user_id']
+});

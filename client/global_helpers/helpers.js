@@ -3,7 +3,7 @@ Template.registerHelper("session", function(key) {
 });
 
 
-Template.registerHelper("global", function(variable) {
+Template.registerHelper("global", function(variable, prop) {
 	if(prop) return window[variable][prop];
 	return window[variable];
 });

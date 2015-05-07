@@ -7,9 +7,9 @@ Ultimate('User').extends(UltimateUser, {
 			type: Boolean,
 		}
 	},
-  hasValidCard: function() {
-    return !!this.valid_card;
-  },
+  	hasValidCard: function() {
+    	return !!this.valid_card;
+ 	},
 	hasNoInstances: function() {
 		return Orders.find().count() === 0;
 	}
