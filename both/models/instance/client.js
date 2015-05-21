@@ -1,10 +1,10 @@
 Instance.extendClient({
 	createInstance: function() {
-    BlockUI.block();
-		
+	    BlockUI.block();
+			
 		this.processOrder(function(error, res) {
 			BlockUI.unblock();
-      if(error) Flash.danger(error.reason);
+	      	if(error) Flash.danger(error.reason);
 		});
 	},
 	isSubdomainUsed: function(callback) {

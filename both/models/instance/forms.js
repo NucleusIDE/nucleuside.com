@@ -11,13 +11,13 @@ Instance.extend({
 					path: 'billing-option',
 					title: 'Billing Option',
 					template: 'billing_option',
-					barPercent: 20,
+					barPercent: 25,
 					onBeforeShow: function(wizard) {
 						var githubUrl = Session.get('free_trial_github_url');
-						
+
 						if(githubUrl) {
 							Session.set('free_trial_github_url', null);
-							
+
 							this.billing_method = 'trial';
 							this.github_url = githubUrl;
 							this.save();
@@ -30,7 +30,7 @@ Instance.extend({
 					form: 'order_details',
 					title: 'Order Details',
 					template: 'order_details',
-					barPercent: 45,
+					barPercent: 51,
 					onNext: function(wizard, autoform) {
 						if(!Meteor.user().valid_card) {
 							wizard.setStepsCompleted(2);
@@ -43,11 +43,11 @@ Instance.extend({
 					path: 'review',
 					title: 'Review',
 					template: 'review',
-					barPercent: 63,
-					onNext: function(wizard) { 
+					barPercent: 77,
+					onNext: function(wizard) {
 						this.createInstance();
 						wizard.next();
-					}	
+					}
 			    }, {
 					path: 'complete',
 					title: 'Thank You!',

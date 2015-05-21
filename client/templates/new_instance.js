@@ -12,7 +12,7 @@ Ultimate('NewInstanceTemplate').extends(UltimateComponent, {
 		return this.last('animal');
 	},
 	'click a': ['model', 'set', 'billing_method'],
-	'click': function() {
+	click: function() {
 		console.log('CLICK MOFO')
 		this.unshift('animal', 'dog');
 	}

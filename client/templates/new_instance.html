@@ -7,12 +7,12 @@
           	<section class="widget">
             	<div class="body">
 				 	{{>ultimate_wizard id="new_instance" model=this}}
-            	</div>       
+            	</div>
 			</section>
         </div>
       </div>
     </div>
-		
+
     <div class="loader-wrap hiding hide">
       <i class="fa fa-circle-o-notch fa-spin"></i>
     </div>
@@ -23,21 +23,21 @@
 <template name="billing_option">
   	<div class="billing-buttons col-md-12 text-align-center" style="padding-top: 60px">
     	<a class="btn-{{umSelected 'hourly' 'billing_method' 'transparent' 'primary'}} btn-lg btn-block" v="hourly">	Hourly* ($1.5/hr )</a>
-		
+
 
 		<div style="height:25px;"></div>
-			
+
 
     	<a class="btn-{{umSelected 'monthly' 'billing_method' 'transparent' 'primary'}} btn-lg btn-block" v="monthly">Monthly  ($160/month)</a>
-		
 
-		<div class="or" style="height:25px; margin-top: 20px;">- OR -{{dog}} + {{test}}</div>	
-			
+
+		<div class="or" style="height:25px; margin-top: 20px;">- OR -{{dog}} + {{test}}</div>
+
 
 		<a class="btn-{{umSelected 'trial' 'billing_method' 'transparent' 'primary'}} btn-lg btn-block" v="trial">FREE 10 Minute Trial!</a>
-		
-		
-		
+
+
+
     	<span class="help-block pull-left" style="margin-top: 60px;">*min 2 hours billed. Charged every week</span>
   	</div>
 </template>
@@ -47,10 +47,10 @@
 <div class="tab-pane" id="tab2" style="position: relative; left: -32px; top: 14px;">
     <fieldset>
 			{{>form_group name='github_url' style="width:383px" help="Github URL of your project"}}
-			
+
 			{{>form_group name='subdomain' style="width:278px" addon=".nucleus.com" help="Your project will be accessible here"}}
-			
-			{{>form_group name='password' style="width:258px" help="Want to password protect your subdomain?"}}
+
+			{{>form_group name='password' type="password" style="width:258px" help="Want to password protect your subdomain?"}}
     </fieldset>
 </div>
 </template>
@@ -60,11 +60,11 @@
 	  <div class="tab-pane" id="tab3" style="position: relative; left: -30px; top: 15px;">
 	    <div class="form-horizontal mt-sm">
 	      <fieldset>
-					{{>read_only_form_group label="Subdomain" value=subdomain value2=".nucleuside.com"}}	
+					{{>read_only_form_group label="Subdomain" value=subdomain value2=".nucleuside.com"}}
 					{{>read_only_form_group label="Billing Option" value=billing_method}}
 					{{>read_only_form_group label="Github URL" value=github_url}}
-					{{>read_only_form_group label="Card" value="************" value2=currentUser.get_card}}
-					{{>read_only_form_group label="Amount" value=display_amount}}		
+					{{>read_only_form_group label="Card" value="************" value2=currentUser.card_number}}
+					{{>read_only_form_group label="Amount" value=displayAmount}}
 	      </fieldset>
 	    </div>
 	  </div>

@@ -1,7 +1,7 @@
 Ultimate('trial_row').extends(InstanceRow, {
 	status: function() {
 		var trialStart = this.model().order().trial_started,
-			status = this.model().ec2().status;
+			status = this.model().status();
 		
 		if(trialStart && status == 'running') {
 			this.setReactiveIntervalUntil(function() {

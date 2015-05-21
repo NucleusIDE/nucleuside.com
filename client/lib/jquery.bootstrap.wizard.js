@@ -13,7 +13,7 @@
 var bootstrapWizardCreate = function(element, options) {
 	var element = $(element);
 	var obj = this;
-	
+
 	// selector skips any 'li' elements that do not contain a child with a tab data-toggle
 	var baseItemSelector = 'li:has([data-toggle="tab"])';
 
@@ -21,7 +21,7 @@ var bootstrapWizardCreate = function(element, options) {
 	var $settings = $.extend({}, $.fn.bootstrapWizard.defaults, options);
 	var $activeTab = null;
 	var $navigation = null;
-	
+
 	this.rebindClick = function(selector, fn)
 	{
 		selector.unbind('click', fn).bind('click', fn);
@@ -172,7 +172,7 @@ var bootstrapWizardCreate = function(element, options) {
 		// Remove menu item
 		$item.remove();
 	};
-	
+
 	var innerTabClick = function (e) {
 		// Get the index of the clicked tab
 		var clickedIndex = $navigation.find(baseItemSelector).index($(e.currentTarget).parent(baseItemSelector));
@@ -180,7 +180,7 @@ var bootstrapWizardCreate = function(element, options) {
 			return false;
 		}
 	};
-	
+
 	var innerTabShown = function (e) {  // use shown instead of show to help prevent double firing
 		$element = $(e.target).parent();
 		var nextTab = $navigation.find(baseItemSelector).index($element);
@@ -197,21 +197,21 @@ var bootstrapWizardCreate = function(element, options) {
 		$activeTab = $element; // activated tab
 		obj.fixNavigationButtons();
 	};
-	
+
 	this.resetWizard = function() {
-		
+
 		// remove the existing handlers
 		$('a[data-toggle="tab"]', $navigation).off('click', innerTabClick);
 		$('a[data-toggle="tab"]', $navigation).off('shown shown.bs.tab', innerTabShown);
-		
+
 		// reset elements based on current state of the DOM
 		$navigation = element.find('ul:first', element);
 		$activeTab = $navigation.find(baseItemSelector + '.active', element);
-		
+
 		// re-add handlers
 		$('a[data-toggle="tab"]', $navigation).on('click', innerTabClick);
 		$('a[data-toggle="tab"]', $navigation).on('shown shown.bs.tab', innerTabShown);
-		
+
 		obj.fixNavigationButtons();
 	};
 
@@ -272,7 +272,7 @@ $.fn.bootstrapWizard.defaults = {
 	onPrevious:       null,
 	onLast:           null,
 	onFirst:          null,
-	onTabChange:      null, 
+	onTabChange:      null,
 	onTabClick:       null,
 	onTabShow:        null
 };

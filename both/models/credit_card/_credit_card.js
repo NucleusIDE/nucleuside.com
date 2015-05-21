@@ -5,6 +5,8 @@ Ultimate('CreditCard').extends(UltimateForm, {
 	last4: function() {
 		return (this.number+'').slice(-4);
 	},
+
+
 	addNewCard: function(stripeCard) {
     	BlockUI.block();
     	this.stripeCreateToken(stripeCard);
@@ -15,7 +17,9 @@ Ultimate('CreditCard').extends(UltimateForm, {
 	stripeCallback: function(status, response) {
     	if(status === 200) this.stripeSuccess();
 		else this.stripeFail();
-  },
+  	},
+
+  	
 	stripeSuccess: function() {
 		this.updateBillingInfo(response.id, function(error, result) {
 	      	if (error) Flash.danger('Something is wrong with the card you provided. Please double check it.');

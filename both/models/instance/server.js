@@ -1,20 +1,19 @@
 Instance.extendServer({
 	linkSubdomain: function(instanceId) {
-		this.setTimeout(function() {
-			this.ec2().getIpAddress();	
-			this._ec2.dns_record_id = Cloudflare.linkSubdomain(this.subdomain, this.ec2().ip_address);
+		this.setTimeout(function() {	
+			this.ec2.dns_record_id = Cloudflare.linkSubdomain(this.subdomain, this.ec2.acquireIpAddress());
 			this.save(); //this._ec2.ip_address also saved
 		}, 5 * 1000); //wait until instance exists
 	},
 	unLinkSubdomain: function(instanceId) {
-		Cloudflare.unLinkSubdomain(this._ec2.dns_record_id);
-		this._ec2.dns_record_id = null;
+		Cloudflare.unLinkSubdomain(this.ec2.dns_record_id);
+		this.ec2.dns_record_id = null;
 		this.save();
 	},
 	
 	
 	launchApp: function() {
-    return; //TODO: TEST UltimateExec
+    	return; //TODO: TEST /w UltimateExec
 		var commands = [
 				'rm -R ' + this.githubPath(), 
 				this.getCloneCommand(),
@@ -30,7 +29,7 @@ Instance.extendServer({
 				}.bind(this)
 			};
 
-    UltimateExec.exec(commands, options, this.ec2().ip_address);
+    	UltimateExec.exec(commands, options, this.getIpAddress());
 	},
 	getCloneCommand: function() {
 		var token = this.user().getToken('github'),
@@ -42,7 +41,7 @@ Instance.extendServer({
 		return this.github_url.replace('http://github.com/', '');
 	},
 	notifyHome: function(status) {
-		this._ec2.status = 'launched';
+		this.ec2.status = 'launched';
 		this.save();
 	}
 });

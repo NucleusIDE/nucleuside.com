@@ -5,15 +5,11 @@ Ultimate('InstanceRow').extends(UltimateComponent, {
   actionButtonClass: ['model.isRunning', 'danger', 'success'],
   
   'click .btn-success': ['model', 'run'],
-  'click .btn-danger': ['model', 'terminate'],
+  'click .btn-danger': ['model', 'shutdown'],
   'click .remove_instance': ['model', 'update', {hide: true}],
   
   'click .btn': function(e) {
     $(e.currentTarget).html('<i class="fa fa-spinner fa-spin"></i>');
-  },
-  'click': function() {
-    debugger; 
-    console.log(123);
   }
 });
 

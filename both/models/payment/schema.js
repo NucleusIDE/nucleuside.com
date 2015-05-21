@@ -51,7 +51,30 @@ Payment.extend({
 			type: String,		
 			optional: true
 		}
-  }
+  	},
+  	subscriptions: {
+	    recentPayments: function() {
+		      	return {};
+	    }	
+  	},
+	relations: {
+		/**
+		instance: function() {
+			return {
+				relation: 'belongs_to',
+				model: Instance,
+				foreign_key: 'instance_id'
+				//aggregates: ['totalCost'],
+			}
+		}
+		**/
+	},
+	aggregates: {
+		totalSpent: {
+			field: 'num',
+			operator: 'sum'
+		}
+	}
 });
 
 Payments.before.insert(function (userId, doc) {

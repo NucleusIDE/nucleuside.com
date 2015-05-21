@@ -6,8 +6,9 @@ Ultimate('Publish').extends(UltimatePublish, {
 	'my-instances': function() {
 		if(!this.user()) return [];
 
+		return [];
 		if(this.user().isAdmin()) return this._adminInstances();
-	  else this._instances();
+	  	else this._instances();
 	},
 	_adminInstances: function() {
 		return Instances.find({hide: {$ne: true}});
@@ -24,6 +25,7 @@ Ultimate('Publish').extends(UltimatePublish, {
 	  return Payments.find({_id: paymentId});
 	},
 	'my-payments': function() {
+		return [];
 		return Payments.find({user_id: this.userId});
 	}
 });
