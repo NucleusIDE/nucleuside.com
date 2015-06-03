@@ -3,7 +3,7 @@ Ultimate('NewInstanceTemplate').extends(UltimateComponent, {
 	ar: function() {
 		console.log('YO', this.get('animal'));
 	},
-	sub: 'self',
+	sub: ['self'],
 	subLimit: ['something', {type: 1}, 10],
 	onCreated: function() {
 		this.push("animal", 'cat');

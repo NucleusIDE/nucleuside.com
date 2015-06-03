@@ -2,19 +2,19 @@ Ultimate('StripeCharge').extends(Stripe, {
 	construct: function(order) {
 		this.order = order;
 		this.cost = this.order.costToCharge(); //the cost is main thing we need in this block
-		this.customer_token = this.order.get_user().stripe_customer_token; //the stripe customer token is the second thing we need
+		this.customer_token = this.order.user().stripe_customer_token; //the stripe customer token is the second thing we need
 	},
 	charge: function() {
 		if(this.cost <= 0) return;
 		
 		var res = this._createSync({
-      amount: this.cost*100,
-      currency: "USD",
-      customer: this.customer_token,
-      description: "Charge for Nucleus IDE"
-    });
+      		amount: this.cost*100,
+      		currency: "USD",
+		    customer: this.customer_token,
+		    description: "Charge for Nucleus IDE"
+    	});
 		
-    this.handleResponse(res);
+    	this.handleResponse(res);
 	},
 	
 	
@@ -27,14 +27,15 @@ Ultimate('StripeCharge').extends(Stripe, {
 	
 	
 	handleResponse: function(res) {
-    if (res.error) this.handleSuccess(res.data.id);
+    	if (res.error) this.handleSuccess(res.data.id);
 		else this.handleFailure(res.error);
 	},
 	
 	handleSuccess: function(stripeChargeId) {
-    Payment.createSuccess(this.order, stripeChargeId);
+		this.order.set('last_charged', new Date);
+    	Payment.createSuccess(this.order, stripeChargeId);
 	},
 	handleFailure: function(error) {
-    Payment.createFail(this.order);
+    	Payment.createFail(this.order);
 	}
 });

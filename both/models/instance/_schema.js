@@ -44,14 +44,30 @@ Instance.extend({
 		}
 	},
 
+	subscriptions: {
+	    all: function(userId) {
+	    	var user = Meteor.users.findOne(userId),
+	    		isAdmin = user ? user.isAdmin() : null;
+	    	console.log('ADMIN RUN', userId, isAdmin, user);
+	    	return {
+	    		selector: isAdmin ? {hide: {$ne: true}} : {user_id: userId, hide: {$ne: true}}
+	    	};
+	    }
+  	},
+
 	relations: {
-		payments: function() {
-			return {
-				relation: 'has_many',
-				model: 'Payment',
-				foreign_key: 'instance_id',
-				aggregates: ['totalSpent']
-			}
+		payments: {
+			relation: 'has_many',
+			model: 'Payment',
+			foreign_key: 'instance_id',
+			aggregates: ['totalSpent']
+		},
+		moneySpent: {
+			relation: 'aggregate',
+			model: 'Payment',
+			foreign_key: 'instance_id',
+			field: 'num',
+			operator: 'sum'
 		}
 	},
 	

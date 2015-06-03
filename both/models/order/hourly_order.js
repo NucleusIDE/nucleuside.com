@@ -10,9 +10,15 @@ Ultimate('HourlyOrder').extends(Order, {
     });
   },
 
-	billing_method: 'hourly',
-	displayAmount: '$1.50/hr',
-	
+
+  defaults: function() {
+    return _.extend({}, this.callParent('defaults'), {
+      billing_method: 'hourly', 
+      units_used: Order.BILLING_METHODS.hourly.min_units_used,
+      cost_per_unit:  Order.BILLING_METHODS.hourly.cost_per_unit
+    });
+  },
+
   costToCharge: function() {
     return this.cost_per_unit * this.hoursUsed();
   },

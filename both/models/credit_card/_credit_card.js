@@ -15,13 +15,13 @@ Ultimate('CreditCard').extends(UltimateForm, {
 		Stripe.createToken(stripeCard, this.stripeCallback.bind(this));
 	},
 	stripeCallback: function(status, response) {
-    	if(status === 200) this.stripeSuccess();
+    	if(status === 200) this.stripeSuccess(response.id);
 		else this.stripeFail();
   	},
 
   	
-	stripeSuccess: function() {
-		this.updateBillingInfo(response.id, function(error, result) {
+	stripeSuccess: function(cardToken) {
+		this.updateBillingInfo(cardToken, function(error, result) {
 	      	if (error) Flash.danger('Something is wrong with the card you provided. Please double check it.');
 	      	else {
 	      		Flash.success("Payment info updated! :)");

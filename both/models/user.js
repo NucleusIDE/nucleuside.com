@@ -7,29 +7,32 @@ Ultimate('User').extends(UltimateUser, {
 			type: Boolean,
 		}
 	},
-	subscriptions: {
+	hasValidCard: function() {
+    	return !!this.valid_card;
+ 	},
+	hasNoInstances: function() {
+		return Orders.find().count() === 0;
+	},
 
-		recentUsers: function() {
-			return {
-				selector: {valid_card: true},
-				limit: 2,
-				with: ['instances']
-			}
+
+	subscriptions: {
+		recentUsers: {
+			selector: {valid_card: true},
+			limit: 2,
+			//with: ['instances']
 		}
 	},
-	
 	relations: {
 		instances: {
 			relation: 'has_many',
 			model: Instance,
 			foreign_key: 'user_id',
-			with: ['payments']
-			
+			//with: ['payments']
 			//aggregates: ['totalCost'],
 		},
 		
-		/**
-		payments: {
+		
+		manyPayments: {
 			relation: 'many_to_many',
 			model: Payment,
 			through: Instance,
@@ -42,20 +45,6 @@ Ultimate('User').extends(UltimateUser, {
 			}
 			//aggregates: ['totalCost'],
 		}
-		**/
-	},
-	/**
-	aggregates: {
-		totalSpent: {
-			field: 'total',
-			operator: 'sum'
-		}
-	},
-	**/
-  	hasValidCard: function() {
-    	return !!this.valid_card;
- 	},
-	hasNoInstances: function() {
-		return Orders.find().count() === 0;
+		
 	}
 });

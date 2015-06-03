@@ -6,7 +6,6 @@ Ultimate('Publish').extends(UltimatePublish, {
 	'my-instances': function() {
 		if(!this.user()) return [];
 
-		return [];
 		if(this.user().isAdmin()) return this._adminInstances();
 	  	else this._instances();
 	},

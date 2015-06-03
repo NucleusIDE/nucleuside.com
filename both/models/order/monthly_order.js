@@ -1,4 +1,4 @@
-Ultimate('MonthlyOrder').extends(Order, 'orders', {
+Ultimate('MonthlyOrder').extends(Order, {
   schema: function() {
     return _.extend({}, this.callParent('schema'), {
       units_used: {
@@ -16,9 +16,15 @@ Ultimate('MonthlyOrder').extends(Order, 'orders', {
     });
   },
 
-	billing_method: 'monthly',
-	displayAmount: '$160/mo',
-	
+	defaults: function() {
+    return _.extend({}, this.callParent('defaults'), {
+      billing_method: 'monthly', 
+      units_used: Order.BILLING_METHODS.monthly.min_units_used,
+      cost_per_unit: Order.BILLING_METHODS.monthly.cost_per_unit
+    });
+  },
+
+
 	construct: function() {
 		StripeSubscription.subscribe(this);
 	},

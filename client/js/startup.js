@@ -3,8 +3,5 @@ Ultimate('ClientStartup').extends(UltimateStartup, {
 		Stripe.setPublishableKey(ConfigClient.stripe);
 	},
 	
-	sub: 'self',
-	ar: function() {
-		if(Meteor.user()) Meteor.subscribe('my-instances');
-	}
+	sub: ['roles', 'self', Instance.handle().subscribe('all')]
 });

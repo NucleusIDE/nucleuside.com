@@ -5,27 +5,21 @@ Instance.extendHttp({
 
 
 	processOrder: function() {
-		this.setInitialValues();
+		this.startServer();
 		this.createOrder();
-		this.run();
-	},
-	setInitialValues: function() {
-		this.units_used = Order.BILLING_METHODS[this.billing_method].min_units_used;
-		this.cost_per_unit = Order.BILLING_METHODS[this.billing_method].cost_per_unit;
-		this.last_charged = new Date; //used in hourly orders only
 	},
 	createOrder: function() {
-		var OrderClass = BILLING_METHODS[this.billing_method].class(),
-		  order = new OrderClass({instance_id: this._id, user_id: Meteor.userId(), billing_method: this.billing_method});
-
-		this.order_id = order.save();
+		this.order_id = Order.createOrder(this.billing_method, this._id);
+		this.save(); //the ec2 object props (instance_id) will also save ;)
 	},
 
 
-	run: function() {
+	startServer: function() {
+		if(this.ec2.instance_id) this.terminate();
 		this.run();
-		this.save(); //the ec2 object props (instance_id) will save ;)	
-
+		
+		console.log('EC2', this.ec2.status, this.ec2.instance_id, this.getAllMongoAttributes());
+		this.save();
 		this.monitor(function() {
 			this.launchApp();
 			this.terminateTrial();
@@ -34,6 +28,7 @@ Instance.extendHttp({
 		this.linkSubdomain();
 	},
 	shutdown: function() {
+		console.log(this.terminate);
 		this.terminated_at = moment().toDate(); //used for hourly usage calculation
 		this.terminate()
 		this.monitor();
@@ -51,7 +46,7 @@ Instance.extendHttp({
 
 	monitor: function(callbacks) {
 		callbacks = _.isFunction(callbacks) ? {onRunning: callbacks} : (callbacks || {});
-		callbacks.onStatus = this.save; //status set on this._ec2.status prior to save()
+		callbacks.onStatus = this.save.bind(this); //status set on this._ec2.status prior to save()
 		callbacks = _.bindContext(callbacks, this);
 		
 		this.monitorStatus(callbacks);

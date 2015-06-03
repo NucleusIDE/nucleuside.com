@@ -1,10 +1,10 @@
 Ultimate('InstanceRow').extends(UltimateComponent, {
-  statusClass: ['model.status', {stopped: 'danger', terminated: 'danger', running: 'success', default: 'warning'}],
-  showActionButton: ['model.status', ['running', 'terminated']],
+  statusClass: ['model.getStatus', {stopped: 'danger', terminated: 'danger', running: 'success', default: 'warning'}],
+  showActionButton: ['model.getStatus', ['running', 'terminated']],
   actionButtonText: ['model.isRunning', 'stop', 'start'],
   actionButtonClass: ['model.isRunning', 'danger', 'success'],
   
-  'click .btn-success': ['model', 'run'],
+  'click .btn-success': ['model', 'startServer'],
   'click .btn-danger': ['model', 'shutdown'],
   'click .remove_instance': ['model', 'update', {hide: true}],
   

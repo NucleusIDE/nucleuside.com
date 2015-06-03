@@ -1,4 +1,5 @@
 Ultimate('Order').extends(UltimateModel, {
+  collection: 'orders',
   schema: {
     instance_id: {
       type: String,
@@ -8,7 +9,18 @@ Ultimate('Order').extends(UltimateModel, {
     },
   },
 
-  collection: 'orders',
+  defaults: function() {
+    return {
+      user_id: Meteor.userId(),
+      last_charged: new Date,
+    };
+  },
+
+
+  displayAmount: function() {
+    return Order.BILLING_METHODS[this.billing_method].display_amount;
+  },
+  
 	instance: function() {
 		return Instances.findOne(this.instance_id);
 	},
@@ -18,10 +30,9 @@ Ultimate('Order').extends(UltimateModel, {
   orderIs: function(billingMethod) {
     return this.billing_method === billingMethod;
   }
+}, {
+  createOrder: function(billingMethod, instanceId) {
+    var OrderClass = Order.BILLING_METHODS[billingMethod].class();
+    return new OrderClass({instance_id: instanceId}).save();
+  }
 });
-
-/**
-Orders.before.insert(function (userId, doc) {
-  doc.created_at = moment().toDate();
-});
-**/

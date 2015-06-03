@@ -22,6 +22,9 @@ Ultimate('Instance').extends(UltimateModel, {
 
 
   isRunning: function() {
-    return this.status() === 'running';
+    return this.getStatus() === 'running';
+  },
+  getStatus: function() {
+    return this.ec2.status;
   }
 });

@@ -1,6 +1,7 @@
 Instance.extendServer({
 	linkSubdomain: function(instanceId) {
 		this.setTimeout(function() {	
+			if(this.ec2.dns_record_id) Cloudflare.unLinkSubdomain(this.ec2.dns_record_id);
 			this.ec2.dns_record_id = Cloudflare.linkSubdomain(this.subdomain, this.ec2.acquireIpAddress());
 			this.save(); //this._ec2.ip_address also saved
 		}, 5 * 1000); //wait until instance exists
