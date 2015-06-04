@@ -11,7 +11,6 @@ Ultimate('Order').extends(UltimateModel, {
 
   defaults: function() {
     return {
-      user_id: Meteor.userId(),
       last_charged: new Date,
     };
   },
@@ -33,6 +32,6 @@ Ultimate('Order').extends(UltimateModel, {
 }, {
   createOrder: function(billingMethod, instanceId) {
     var OrderClass = Order.BILLING_METHODS[billingMethod].class();
-    return new OrderClass({instance_id: instanceId}).save();
+    return new OrderClass({instance_id: instanceId, user_id: Meteor.userId()}).save();
   }
 });

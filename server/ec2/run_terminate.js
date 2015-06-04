@@ -23,7 +23,6 @@ EC2.extend({
 			throw new Meteor.Error('unable-to-launch-instance', "UNABLE TO LAUNCHING ORDER INSTANCE", this._id);
 		}
 		else {
-			console.log('PENDING');
 			this.status = 'pending';
 			return this.instance_id = res.data.Instances[0].InstanceId;
 		}

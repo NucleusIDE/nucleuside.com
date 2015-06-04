@@ -32,8 +32,5 @@ Ultimate('MonthlyOrder').extends(Order, {
 	
   costToCharge: function() {
     return this.cost_per_unit;
-  },
-	cancelSubscription: function() {
-		StripeSubscription.cancel(this);
-	}
+  }
 });

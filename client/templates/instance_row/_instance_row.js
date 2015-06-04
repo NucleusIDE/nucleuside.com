@@ -4,7 +4,11 @@ Ultimate('InstanceRow').extends(UltimateComponent, {
   actionButtonText: ['model.isRunning', 'stop', 'start'],
   actionButtonClass: ['model.isRunning', 'danger', 'success'],
   
-  'click .btn-success': ['model', 'startServer'],
+  dontShowTerminatedButton: function() {
+    return this.model().getStatus() == 'terminated' && !Meteor.user().isAdmin();
+  },
+
+  'click .btn-success': ['model', 'startup'],
   'click .btn-danger': ['model', 'shutdown'],
   'click .remove_instance': ['model', 'update', {hide: true}],
   

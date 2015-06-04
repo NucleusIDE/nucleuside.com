@@ -1,16 +1,24 @@
 Ultimate('TrialOrder').extends(Order, 'orders', {
-  schema: function() {
-    return _.extend({}, this.callParent('schema'), {
-      trial_started: {
-        type: Date,
-      }
-    });
-  },
+	schema: function() {
+		return _.extend({}, this.callParent('schema'), {
+			  trial_started: {
+			    	type: Date,
+			  }
+		});
+	},
 
-	billing_method: 'trial',
-	displayAmount: 'FREE',
+	defaults: function() {
+	    return _.extend({}, this.callParent('defaults'), {
+			billing_method: 'trial', 
+			units_used: Order.BILLING_METHODS.trial.min_units_used,
+			cost_per_unit: Order.BILLING_METHODS.trial.cost_per_unit
+	    });
+  	},
 
-  costToCharge: function() { return 0; },
+
+  	costToCharge: function() { 
+  		return 0; 
+  	},
 	
 	
 	terminateTrial: function() {

@@ -8,6 +8,6 @@ Ultimate('monthly_row').extends(InstanceRow, {
 		this.model().save();
 		this.model().reboot();
 	},
-	'click .cancel_subscription': ['model.order', 'cancelSubscription']
+	'click .cancel_subscription': ['model', 'cancelSubscription']
 });
 

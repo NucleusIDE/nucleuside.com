@@ -18,7 +18,8 @@ Instance.extendHttp({
 		if(this.ec2.instance_id) this.terminate();
 		this.run();
 		
-		console.log('EC2', this.ec2.status, this.ec2.instance_id, this.getAllMongoAttributes());
+		console.log('EC2', this.ec2.status, this.ec2.instance_id);
+		
 		this.save();
 		this.monitor(function() {
 			this.launchApp();
@@ -27,19 +28,24 @@ Instance.extendHttp({
 
 		this.linkSubdomain();
 	},
-	shutdown: function() {
-		console.log(this.terminate);
+	shutdownServer: function() {
 		this.terminated_at = moment().toDate(); //used for hourly usage calculation
-		this.terminate()
+		this.terminate();
 		this.monitor();
 		this.save();
 		this.unLinkSubdomain();
 	},
 	reboot: function() {
+		this.ec2.status = 'rebooting';
+		this.save();
+
 		this.stop();
-		this.monitorStatus({
+		this.monitor({
 			onRunning: this.launchApp,
-			onStopped: this.start
+			onStopped: function() {
+				this.start();
+				this.monitor();
+			}
 		});
 	},
 
@@ -53,5 +59,10 @@ Instance.extendHttp({
 	},
 	terminateTrial: function() {
 		if(this.orderIs('trial')) this.order().terminateTrial();
-	}
+	},
+	cancelSubscription: function() {
+		this.set('hide', true);
+		this.terminate();
+		StripeSubscription.cancel(this.order());
+  	}
 });

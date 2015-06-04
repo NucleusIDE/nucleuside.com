@@ -48,7 +48,7 @@ Instance.extend({
 	    all: function(userId) {
 	    	var user = Meteor.users.findOne(userId),
 	    		isAdmin = user ? user.isAdmin() : null;
-	    	console.log('ADMIN RUN', userId, isAdmin, user);
+
 	    	return {
 	    		selector: isAdmin ? {hide: {$ne: true}} : {user_id: userId, hide: {$ne: true}}
 	    	};

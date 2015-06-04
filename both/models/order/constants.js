@@ -19,6 +19,9 @@ Order.extendStatic({
 	  	trial: {
 			name: 'trial',
 			class: function() { return TrialOrder; },
+			billing_period: 1, //day
+	    	min_units_used: 1,
+	    	cost_per_unit: 0,
       		display_amount: 'FREE'
 	  	}
   	}
