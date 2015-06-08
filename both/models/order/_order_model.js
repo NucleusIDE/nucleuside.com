@@ -9,6 +9,14 @@ Ultimate('Order').extends(UltimateModel, {
     },
   },
 
+  relations: {
+    instance: {
+      relation: 'belongs_to', 
+      model: 'Instance',
+      foreign_key: 'instance_id'
+    }
+  },
+
   defaults: function() {
     return {
       last_charged: new Date,
@@ -19,10 +27,11 @@ Ultimate('Order').extends(UltimateModel, {
   displayAmount: function() {
     return Order.BILLING_METHODS[this.billing_method].display_amount;
   },
+  runningCostFormatted: function() {
+    return '$' + parseFloat(this.costToCharge()).toFixed(2);
+  },
   
-	instance: function() {
-		return Instances.findOne(this.instance_id);
-	},
+
   isRunning: function() {
     return this.instance().isRunning();
   },

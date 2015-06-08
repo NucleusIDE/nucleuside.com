@@ -7,6 +7,11 @@ Instance.extendHttp({
 	processOrder: function() {
 		this.startServer();
 		this.createOrder();
+
+		this.monitor(function() {
+			this.launchApp();
+			if(this.order().orderIs('trial')) this.order().setTerminateTrialTimeout();
+		});
 	},
 	createOrder: function() {
 		this.order_id = Order.createOrder(this.billing_method, this._id);
@@ -21,10 +26,6 @@ Instance.extendHttp({
 		console.log('EC2', this.ec2.status, this.ec2.instance_id);
 		
 		this.save();
-		this.monitor(function() {
-			this.launchApp();
-			this.terminateTrial();
-		});
 
 		this.linkSubdomain();
 	},
@@ -56,13 +57,5 @@ Instance.extendHttp({
 		callbacks = _.bindContext(callbacks, this);
 		
 		this.monitorStatus(callbacks);
-	},
-	terminateTrial: function() {
-		if(this.orderIs('trial')) this.order().terminateTrial();
-	},
-	cancelSubscription: function() {
-		this.set('hide', true);
-		this.terminate();
-		StripeSubscription.cancel(this.order());
-  	}
+	}
 });

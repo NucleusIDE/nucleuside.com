@@ -72,7 +72,8 @@ Payment.extend({
 	aggregates: {
 		totalSpent: {
 			field: 'num',
-			operator: 'sum'
+			operator: 'sum',
+			allowClient: true
 		}
 	}
 });

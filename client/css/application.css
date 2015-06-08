@@ -22713,27 +22713,27 @@ a.fc-event {
 /***********************************/
 /* line 592, ../../src/sass/_override-custom-libs.scss */
 table.dataTable thead .sorting {
-  background: url("../lib/datatables/media/images/sort_both.png") no-repeat center right;
+  background: url("../lib/datatables/media/images/sort_both.png") no-repeat center left;
 }
 
 /* line 595, ../../src/sass/_override-custom-libs.scss */
 table.dataTable thead .sorting_asc {
-  background: url("../lib/datatables/media/images/sort_asc.png") no-repeat center right;
+  background: url("../lib/datatables/media/images/sort_asc.png") no-repeat center left;
 }
 
 /* line 598, ../../src/sass/_override-custom-libs.scss */
 table.dataTable thead .sorting_desc {
-  background: url("../lib/datatables/media/images/sort_desc.png") no-repeat center right;
+  background: url("../lib/datatables/media/images/sort_desc.png") no-repeat center left;
 }
 
 /* line 601, ../../src/sass/_override-custom-libs.scss */
 table.dataTable thead .sorting_asc_disabled {
-  background: url("../lib/datatables/media/images/sort_asc_disabled.png") no-repeat center right;
+  background: url("../lib/datatables/media/images/sort_asc_disabled.png") no-repeat center left;
 }
 
 /* line 604, ../../src/sass/_override-custom-libs.scss */
 table.dataTable thead .sorting_desc_disabled {
-  background: url("../lib/datatables/media/images/sort_desc_disabled.png") no-repeat center right;
+  background: url("../lib/datatables/media/images/sort_desc_disabled.png") no-repeat center left;
 }
 
 /* line 608, ../../src/sass/_override-custom-libs.scss */
@@ -26190,28 +26190,30 @@ table.table thead .sorting_desc_disabled {
 }
 
 /* line 92, ../../src/sass/_widgets.scss */
+
 table.table thead .sorting {
-  background: url("../img/datatables/sort_both.png") no-repeat center right;
+  background: url("/lib/datatables/media/images/sort_both.png") no-repeat center left;
 }
+
 
 /* line 93, ../../src/sass/_widgets.scss */
 table.table thead .sorting_asc {
-  background: url("../img/datatables/sort_asc.png") no-repeat center right;
+  background: url("/lib/datatables/media/images/sort_asc.png") no-repeat center left;
 }
 
 /* line 94, ../../src/sass/_widgets.scss */
 table.table thead .sorting_desc {
-  background: url("../img/datatables/sort_desc.png") no-repeat center right;
+  background: url("/lib/datatables/media/images/sort_desc.png") no-repeat center left;
 }
 
 /* line 96, ../../src/sass/_widgets.scss */
 table.table thead .sorting_asc_disabled {
-  background: url("../img/datatables/sort_asc_disabled.png") no-repeat center right;
+  background: url("/lib/datatables/media/images/sort_asc_disabled.png") no-repeat center left;
 }
 
 /* line 97, ../../src/sass/_widgets.scss */
 table.table thead .sorting_desc_disabled {
-  background: url("../img/datatables/sort_desc_disabled.png") no-repeat center right;
+  background: url("/lib/datatables/media/images/sort_desc_disabled.png") no-repeat center left;
 }
 
 /* line 99, ../../src/sass/_widgets.scss */

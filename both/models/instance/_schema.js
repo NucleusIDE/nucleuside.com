@@ -50,12 +50,20 @@ Instance.extend({
 	    		isAdmin = user ? user.isAdmin() : null;
 
 	    	return {
+	    		//selector: {},
+	    		with: ['order', 'moneySpent'],
 	    		selector: isAdmin ? {hide: {$ne: true}} : {user_id: userId, hide: {$ne: true}}
 	    	};
 	    }
   	},
 
 	relations: {
+		order:{
+			relation: 'has_one', 
+			model: 'Order',
+			foreign_key: 'instance_id',
+			selector: {className: null}
+		},
 		payments: {
 			relation: 'has_many',
 			model: 'Payment',
@@ -67,7 +75,8 @@ Instance.extend({
 			model: 'Payment',
 			foreign_key: 'instance_id',
 			field: 'num',
-			operator: 'sum'
+			operator: 'sum',
+			allowClient: true
 		}
 	},
 	

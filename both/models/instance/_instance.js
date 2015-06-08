@@ -8,14 +8,8 @@ Ultimate('Instance').extends(UltimateModel, {
       operator: 'sum'
     }
   },
-  order: function() {
-    return Orders.findOne(this.order_id);
-  },
 
 
-  orderIs: function(billingMethod) {
-    return this.billing_method === billingMethod;
-  },
   displayAmount: function() {
     return Order.BILLING_METHODS[this.billing_method].display_amount;
   },
@@ -26,5 +20,18 @@ Ultimate('Instance').extends(UltimateModel, {
   },
   getStatus: function() {
     return this.ec2.status;
-  }
+  },
+
+
+  url: function() {
+    return this.subdomain + '.' + Config.hostedDomain;
+  },
+  getGithubUrl: function() {
+      var githubUrl = this.github_url.replace('.git', ''),
+        parts = githubUrl.split('/'),
+        repo = parts.pop(),
+        user = parts.pop();
+
+      return 'http://github.com/' + user + '/' + repo;
+  },
 });

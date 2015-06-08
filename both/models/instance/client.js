@@ -1,4 +1,8 @@
 Instance.extendClient({
+	hoursRunning: function() {
+		return moment().diff(moment(this.created_at), 'hours') + ' hours';  
+	},
+
 	createInstance: function() {
 	    BlockUI.block();
 			

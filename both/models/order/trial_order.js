@@ -1,4 +1,4 @@
-Ultimate('TrialOrder').extends(Order, 'orders', {
+Ultimate('TrialOrder').extends(Order, {
 	schema: function() {
 		return _.extend({}, this.callParent('schema'), {
 			  trial_started: {
@@ -21,10 +21,29 @@ Ultimate('TrialOrder').extends(Order, 'orders', {
   	},
 	
 	
-	terminateTrial: function() {
+	countdownToTermination: function(templateInstance) {
+		var trialStart = this.trial_started,
+			status = this.instance().getStatus(),
+			lapsedMinutes = moment().diff(moment(trialStart).toDate(), 'minutes'),
+			maxCalls = (Config.trialLengthMinutes - lapsedMinutes + 1) * 60;
+		
+		if(trialStart && status == 'running' && lapsedMinutes < Config.trialLengthMinutes) {
+			templateInstance.setReactiveIntervalUntil(function() {
+				return status != 'running';
+			}, 1000, this._id, maxCalls);
+			
+			return 'Trial Remaining: ' + Utilities.countdown(trialStart, Config.trialLengthMinutes);
+		}
+		else return status;
+	}
+});
+
+TrialOrder.extendServer({
+	setTerminateTrialTimeout: function() {
 		this.set('trial_started', new Date);
+		
 		this.setTimeout(function() {
 			this.instance().terminate();
-		}, 1000 * 60 * 10);
+		}, 1000 * 60 * Config.trialLengthMinutes);
 	}
 });

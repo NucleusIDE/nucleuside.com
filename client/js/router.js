@@ -15,7 +15,7 @@ Ultimate('ClientRouter').extends(UltimateRouter, {
 	'/new-instance/:step': function() {
 		return new Instance().reactive('new_instance'); 
 	},
-	'instances': function() {
+	instances: function() {
 		return Instances.find();
 	},
 	payment_info: function()  {

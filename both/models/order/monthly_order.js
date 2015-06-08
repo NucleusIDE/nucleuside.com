@@ -25,12 +25,18 @@ Ultimate('MonthlyOrder').extends(Order, {
   },
 
 
-	construct: function() {
-		StripeSubscription.subscribe(this);
+	onAfterInsert: function() {
+		if(this._id) StripeSubscription.subscribe(this);
 	},
 
 	
   costToCharge: function() {
     return this.cost_per_unit;
+  }
+}, {}, {
+  cancelSubscription: function() {
+    this.instance().set('hide', true);
+    this.instance().terminate();
+    StripeSubscription.cancel(this);
   }
 });

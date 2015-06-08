@@ -7,7 +7,8 @@ Ultimate('ConfigServer').extends(UltimateConfig, {
 		github: {
 			clientId: "3bffcdce163a675e64b8", 
 			secret: "df984df5ccd772a67060cb0aa4704c7aade064e9"
-		}
+		},
+		hostedDomain: 'moralmoneymatters.com'
 	},
 	
 	development: {
@@ -18,12 +19,14 @@ Ultimate('ConfigServer').extends(UltimateConfig, {
 		github: {
 			clientId: "3bffcdce163a675e64b8", 
 			secret: "df984df5ccd772a67060cb0aa4704c7aade064e9"
-		}
+		},
+		hostedDomain: 'theultimateide.com'
 	},
 	
+	trialLengthMinutes: 10,
 	
-  adminEmails: ['ckhabra@gmail.com', 'james@faceyspacey.com', 'coder@nucleuside.com'],
-  aws: {
+  	adminEmails: ['ckhabra@gmail.com', 'james@faceyspacey.com', 'coder@nucleuside.com'],
+  	aws: {
 		accessKeyId: "AKIAJ6TQDQPF2GR2Y2ZA", 
 		secretAccessKey: "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"
 	},
@@ -36,3 +39,5 @@ Ultimate('ConfigServer').extends(UltimateConfig, {
 		};
 	}
 });
+
+Config = ConfigServer;

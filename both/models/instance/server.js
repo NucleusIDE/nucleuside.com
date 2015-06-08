@@ -14,18 +14,20 @@ Instance.extendServer({
 	
 	
 	launchApp: function() {
-    	return; //TODO: TEST /w UltimateExec
+		var privateKeyPath = process.env.PWD.substr(0, process.env.PWD.lastIndexOf('/')) + '/nucleus_aws_key.pem';
+
 		var commands = [
 				'rm -R ' + this.githubPath(), 
 				this.getCloneCommand(),
-				'cd ' + this.githubPath(), 
-				'meteor --port 80'
+				'export ULTIMATE_IDE_PASSWORD="'+this.password+'"',
+				'cd ' + this.githubPath() + ' && meteor --port 80' 
 			],
 			options = {
+				privateKey: privateKeyPath,
 				stdout: function(data) {
 					if(data.indexOf('App running at') > -1) this.notifyHome('launched');
 				}.bind(this),
-				stderr: function(data) {
+				onFail: function(data) {
 					this.notifyHome('failed');
 				}.bind(this)
 			};
@@ -34,15 +36,21 @@ Instance.extendServer({
 	},
 	getCloneCommand: function() {
 		var token = this.user().getToken('github'),
-			githubPath = this.getGithubPath();
+			githubPath = this.githubPath();
 		
 		return 'git clone https://'+token+':x-oauth-basic@github.com/' + githubPath;
 	},
 	githubPath: function() {
-		return this.github_url.replace('http://github.com/', '');
+	    var githubUrl = this.github_url.replace('.git', ''),
+	    	parts = githubUrl.split('/'),
+	    	repo = parts.pop(),
+	    	user = parts.pop();
+
+	    return user + '/' + repo + '.git';
 	},
 	notifyHome: function(status) {
-		this.ec2.status = 'launched';
+		console.log("APP DEPLOYMENT", status);
+		this.ec2.status = status;
 		this.save();
 	}
 });

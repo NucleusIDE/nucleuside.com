@@ -1,0 +1,46 @@
+<template name="InstanceDomainCell">
+  <a href="{{url}}" style="color:white; font-size: 14px;">{{url}}</a>
+
+  <br />
+
+  {{#with order}}
+     {{#if orderIs 'monthly'}}
+      <small><a class='cancel_subscription' href="#">cancel</a></small>
+    {{else}}
+      <small><a class='remove_instance' href="#">remove instance</a></small>
+    {{/if}}
+  {{/with}}
+</template>
+
+
+<template name="InstanceStatusCell">
+  <span class="label label-success label-{{statusClass}}">{{getStatus}}</span>
+</template>
+
+
+<template name="InstanceButtonCellWrapper">
+  {{>cellTemplate}}
+</template>
+
+
+
+<template name="trial_button_cell">
+  {{#if showActionButton}}
+    {{#unless dontShowTerminatedButton}}
+      <a class="btn btn-{{actionButtonClass}}" href="#">{{actionButtonText}}</a>
+    {{/unless}}
+  {{/if}}
+</template>
+
+<template name="hourly_button_cell">
+  {{#if showActionButton}}
+    {{#unless dontShowTerminatedButton}}
+      <a class="btn btn-{{actionButtonClass}}" href="#">{{actionButtonText}}</a>
+    {{/unless}}
+  {{/if}}
+</template>
+
+
+<template name="monthly_button_cell">
+  <a class="btn btn-{{actionButtonClass}}" href="#">{{actionButtonText}}</a>
+</template>
