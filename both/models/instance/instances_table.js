@@ -12,7 +12,7 @@ Ultimate('InstancesTable').extends(UltimateDatatableComponent, {
   	tableColumns: [
     	{title: "Subdomain", data: "subdomain", tmpl: 'InstanceDomainCell'},
     	{title: "Github URL", data: "github_url", render: function(val, type, model) {
-        return '<a href="http://'+model.getGithubUrl()+'">'+model.getGithubUrl()+'</a>';
+        return '<a href="http://'+model.getGithubUrl()+'">'+model.githubPath()+'</a>';
       }},
       {title: 'Launched', data: 'created_at', render: function(val, type, model) { return model.formattedDatetime(); }},
       {title: 'Running', data: 'created_at', render: function(val, type, model) { 

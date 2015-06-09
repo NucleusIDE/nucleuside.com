@@ -34,4 +34,12 @@ Ultimate('Instance').extends(UltimateModel, {
 
       return 'http://github.com/' + user + '/' + repo;
   },
+  githubPath: function() {
+      var githubUrl = this.github_url.replace('.git', ''),
+        parts = githubUrl.split('/'),
+        repo = parts.pop(),
+        user = parts.pop();
+
+      return user + '/' + repo;
+  },
 });

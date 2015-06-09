@@ -11,9 +11,7 @@ Ultimate('InstanceDomainCell').extends(UltimateComponent, {
 
 Ultimate('InstanceButtonCellWrapper').extends(UltimateComponent, {
   cellTemplate: function() {
-    var billingMethod = this.model().billing_method;
-    console.log('BM', this.model(), this.model().billing_method, this.model().order());
-    return Template[billingMethod + '_button_cell'];
+    return Template[this.model().billing_method + '_button_cell'];
   }
 });
 

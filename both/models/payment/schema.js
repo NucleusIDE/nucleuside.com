@@ -52,6 +52,9 @@ Payment.extend({
 			optional: true
 		}
   	},
+  	onBeforeInsert: function() {
+  		this.num = Payments.find().count() + 1;
+  	},
   	subscriptions: {
 	    recentPayments: function() {
 		      	return {};
@@ -78,7 +81,3 @@ Payment.extend({
 	}
 });
 
-Payments.before.insert(function (userId, doc) {
-  doc.date = moment().toDate();
-	doc.num = Payments.find().count() + 1;
-});

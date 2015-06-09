@@ -4,24 +4,22 @@
 # but you can also edit it by hand.
 
 meteor-platform
-iron:router
-accounts-password
-mrt:moment
-mrgalaxy:stripe
-channikhabra:block-ui
+http
+email
+reactive-var
+
 accounts-github
 service-configuration
-naxio:flash
-matb33:collection-hooks
-email
+
+
+mrgalaxy:stripe
 eluck:aws-sdk
-reactive-var
-alanning:roles
+
+
 gandev:server-eval
-http
-zimme:iron-router-auth
-aldeed:autoform
-meteorhacks:zones
-ultimateide:ultimate-models
 msavin:mongol
 msavin:jetsetter
+meteorhacks:zones
+
+
+ultimateide:ultimate-mvc

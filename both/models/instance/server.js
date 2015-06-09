@@ -36,17 +36,9 @@ Instance.extendServer({
 	},
 	getCloneCommand: function() {
 		var token = this.user().getToken('github'),
-			githubPath = this.githubPath();
+			githubPath = this.githubPath() + '.git';
 		
 		return 'git clone https://'+token+':x-oauth-basic@github.com/' + githubPath;
-	},
-	githubPath: function() {
-	    var githubUrl = this.github_url.replace('.git', ''),
-	    	parts = githubUrl.split('/'),
-	    	repo = parts.pop(),
-	    	user = parts.pop();
-
-	    return user + '/' + repo + '.git';
 	},
 	notifyHome: function(status) {
 		console.log("APP DEPLOYMENT", status);
